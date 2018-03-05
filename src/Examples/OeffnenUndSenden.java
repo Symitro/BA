@@ -32,7 +32,7 @@ public class OeffnenUndSenden extends JFrame {
     InputStream inputStream;
     Boolean serialPortGeoeffnet = false;
 
-    int baudrate = 9600;
+    int baudrate = 115200;
     int dataBits = SerialPort.DATABITS_8;
     int stopBits = SerialPort.STOPBITS_1;
     int parity = SerialPort.PARITY_NONE;
@@ -251,7 +251,8 @@ public class OeffnenUndSenden extends JFrame {
     void serialPortDatenVerfuegbar() {
         try {
             byte[] data = new byte[150];
-            int num;
+            int num; //= new AsciitoHex(data);
+
             while (inputStream.available() > 0) {
                 num = inputStream.read(data, 0, data.length);
                 System.out.println("Empfange: " + new String(data, 0, num));
@@ -260,6 +261,15 @@ public class OeffnenUndSenden extends JFrame {
         } catch (IOException e) {
             System.out.println("Fehler beim Lesen empfangener Daten");
         }
+    }
+
+    private static String asciiToHex(String asciiValue) {
+        char[] chars = asciiValue.toCharArray();
+        StringBuffer hex = new StringBuffer();
+        for (int i = 0; i < chars.length; i++) {
+            hex.append(Integer.toHexString((int) chars[i]));
+        }
+        return hex.toString();
     }
 
     class WindowListener extends WindowAdapter {
