@@ -251,16 +251,27 @@ public class OeffnenUndSenden extends JFrame {
     void serialPortDatenVerfuegbar() {
         try {
             byte[] data = new byte[150];
-            int num; //= new AsciitoHex(data);
-
+            int num;
             while (inputStream.available() > 0) {
                 num = inputStream.read(data, 0, data.length);
+                String byteArrayToHex = byteArrayToHexString(data);
                 System.out.println("Empfange: " + new String(data, 0, num));
                 empfangen.append(new String(data, 0, num));
             }
         } catch (IOException e) {
             System.out.println("Fehler beim Lesen empfangener Daten");
         }
+    }
+
+    public static String byteArrayToHexString(byte[] byteArray) {
+        String hexString = "";
+
+        for (int i = 0; i < byteArray.length; i++) {
+            String thisByte = "".format("%x", byteArray[i]);
+            hexString += thisByte;
+        }
+
+        return hexString;
     }
 
     private static String asciiToHex(String asciiValue) {
@@ -270,6 +281,7 @@ public class OeffnenUndSenden extends JFrame {
             hex.append(Integer.toHexString((int) chars[i]));
         }
         return hex.toString();
+
     }
 
     class WindowListener extends WindowAdapter {

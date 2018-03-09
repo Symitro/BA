@@ -20,7 +20,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-public class GuiApp1 {
+public class GuiApp1 extends javax.swing.JFrame {
 
     //Note: Typically the main method will be in a
     //separate class. As this is a simple one class
@@ -35,7 +35,7 @@ public class GuiApp1 {
 
         //make sure the program exits when the frame closes
         guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        guiFrame.setTitle("Example GUI");
+        guiFrame.setTitle("Diagnoseapplikation");
         guiFrame.setSize(300, 250);
 
         //This will center the JFrame in the middle of the screen
@@ -46,65 +46,78 @@ public class GuiApp1 {
             "Cherry", "Date", "Kiwi", "Orange", "Pear", "Strawberry"};
 
         //Options for the JList
-        String[] vegOptions = {"Asparagus", "Beans", "Broccoli", "Cabbage",
+        String[] devices = {"Asparagus", "Beans", "Broccoli", "Cabbage",
             "Carrot", "Celery", "Cucumber", "Leek", "Mushroom",
             "Pepper", "Radish", "Shallot", "Spinach", "Swede",
             "Turnip"};
 
         //The first JPanel contains a JLabel and JCombobox
-        final JPanel comboPanel = new JPanel();
-        JLabel comboLbl = new JLabel("Fruits:");
-        JComboBox fruits = new JComboBox(fruitOptions);
+        final JPanel consolePanel = new JPanel();
+        JLabel consoleLbl = new JLabel("Fruits:");
+        JComboBox log = new JComboBox(fruitOptions);
 
-        comboPanel.add(comboLbl);
-        comboPanel.add(fruits);
+        consolePanel.add(consoleLbl);
+        consolePanel.add(log);
 
         //Create the second JPanel. Add a JLabel and JList and
         //make use the JPanel is not visible.
-        final JPanel listPanel = new JPanel();
-        listPanel.setVisible(false);
+        final JPanel deviceListPanel = new JPanel();
+        deviceListPanel.setVisible(true);
+        final JPanel deviceSettingsPanel = new JPanel();
+        deviceSettingsPanel.setVisible(true);
         JLabel listLbl = new JLabel("Vegetables:");
-        JList vegs = new JList(vegOptions);
+        JList vegs = new JList(devices);
         vegs.setLayoutOrientation(JList.HORIZONTAL_WRAP);
 
-        listPanel.add(listLbl);
-        listPanel.add(vegs);
+        deviceListPanel.add(listLbl);
+        deviceListPanel.add(vegs);
 
-        JButton vegFruitBut = new JButton("Fruit or Veg");
+        JButton refreshBut = new JButton("Aktualisieren");
 
         //Creating the MenuBar and adding components
         JMenuBar mb = new JMenuBar();
-        JMenu m1 = new JMenu("FILE");
-        JMenu m2 = new JMenu("Help");
+        JMenu m1 = new JMenu("Datei");
+        JMenu m2 = new JMenu("Firmware");
+        JMenu m3 = new JMenu("Hilfe");
         mb.add(m1);
         mb.add(m2);
-        JMenuItem m11 = new JMenuItem("Open");
-        JMenuItem m22 = new JMenuItem("Save as");
+        mb.add(m3);
+        JMenuItem m11 = new JMenuItem("Config laden");
+        JMenuItem m12 = new JMenuItem("Config speichern");
         m1.add(m11);
-        m1.add(m22);
+        m1.add(m12);
+        JMenuItem m21 = new JMenuItem("Lokale Firmware laden");
+        JMenuItem m22 = new JMenuItem("Online-Firmware laden");
+        m2.add(m21);
+        m2.add(m22);
+        JMenuItem m31 = new JMenuItem("?");
+        JMenuItem m32 = new JMenuItem("Über");
+        m3.add(m31);
+        m3.add(m32);
         //The ActionListener class is used to handle the
         //event that happens when the user clicks the button.
         //As there is not a lot that needs to happen we can 
         //define an anonymous inner class to make the code simpler.
-        vegFruitBut.addActionListener(new ActionListener() {
+        refreshBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 //When the fruit of veg button is pressed
                 //the setVisible value of the listPanel and
                 //comboPanel is switched from true to 
                 //value or vice versa.
-                listPanel.setVisible(!listPanel.isVisible());
-                comboPanel.setVisible(!comboPanel.isVisible());
+                deviceListPanel.setVisible(!deviceListPanel.isVisible());
+                consolePanel.setVisible(!consolePanel.isVisible());
 
             }
         });
 
         //The JFrame uses the BorderLayout layout manager.
         //Put the two JPanels and JButton in different areas.
-        guiFrame.add(comboPanel, BorderLayout.NORTH);
+        guiFrame.add(consolePanel, BorderLayout.NORTH);
         guiFrame.add(mb, BorderLayout.NORTH);
-        guiFrame.add(listPanel, BorderLayout.CENTER);
-        guiFrame.add(vegFruitBut, BorderLayout.SOUTH);
+        guiFrame.add(deviceListPanel, BorderLayout.WEST);
+        guiFrame.add(deviceSettingsPanel, BorderLayout.EAST);
+        guiFrame.add(refreshBut, BorderLayout.SOUTH);
 
         //make sure the JFrame is visible
         guiFrame.setVisible(true);
