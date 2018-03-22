@@ -9,6 +9,7 @@ package Examples;
  *
  * @author Julian
  */
+import static Examples.OeffnenUndSenden.byteArrayToHexString;
 import java.io.*;
 import java.util.*;
 import javax.comm.*;
@@ -58,9 +59,9 @@ public class SimpleRead implements Runnable, SerialPortEventListener {
         }
         serialPort.notifyOnDataAvailable(true);
         try {
-            serialPort.setSerialPortParams(9600,
+            serialPort.setSerialPortParams(115200,
                     SerialPort.DATABITS_8,
-                    SerialPort.STOPBITS_1,
+                    SerialPort.STOPBITS_2,
                     SerialPort.PARITY_NONE);
         } catch (UnsupportedCommOperationException e) {
             System.out.println(e);
@@ -90,13 +91,16 @@ public class SimpleRead implements Runnable, SerialPortEventListener {
             case SerialPortEvent.OUTPUT_BUFFER_EMPTY:
                 break;
             case SerialPortEvent.DATA_AVAILABLE:
-                byte[] readBuffer = new byte[20];
+                byte[] readBuffer = new byte[150];
 
                 try {
                     while (inputStream.available() > 0) {
+
                         int numBytes = inputStream.read(readBuffer);
+                        String byteArrayToHex = byteArrayToHexString(readBuffer);
+
+                        System.out.println("Empfange: " + byteArrayToHex);
                     }
-                    System.out.print(new String(readBuffer));
                 } catch (IOException e) {
                     System.out.println(e);
                 }

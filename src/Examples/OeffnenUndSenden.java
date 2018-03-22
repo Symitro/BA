@@ -18,6 +18,8 @@ import java.util.TooManyListenersException;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.zip.CRC32;
 
 // TODO Dialog zur Konfiguration der Schnittstellenparameter
 public class OeffnenUndSenden extends JFrame {
@@ -34,7 +36,7 @@ public class OeffnenUndSenden extends JFrame {
 
     int baudrate = 115200;
     int dataBits = SerialPort.DATABITS_8;
-    int stopBits = SerialPort.STOPBITS_1;
+    int stopBits = SerialPort.STOPBITS_2;
     int parity = SerialPort.PARITY_NONE;
 
     /**
@@ -242,7 +244,17 @@ public class OeffnenUndSenden extends JFrame {
             return;
         }
         try {
-            outputStream.write(nachricht.getBytes());
+            // byte[] hexToByteArray = hexStringToByteArray();
+            byte[] Sendstream = {(byte) 0x11, (byte) 0x03, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x01, (byte) 0x86, (byte) 0xE2};
+            // CRC32 crc32 = new CRC32();
+
+            // crc32.update(hexToByteArray);
+            // outputStream.write(Sendstream, 0, 8);
+            outputStream.write(Sendstream);
+            System.out.println("Hex gesendet");
+            System.out.println(Arrays.toString(Sendstream));
+            System.out.println(Sendstream);
+
         } catch (IOException e) {
             System.out.println("Fehler beim Senden");
         }
@@ -255,9 +267,12 @@ public class OeffnenUndSenden extends JFrame {
             while (inputStream.available() > 0) {
                 num = inputStream.read(data, 0, data.length);
                 String byteArrayToHex = byteArrayToHexString(data);
-                System.out.println("Empfange: " + new String(data, 0, num));
-                empfangen.append(new String(data, 0, num));
+
+                System.out.println("Empfange: " + byteArrayToHex);      //System.out.println("Empfange: " + new String(data, 0, num));
+
+                empfangen.append(byteArrayToHex);
             }
+
         } catch (IOException e) {
             System.out.println("Fehler beim Lesen empfangener Daten");
         }
@@ -267,21 +282,27 @@ public class OeffnenUndSenden extends JFrame {
         String hexString = "";
 
         for (int i = 0; i < byteArray.length; i++) {
-            String thisByte = "".format("%x", byteArray[i]);
+            String thisByte = "".format("%02x", byteArray[i]);
+
             hexString += thisByte;
         }
 
         return hexString;
     }
 
-    private static String asciiToHex(String asciiValue) {
-        char[] chars = asciiValue.toCharArray();
-        StringBuffer hex = new StringBuffer();
-        for (int i = 0; i < chars.length; i++) {
-            hex.append(Integer.toHexString((int) chars[i]));
-        }
-        return hex.toString();
+    public static byte[] hexStringToByteArray(String hexString) {
+        byte[] bytes = new byte[hexString.length() / 2];
 
+        for (int i = 0; i < hexString.length(); i += 2) {
+            String sub = hexString.substring(i, i + 2);
+            Integer intVal = Integer.parseInt(sub, 16);
+            bytes[i / 2] = intVal.byteValue();
+            String hex = "".format("%02x", bytes[i / 2]);
+            System.out.println(hex);
+        }
+        System.out.println(hexString);
+
+        return bytes;
     }
 
     class WindowListener extends WindowAdapter {

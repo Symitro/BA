@@ -5,9 +5,10 @@ import java.util.*;
 import javax.comm.*;
 
 public class SimpleWrite {
+
     static Enumeration portList;
     static CommPortIdentifier portId;
-    static String messageString = "Hello, world!\n";
+    static String messageString = "150301000001";
     static SerialPort serialPort;
     static OutputStream outputStream;
 
@@ -17,25 +18,44 @@ public class SimpleWrite {
         while (portList.hasMoreElements()) {
             portId = (CommPortIdentifier) portList.nextElement();
             if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                // if (portId.getName().equals("COM1")) {
-                if (portId.getName().equals("/dev/term/a")) {
+                if (portId.getName().equals("COM3")) {
+                    //if (portId.getName().equals("/dev/term/a")) {
                     try {
                         serialPort = (SerialPort) portId.open("SimpleWriteApp", 2000);
-                    } catch (PortInUseException e) {}
+
+                    } catch (PortInUseException e) {
+                    }
                     try {
                         outputStream = serialPort.getOutputStream();
-                    } catch (IOException e) {}
+                    } catch (IOException e) {
+                    }
                     try {
-                        serialPort.setSerialPortParams(9600,
-                            SerialPort.DATABITS_8,
-                            SerialPort.STOPBITS_1,
-                            SerialPort.PARITY_NONE);
-                    } catch (UnsupportedCommOperationException e) {}
+                        serialPort.setSerialPortParams(115200,
+                                SerialPort.DATABITS_8,
+                                SerialPort.STOPBITS_2,
+                                SerialPort.PARITY_NONE);
+                    } catch (UnsupportedCommOperationException e) {
+                    }
                     try {
-                        outputStream.write(messageString.getBytes());
-                    } catch (IOException e) {}
+                        byte[] hexToByteArray = hexStringToByteArray(messageString);
+                        outputStream.write(hexToByteArray);
+                    } catch (IOException e) {
+                    }
                 }
             }
         }
+    }
+
+    public static byte[] hexStringToByteArray(String hexString) {
+        byte[] bytes = new byte[hexString.length() / 2];
+
+        for (int i = 0; i < hexString.length(); i += 2) {
+            String sub = hexString.substring(i, i + 2);
+            Integer intVal = Integer.parseInt(sub, 16);
+            bytes[i / 2] = intVal.byteValue();
+            String hex = "".format("0x%x", bytes[i / 2]);
+        }
+
+        return bytes;
     }
 }

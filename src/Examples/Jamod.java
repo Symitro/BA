@@ -5,13 +5,19 @@
  */
 package Examples;
 
+import com.ghgande.j2mod.modbus.*;
+import com.ghgande.j2mod.modbus.net.SerialConnection;
+import com.ghgande.j2mod.modbus.util.SerialParameters;
+import static com.sun.org.apache.xalan.internal.xsltc.cmdline.Compile.printUsage;
+import java.io.IOException;
+
 /**
  *
  * @author Julian
  */
 public class Jamod {
 
-    public static void Main()
+    public static void Main() {
             
     static SerialConnection con = null;
     static int freqMsec = 1000;  // number of milliseconds between
@@ -51,4 +57,10 @@ public class Jamod {
             params.setEcho(true);
             con = new SerialConnection(params);
             con.open();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            printUsage();
+            System.exit(1);
         }
+    }
+}
