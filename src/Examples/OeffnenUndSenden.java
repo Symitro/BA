@@ -18,8 +18,10 @@ import java.util.TooManyListenersException;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.zip.CRC32;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 // TODO Dialog zur Konfiguration der Schnittstellenparameter
 public class OeffnenUndSenden extends JFrame {
@@ -245,9 +247,9 @@ public class OeffnenUndSenden extends JFrame {
         }
         try {
             // byte[] hexToByteArray = hexStringToByteArray();
-            byte[] Sendstream = {(byte) 0x11, (byte) 0x03, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x01, (byte) 0x86, (byte) 0xE2};
-            // CRC32 crc32 = new CRC32();
+            byte[] Sendstream = {(byte) 0x08, (byte) 0x03, (byte) 0x27, (byte) 0x18, (byte) 0x00, (byte) 0x01, (byte) 0x87, (byte) 0x66};
 
+            // CRC32 crc32 = new CRC32();
             // crc32.update(hexToByteArray);
             // outputStream.write(Sendstream, 0, 8);
             outputStream.write(Sendstream);
@@ -260,15 +262,149 @@ public class OeffnenUndSenden extends JFrame {
         }
     }
 
-    void serialPortDatenVerfuegbar() {
+    void serialPortDatenVerfuegbar() throws InterruptedException {
         try {
-            byte[] data = new byte[150];
+            byte[] data = new byte[60];
             int num;
             while (inputStream.available() > 0) {
                 num = inputStream.read(data, 0, data.length);
                 String byteArrayToHex = byteArrayToHexString(data);
-
                 System.out.println("Empfange: " + byteArrayToHex);      //System.out.println("Empfange: " + new String(data, 0, num));
+
+                if ("0f03".equals(byteArrayToHex.substring(0, 4)) || "0F03".equals(byteArrayToHex.substring(0, 4))) {
+                    // Falls Antwort, Abfragen auslösen mit Device + CRC, gesplittet auf HR-Abfolgen
+                    System.out.println("byteArrayToHex = 0F03");
+                    System.out.println("PC-Bridge");
+                    Thread.sleep(5);
+                    try {
+                        byte[] sendstream = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x32};
+                        String sendstreammsg = byteArrayToHexString(sendstream);
+                        System.out.println(sendstreammsg);
+                        CRC16 crc = new CRC16();
+                        crc.update(sendstream, 0, sendstream.length);
+                        crc.getAll();
+                        String crcmsg = byteArrayToHexString(crc.getAll());
+                        System.out.println(crcmsg);
+                        outputStream.write(crc.getAll());
+                        Thread.sleep(5);
+
+                        byte[] sendstream2 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x36};
+                        String sendstreammsg2 = byteArrayToHexString(sendstream2);
+                        System.out.println(sendstreammsg2);
+                        CRC16 crc2 = new CRC16();
+                        crc2.update(sendstream2, 0, sendstream2.length);
+                        crc2.getAll();
+                        String crcmsg2 = byteArrayToHexString(crc2.getAll());
+                        System.out.println(crcmsg2);
+                        outputStream.write(crc2.getAll());
+                        Thread.sleep(5);
+
+                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x05};
+                        String sendstreammsg3 = byteArrayToHexString(sendstream3);
+                        System.out.println(sendstreammsg3);
+                        CRC16 crc3 = new CRC16();
+                        crc3.update(sendstream3, 0, sendstream3.length);
+                        crc3.getAll();
+                        String crcmsg3 = byteArrayToHexString(crc3.getAll());
+                        System.out.println(crcmsg3);
+                        outputStream.write(crc3.getAll());
+
+//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01};
+//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x43};
+
+                        System.out.println("0F03 senden erfolgreich");
+
+                    } catch (IOException e) {
+                        System.out.println("0F03 senden nicht möglich");
+                    }
+                }
+                if ("100302".equals(byteArrayToHex.substring(0, 6))) {
+                    System.out.println("byteArrayToHex = 100302");
+                    System.out.println("Alone at Work 2.0");
+                    System.out.println("Alone at Work 2.0");
+                    System.out.println("Alone at Work 2.0");
+                    System.out.println("Alone at Work 2.0");
+                    System.out.println("Alone at Work 2.0");
+                    System.out.println("Alone at Work 2.0");
+                    System.out.println("Alone at Work 2.0");
+                    System.out.println("Alone at Work 2.0");
+                }
+                if ("110302".equals(byteArrayToHex.substring(0, 6))) {
+                    System.out.println("byteArrayToHex = 110302");
+                    System.out.println("Panel left");
+                    System.out.println("Panel left");
+                    System.out.println("Panel left");
+                    System.out.println("Panel left");
+                    System.out.println("Panel left");
+                    System.out.println("Panel left");
+                    System.out.println("Panel left");
+                    System.out.println("Panel left");
+                }
+                if ("120302".equals(byteArrayToHex.substring(0, 6))) {
+                    System.out.println("byteArrayToHex = 120302");
+                    System.out.println("Panel right");
+                    System.out.println("Panel right");
+                    System.out.println("Panel right");
+                    System.out.println("Panel right");
+                    System.out.println("Panel right");
+                    System.out.println("Panel right");
+                }
+                if ("140302".equals(byteArrayToHex.substring(0, 6))) {
+                    System.out.println("byteArrayToHex = 140302");
+                    System.out.println("Connected Lighting");
+                    System.out.println("Connected Lighting");
+                    System.out.println("Connected Lighting");
+                    System.out.println("Connected Lighting");
+                    System.out.println("Connected Lighting");
+                }
+                if ("150302".equals(byteArrayToHex.substring(0, 6))) {
+                    System.out.println("byteArrayToHex = 150302");
+                    System.out.println("Connected Lighting");
+                    System.out.println("Connected Lighting");
+                    System.out.println("Connected Lighting");
+                    System.out.println("Connected Lighting");
+                    System.out.println("Connected Lighting");
+                    System.out.println("Connected Lighting");
+                }
+                if ("170302".equals(byteArrayToHex.substring(0, 6))) {
+                    System.out.println("byteArrayToHex = 170302");
+                    System.out.println("Senslight Head 1");
+                    System.out.println("Senslight Head 1");
+                    System.out.println("Senslight Head 1");
+                    System.out.println("Senslight Head 1");
+                    System.out.println("Senslight Head 1");
+                    System.out.println("Senslight Head 1");
+                }
+                if ("180302".equals(byteArrayToHex.substring(0, 6))) {
+                    System.out.println("byteArrayToHex = 180302");
+                    System.out.println("Senslight Head 2");
+                    System.out.println("Senslight Head 2");
+                    System.out.println("Senslight Head 2");
+                    System.out.println("Senslight Head 2");
+                    System.out.println("Senslight Head 2");
+                    System.out.println("Senslight Head 2");
+                    System.out.println("Senslight Head 2");
+                    System.out.println("Senslight Head 2");
+                }
+                if ("190302".equals(byteArrayToHex.substring(0, 6))) {
+                    System.out.println("byteArrayToHex = 190302");
+                    System.out.println("Senslight Head 3");
+                    System.out.println("Senslight Head 3");
+                    System.out.println("Senslight Head 3");
+                    System.out.println("Senslight Head 3");
+                    System.out.println("Senslight Head 3");
+                    System.out.println("Senslight Head 3");
+                    System.out.println("Senslight Head 3");
+                }
+                if ("200302".equals(byteArrayToHex.substring(0, 6))) {
+                    System.out.println("byteArrayToHex = 200302");
+                    System.out.println("Senslight Head 4");
+                    System.out.println("Senslight Head 4");
+                    System.out.println("Senslight Head 4");
+                    System.out.println("Senslight Head 4");
+                    System.out.println("Senslight Head 4");
+                    System.out.println("Senslight Head 4");
+                }
 
                 empfangen.append(byteArrayToHex);
             }
@@ -282,7 +418,7 @@ public class OeffnenUndSenden extends JFrame {
         String hexString = "";
 
         for (int i = 0; i < byteArray.length; i++) {
-            String thisByte = "".format("%02x", byteArray[i]);
+            String thisByte = String.format("%02x", byteArray[i]);
 
             hexString += thisByte;
         }
@@ -303,6 +439,7 @@ public class OeffnenUndSenden extends JFrame {
         System.out.println(hexString);
 
         return bytes;
+
     }
 
     class WindowListener extends WindowAdapter {
@@ -360,9 +497,14 @@ public class OeffnenUndSenden extends JFrame {
         public void serialEvent(SerialPortEvent event) {
             System.out.println("serialPortEventlistener");
             switch (event.getEventType()) {
-                case SerialPortEvent.DATA_AVAILABLE:
-                    serialPortDatenVerfuegbar();
-                    break;
+                case SerialPortEvent.DATA_AVAILABLE: {
+                    try {
+                        serialPortDatenVerfuegbar();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(OeffnenUndSenden.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
                 case SerialPortEvent.BI:
                 case SerialPortEvent.CD:
                 case SerialPortEvent.CTS:
