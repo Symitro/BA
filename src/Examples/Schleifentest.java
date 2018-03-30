@@ -1,14 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Examples;
-
-/**
- *
- * @author Julian
- */
 
 import javax.comm.*;
 import java.util.Enumeration;
@@ -18,12 +8,21 @@ import java.util.TooManyListenersException;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-// TODO Dialog zur Konfiguration der Schnittstellenparameter
-public class OeffnenUndSenden extends JFrame {
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+/**
+ *
+ * @author Julian
+ */
+public class Schleifentest extends JFrame {
 
     /**
      * Variable declaration
@@ -67,7 +66,7 @@ public class OeffnenUndSenden extends JFrame {
         System.out.println("Programm gestartet");
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new OeffnenUndSenden();
+                new Schleifentest();
             }
         });
         System.out.println("Main durchlaufen");
@@ -76,7 +75,7 @@ public class OeffnenUndSenden extends JFrame {
     /**
      * Konstruktor
      */
-    public OeffnenUndSenden() {
+    public Schleifentest() {
         System.out.println("Konstruktor aufgerufen");
         initComponents();
     }
@@ -239,23 +238,52 @@ public class OeffnenUndSenden extends JFrame {
         }
     }
 
-    void sendeSerialPort(String nachricht) {
+    void sendeSerialPort(String nachricht) throws InterruptedException {
         System.out.println("Sende: " + nachricht);
         if (serialPortGeoeffnet != true) {
             return;
         }
         try {
-            // byte[] hexToByteArray = hexStringToByteArray();
-            byte[] Sendstream = {(byte) 0x08, (byte) 0x03, (byte) 0x27, (byte) 0x18, (byte) 0x00, (byte) 0x01, (byte) 0x87, (byte) 0x66};
+            byte[] data = new byte[60];
+            int num;
+            num = inputStream.read(data, 0, data.length);
+            String byteArrayToHex = byteArrayToHexString(data);
+            System.out.println("Empfange: " + byteArrayToHex);
+            if ("0f03".equals(byteArrayToHex.substring(0, 4)) || "0F03".equals(byteArrayToHex.substring(0, 4))) {
 
-            // CRC32 crc32 = new CRC32();
-            // crc32.update(hexToByteArray);
-            // outputStream.write(Sendstream, 0, 8);
-            outputStream.write(Sendstream);
-            System.out.println("Hex gesendet");
-            System.out.println(Arrays.toString(Sendstream));
-            System.out.println(Sendstream);
+                byte[] sendstreamCUM4_1 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x20};
+                byte[] sendstreamCUM4_2 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x24};
+                //            byte[] sendstreamCUM4_3 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x05};
+                //            byte[] sendstreamCUM4_4 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01};
+                //            byte[] sendstreamCUM4_5 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x43};
+                //            byte[] sendstreamCUM4_6 = {(byte) 0x08, (byte) 0x03, (byte) 0x10, (byte) 0x00, (byte) 0x00, (byte) 0x06};
+                //            byte[] sendstreamCUM4_7 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x01, (byte) 0x00, (byte) 0x78};
+                //            byte[] sendstreamCUM4_8 = {(byte) 0x08, (byte) 0x03, (byte) 0x27, (byte) 0x17, (byte) 0x00, (byte) 0x04};
+                //            byte[] sendstreamCUM4_9 = {(byte) 0x08, (byte) 0x03, (byte) 0x35, (byte) 0x05, (byte) 0x00, (byte) 0x01};
+                //            byte[] sendstreamCUM4_10 = {(byte) 0x08, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x18};
+                //            byte[] sendstreamCUM4_11 = {(byte) 0x08, (byte) 0x03, (byte) 0x42, (byte) 0x00, (byte) 0x00, (byte) 0x03};
+                //            byte[] sendstreamCUM4_12 = {(byte) 0x08, (byte) 0x03, (byte) 0x45, (byte) 0x00, (byte) 0x00, (byte) 0x31};
+                //            byte[] sendstreamCUM4_13 = {(byte) 0x08, (byte) 0x03, (byte) 0x60, (byte) 0x00, (byte) 0x00, (byte) 0x04};
+                //            byte[] sendstreamCUM4_14 = {(byte) 0x08, (byte) 0x03, (byte) 0x60, (byte) 0x06, (byte) 0x00, (byte) 0x04};
+                //            byte[] sendstreamCUM4_15 = {(byte) 0x08, (byte) 0x03, (byte) 0x61, (byte) 0x00, (byte) 0x00, (byte) 0x04};
+                //            byte[] sendstreamCUM4_16 = {(byte) 0x08, (byte) 0x03, (byte) 0x62, (byte) 0x00, (byte) 0x00, (byte) 0x52};
+                //            byte[] sendstreamCUM4_17 = {(byte) 0x08, (byte) 0x03, (byte) 0x63, (byte) 0x00, (byte) 0x00, (byte) 0x68};
 
+                byte[][] sendarrays = {sendstreamCUM4_1, sendstreamCUM4_2};
+                CRC16 crc = new CRC16();
+//                crc.update(sendarrays[0][1], 0, sendarrays.length
+//                );
+                crc.getAll();
+                String crcmsg = byteArrayToHexString(crc.getAll());
+                System.out.println(crcmsg);
+                outputStream.write(crc.getAll());
+                Thread.sleep(3);
+
+                outputStream.write(sendstreamCUM4_1);
+                System.out.println("Hex gesendet");
+                System.out.println(Arrays.toString(sendstreamCUM4_1));
+                System.out.println(sendstreamCUM4_1);
+            }
         } catch (IOException e) {
             System.out.println("Fehler beim Senden");
         }
@@ -268,60 +296,59 @@ public class OeffnenUndSenden extends JFrame {
             while (inputStream.available() > 0) {
                 num = inputStream.read(data, 0, data.length);
                 String byteArrayToHex = byteArrayToHexString(data);
-                System.out.println("Empfange: " + byteArrayToHex);      //System.out.println("Empfange: " + new String(data, 0, num));
+                System.out.println("Empfange: " + byteArrayToHex);
 
-                if ("0f03".equals(byteArrayToHex.substring(0, 4)) || "0F03".equals(byteArrayToHex.substring(0, 4))) {
-                    // Falls Antwort, Abfragen auslösen mit Device + CRC, gesplittet auf HR-Abfolgen
-                    System.out.println("byteArrayToHex = 0F03");
-                    System.out.println("PC-Bridge");
-                    Thread.sleep(3);
-                    try {
-                        byte[] sendstream = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x20};
-                        CRC16 crc = new CRC16();
-                        crc.update(sendstream, 0, sendstream.length);
-                        crc.getAll();
-                        String crcmsg = byteArrayToHexString(crc.getAll());
-                        System.out.println(crcmsg);
-                        outputStream.write(crc.getAll());
-                        Thread.sleep(3);
-
-//                        byte[] sendstream2 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x24};
-//                        CRC16 crc2 = new CRC16();
-//                        crc2.update(sendstream2, 0, sendstream2.length);
-//                        crc2.getAll();
-//                        String crcmsg2 = byteArrayToHexString(crc2.getAll());
-//                        System.out.println(crcmsg2);
-//                        outputStream.write(crc2.getAll());
+//                if ("0f03".equals(byteArrayToHex.substring(0, 4)) || "0F03".equals(byteArrayToHex.substring(0, 4))) {
+//                    // Falls Antwort, Abfragen auslösen mit Device + CRC, gesplittet auf HR-Abfolgen
+//                    System.out.println("byteArrayToHex = 0F03");
+//                    System.out.println("PC-Bridge");
+//                    Thread.sleep(3);
+//                    try {
+//                        byte[] sendstream = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x20};
+//                        CRC16 crc = new CRC16();
+//                        crc.update(sendstream, 0, sendstream.length);
+//                        crc.getAll();
+//                        String crcmsg = byteArrayToHexString(crc.getAll());
+//                        System.out.println(crcmsg);
+//                        outputStream.write(crc.getAll());
 //                        Thread.sleep(3);
 //
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x05};
-//                        CRC16 crc3 = new CRC16();
-//                        crc3.update(sendstream3, 0, sendstream3.length);
-//                        crc3.getAll();
-//                        String crcmsg3 = byteArrayToHexString(crc3.getAll());
-//                        System.out.println(crcmsg3);
-//                        outputStream.write(crc3.getAll());
-
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x43};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x10, (byte) 0x00, (byte) 0x00, (byte) 0x06};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x01, (byte) 0x00, (byte) 0x78};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x27, (byte) 0x17, (byte) 0x00, (byte) 0x04};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x35, (byte) 0x05, (byte) 0x00, (byte) 0x01};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x18};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x42, (byte) 0x00, (byte) 0x00, (byte) 0x03};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x45, (byte) 0x00, (byte) 0x00, (byte) 0x31};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x60, (byte) 0x00, (byte) 0x00, (byte) 0x04};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x60, (byte) 0x06, (byte) 0x00, (byte) 0x04};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x61, (byte) 0x00, (byte) 0x00, (byte) 0x04};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x62, (byte) 0x00, (byte) 0x00, (byte) 0x52};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x63, (byte) 0x00, (byte) 0x00, (byte) 0x68};
-                        System.out.println("0F03 senden erfolgreich");
-
-                    } catch (IOException e) {
-                        System.out.println("0F03 senden nicht möglich");
-                    }
-                }
+////                        byte[] sendstream2 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x24};
+////                        CRC16 crc2 = new CRC16();
+////                        crc2.update(sendstream2, 0, sendstream2.length);
+////                        crc2.getAll();
+////                        String crcmsg2 = byteArrayToHexString(crc2.getAll());
+////                        System.out.println(crcmsg2);
+////                        outputStream.write(crc2.getAll());
+////                        Thread.sleep(3);
+////
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x05};
+////                        CRC16 crc3 = new CRC16();
+////                        crc3.update(sendstream3, 0, sendstream3.length);
+////                        crc3.getAll();
+////                        String crcmsg3 = byteArrayToHexString(crc3.getAll());
+////                        System.out.println(crcmsg3);
+////                        outputStream.write(crc3.getAll());
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x43};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x10, (byte) 0x00, (byte) 0x00, (byte) 0x06};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x01, (byte) 0x00, (byte) 0x78};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x27, (byte) 0x17, (byte) 0x00, (byte) 0x04};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x35, (byte) 0x05, (byte) 0x00, (byte) 0x01};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x18};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x42, (byte) 0x00, (byte) 0x00, (byte) 0x03};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x45, (byte) 0x00, (byte) 0x00, (byte) 0x31};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x60, (byte) 0x00, (byte) 0x00, (byte) 0x04};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x60, (byte) 0x06, (byte) 0x00, (byte) 0x04};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x61, (byte) 0x00, (byte) 0x00, (byte) 0x04};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x62, (byte) 0x00, (byte) 0x00, (byte) 0x52};
+////                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x63, (byte) 0x00, (byte) 0x00, (byte) 0x68};
+//                        System.out.println("0F03 senden erfolgreich");
+//
+//                    } catch (IOException e) {
+//                        System.out.println("0F03 senden nicht möglich");
+//                    }
+//                }
                 if ("100302".equals(byteArrayToHex.substring(0, 6))) {
                     System.out.println("byteArrayToHex = 100302");
                     System.out.println("Alone at Work 2.0");
@@ -405,7 +432,7 @@ public class OeffnenUndSenden extends JFrame {
                     System.out.println("Senslight Head 4 aktiv");
                 }
 
-                empfangen.append(byteArrayToHex+"\n");
+                empfangen.append(byteArrayToHex + "\n");
             }
 
         } catch (IOException e) {
