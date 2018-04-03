@@ -9,7 +9,6 @@ package Examples;
  *
  * @author Julian
  */
-
 import javax.comm.*;
 import java.util.Enumeration;
 import java.io.*;
@@ -276,46 +275,29 @@ public class OeffnenUndSenden extends JFrame {
                     System.out.println("PC-Bridge");
                     Thread.sleep(3);
                     try {
-                        byte[] sendstream = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x20};
+                        System.out.println(System.currentTimeMillis());
+                        byte[] sendstream = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x01, (byte) 0x00, (byte) 0x40};
                         CRC16 crc = new CRC16();
                         crc.update(sendstream, 0, sendstream.length);
                         crc.getAll();
                         String crcmsg = byteArrayToHexString(crc.getAll());
                         System.out.println(crcmsg);
                         outputStream.write(crc.getAll());
-                        Thread.sleep(3);
+                        
+                        if (inputStream.available() < 0) {
+                            System.out.println(System.currentTimeMillis());
+                            Thread.sleep(3);
+                            System.out.println(System.currentTimeMillis());
+                            byte[] sendstream2 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x41, (byte) 0x00, (byte) 0x0F};
+                            CRC16 crc2 = new CRC16();
+                            crc2.update(sendstream2, 0, sendstream2.length);
+                            crc2.getAll();
+                            String crcmsg2 = byteArrayToHexString(crc2.getAll());
+                            System.out.println(crcmsg2);
+                            outputStream.write(crc2.getAll());
+                            System.out.println(System.currentTimeMillis());
+                        }
 
-//                        byte[] sendstream2 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x24};
-//                        CRC16 crc2 = new CRC16();
-//                        crc2.update(sendstream2, 0, sendstream2.length);
-//                        crc2.getAll();
-//                        String crcmsg2 = byteArrayToHexString(crc2.getAll());
-//                        System.out.println(crcmsg2);
-//                        outputStream.write(crc2.getAll());
-//                        Thread.sleep(3);
-//
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x05};
-//                        CRC16 crc3 = new CRC16();
-//                        crc3.update(sendstream3, 0, sendstream3.length);
-//                        crc3.getAll();
-//                        String crcmsg3 = byteArrayToHexString(crc3.getAll());
-//                        System.out.println(crcmsg3);
-//                        outputStream.write(crc3.getAll());
-
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x43};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x10, (byte) 0x00, (byte) 0x00, (byte) 0x06};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x01, (byte) 0x00, (byte) 0x78};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x27, (byte) 0x17, (byte) 0x00, (byte) 0x04};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x35, (byte) 0x05, (byte) 0x00, (byte) 0x01};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x18};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x42, (byte) 0x00, (byte) 0x00, (byte) 0x03};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x45, (byte) 0x00, (byte) 0x00, (byte) 0x31};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x60, (byte) 0x00, (byte) 0x00, (byte) 0x04};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x60, (byte) 0x06, (byte) 0x00, (byte) 0x04};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x61, (byte) 0x00, (byte) 0x00, (byte) 0x04};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x62, (byte) 0x00, (byte) 0x00, (byte) 0x52};
-//                        byte[] sendstream3 = {(byte) 0x08, (byte) 0x03, (byte) 0x63, (byte) 0x00, (byte) 0x00, (byte) 0x68};
                         System.out.println("0F03 senden erfolgreich");
 
                     } catch (IOException e) {
@@ -405,7 +387,7 @@ public class OeffnenUndSenden extends JFrame {
                     System.out.println("Senslight Head 4 aktiv");
                 }
 
-                empfangen.append(byteArrayToHex+"\n");
+                empfangen.append(byteArrayToHex + "\n");
             }
 
         } catch (IOException e) {
