@@ -8,7 +8,6 @@ import java.util.TooManyListenersException;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -269,7 +268,14 @@ public class Schleifentest extends JFrame {
                 //            byte[] sendstreamCUM4_16 = {(byte) 0x08, (byte) 0x03, (byte) 0x62, (byte) 0x00, (byte) 0x00, (byte) 0x52};
                 //            byte[] sendstreamCUM4_17 = {(byte) 0x08, (byte) 0x03, (byte) 0x63, (byte) 0x00, (byte) 0x00, (byte) 0x68};
 
-                byte[][] sendarrays = {sendstreamCUM4_1, sendstreamCUM4_2};
+                byte[][] sendarrays08 = {sendstreamCUM4_1, sendstreamCUM4_2};
+                
+            
+                byte [] toSend = sendarrays[0];
+
+//                List<Byte> arrays = new ArrayList<Byte>();
+
+                ByteArrayOutputStream bOutput = new ByteArrayOutputStream(12);
                 CRC16 crc = new CRC16();
 //                crc.update(sendarrays[0][1], 0, sendarrays.length
 //                );
