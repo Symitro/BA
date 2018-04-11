@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Examples;
+package Bachelorarbeit_regent.misc;
 
 /**
  *
  * @author Julian
  */
-import static Examples.OeffnenUndSenden.byteArrayToHexString;
 import java.nio.ByteBuffer;
 import java.util.zip.Checksum;
 

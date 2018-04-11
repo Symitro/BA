@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Examples;
+package Bachelorarbeit_regent;
 
 /**
  *
  * @author Julian
  */
+import Bachelorarbeit_regent.data.Datacollection;
+import Bachelorarbeit_regent.data.Dataentry;
+import Bachelorarbeit_regent.misc.ConvertionHelper;
+import Bachelorarbeit_regent.misc.CRC16;
 import javax.comm.*;
 import java.util.Enumeration;
 import java.io.*;
@@ -19,13 +23,25 @@ import java.awt.event.*;
 import java.awt.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
+//https://www.mikrocontroller.net/articles/Serielle_Schnittstelle_unter_Java
 // TODO Dialog zur Konfiguration der Schnittstellenparameter
-public class OeffnenUndSenden extends JFrame {
+public class Diagnoseapplikation extends JFrame {
 
     /**
      * Variable declaration
      */
+    Datacollection CUM4Collection;
+    Datacollection CUCollection;
+    Datacollection AAWCollection;
+    Datacollection PLCollection;
+    Datacollection PRCollection;
+    Datacollection SH1Collection;
+    Datacollection SH2Collection;
+    Datacollection SH3Collection;
+    Datacollection SH4Collection;
+
     CommPortIdentifier serialPortId;
     Enumeration enumComm;
     SerialPort serialPort;
@@ -100,7 +116,7 @@ public class OeffnenUndSenden extends JFrame {
     byte[][] sendarraysCUM4 = {sendstreamCUM4_1, sendstreamCUM4_2, sendstreamCUM4_3, sendstreamCUM4_4, sendstreamCUM4_5, sendstreamCUM4_6, sendstreamCUM4_7, sendstreamCUM4_8, sendstreamCUM4_9, sendstreamCUM4_10, sendstreamCUM4_11, sendstreamCUM4_12, sendstreamCUM4_13, sendstreamCUM4_14, sendstreamCUM4_15, sendstreamCUM4_16, sendstreamCUM4_17, sendstreamCUM4_18, sendstreamCUM4_19, sendstreamCUM4_20, sendstreamCUM4_21, sendstreamCUM4_22, sendstreamCUM4_23, sendstreamCUM4_24, sendstreamCUM4_25, sendstreamCUM4_26, sendstreamCUM4_27, sendstreamCUM4_28, sendstreamCUM4_29, sendstreamCUM4_30, sendstreamCUM4_31, sendstreamCUM4_32, sendstreamCUM4_33, sendstreamCUM4_34, sendstreamCUM4_35};
 
     int messageLengthCUM4 = sendarraysCUM4.length;
-    int currentMessageCUM4 = 0;
+    static int currentMessageCUM4 = 0;
 
     // Abfragen für Control Unit, maximal 16 HR pro Abfrage für Performance
     byte[] sendstreamCU_1 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
@@ -312,6 +328,19 @@ public class OeffnenUndSenden extends JFrame {
      */
     JPanel panel = new JPanel(new GridBagLayout());
 
+    JMenuBar jmenubar1 = new JMenuBar();
+    JMenu jmenu1 = new JMenu();
+    JMenu jmenu2 = new JMenu();
+    JMenu jmenu3 = new JMenu();
+    JMenuItem jmenuitem1 = new JMenuItem();
+    JMenuItem jmenuitem2 = new JMenuItem();
+    JMenuItem jmenuitem3 = new JMenuItem();
+    JMenuItem jmenuitem4 = new JMenuItem();
+    JMenuItem jmenuitem5 = new JMenuItem();
+    JMenuItem jmenuitem6 = new JMenuItem();
+
+    JPanel panelGeraeteDaten = new JPanel(new GridBagLayout());
+    JPanel panelGeraeteListe = new JPanel(new GridBagLayout());
     JPanel panelSetup = new JPanel(new GridBagLayout());
     JPanel panelKommuniziere = new JPanel(new GridBagLayout());
 
@@ -327,6 +356,10 @@ public class OeffnenUndSenden extends JFrame {
     JTextArea empfangen = new JTextArea();
     JScrollPane empfangenJScrollPane = new JScrollPane();
 
+    JList geraeteListe = new JList<>();
+    DefaultTableModel model = new DefaultTableModel();
+    JTable geraeteDatenTabelle = new JTable(model);
+
     /**
      * @param args
      */
@@ -334,17 +367,19 @@ public class OeffnenUndSenden extends JFrame {
         System.out.println("Programm gestartet");
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new OeffnenUndSenden();
+                new Diagnoseapplikation();
             }
         });
         System.out.println("Main durchlaufen");
+//        NewJFrame GUI = new NewJFrame();
     }
 
     /**
      * Konstruktor
      */
-    public OeffnenUndSenden() {
+    public Diagnoseapplikation() {
         System.out.println("Konstruktor aufgerufen");
+        //mainCollection = new Datacollection();
         initComponents();
     }
 
@@ -355,7 +390,7 @@ public class OeffnenUndSenden extends JFrame {
     void initComponents() {
         GridBagConstraints constraints = new GridBagConstraints();
 
-        setTitle("Öffnen und Senden");
+        setTitle("Diagnoseapplikation");
         addWindowListener(new WindowListener());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -372,8 +407,28 @@ public class OeffnenUndSenden extends JFrame {
                 JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         empfangenJScrollPane.setViewportView(empfangen);
 
+        jmenubar1.add(jmenu1);
+        jmenubar1.add(jmenu2);
+        jmenubar1.add(jmenu3);
+        jmenu1.add(jmenuitem1);
+        jmenu1.add(jmenuitem2);
+        jmenu1.add(jmenuitem3);
+        jmenu2.add(jmenuitem4);
+        jmenu3.add(jmenuitem5);
+        jmenu3.add(jmenuitem6);
+        jmenu1.setText("Datei");
+        jmenu2.setText("Firmware");
+        jmenu3.setText("Hilfe");
+        jmenuitem1.setText("Config laden");
+        jmenuitem2.setText("Config speichern");
+        jmenuitem3.setText("Beenden");
+        jmenuitem4.setText("Firmware aktualisieren");
+        jmenuitem5.setText("Über");
+        jmenuitem6.setText("?");
+        setJMenuBar(jmenubar1);
+
         constraints.gridx = 0;
-        constraints.gridy = 0;
+        constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weightx = 0.5;
         constraints.insets = new Insets(5, 5, 5, 5);
@@ -390,8 +445,8 @@ public class OeffnenUndSenden extends JFrame {
         panelSetup.add(aktualisieren, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.weightx = 1;
+        constraints.gridy = 1;
+        constraints.weightx = 2;
         panel.add(panelSetup, constraints);
 
         constraints.gridx = 0;
@@ -408,23 +463,65 @@ public class OeffnenUndSenden extends JFrame {
         panelKommuniziere.add(echo, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.weightx = 1;
+        constraints.gridy = 2;
+        constraints.weightx = 2;
         panel.add(panelKommuniziere, constraints);
 
         constraints.gridx = 0;
-        constraints.gridy = 2;
+        constraints.gridy = 4;
         constraints.weightx = 1;
         constraints.weighty = 1;
         constraints.fill = GridBagConstraints.BOTH;
         panel.add(empfangenJScrollPane, constraints);
 
+        geraeteListe.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = {"Control Unit M4", "Alone at Work 2.0", "Panel Links", "Panel rechts", "Senselighthead 1", "Senselighthead 2", "Senselighthead 3", "Senselighthead 4"};
+
+            public int getSize() {
+                return strings.length;
+            }
+
+            public String getElementAt(int i) {
+                return strings[i];
+            }
+        });
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.weightx = 0.3;
+        constraints.gridwidth = 1;
+        constraints.fill = GridBagConstraints.NONE;
+        panelGeraeteDaten.add(geraeteListe, constraints);
+
+        geraeteDatenTabelle.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{
+                    {null, null, null, null, null, null},},
+                new String[]{
+                    "Variablenname",
+                    "HEX-Adresse", "Aktueller Wert", "Min-Wert", "Max-Wert", "Default-Wert"
+                }
+        ));
+
+        JScrollPane geraeteDatenJScrollPane = new JScrollPane(geraeteDatenTabelle);
+        geraeteDatenTabelle.setFillsViewportHeight(true);
+
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.fill = GridBagConstraints.BOTH;
+        panelGeraeteDaten.add(geraeteDatenJScrollPane);
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.fill = GridBagConstraints.BOTH;
+        panel.add(panelGeraeteDaten, constraints);
+
         aktualisiereSerialPort();
 
         add(panel);
         pack();
-        setSize(600, 300);
+        setSize(1200, 800);
         setVisible(true);
+        setLocationRelativeTo(null);
 
         System.out.println("Fenster erzeugt");
     }
@@ -522,15 +619,11 @@ public class OeffnenUndSenden extends JFrame {
         }
         // Abfrage der Control Unit M4
         if (controlunitm4_status == true && controlunitm4_msgsend == false) {
-            byte[] sendstream = sendarraysCUM4[currentMessageCUM4];
-            currentMessageCUM4++;
+            byte[] sendstream = sendarraysCUM4[Diagnoseapplikation.currentMessageCUM4];
+            Diagnoseapplikation.currentMessageCUM4++;
             totalMessageCount++;
-
-            System.out.println(totalMessageCount);
-            System.out.println(totalLength);
-
-            if (currentMessageCUM4 == messageLengthCUM4) {
-                currentMessageCUM4 = 0;
+            if (Diagnoseapplikation.currentMessageCUM4 == messageLengthCUM4) {
+                Diagnoseapplikation.currentMessageCUM4 = 0;
                 controlunitm4_msgsend = true;
             }
             CRC16 crc = new CRC16();
@@ -538,15 +631,11 @@ public class OeffnenUndSenden extends JFrame {
             crc.getAll();
             outputStream.write(crc.getAll());
         }
-        // Abfrage des Alone at Work-Modules
         if (aloneatwork_status == true && controlunitm4_msgsend == true && aloneatwork_msgsend == false) {
+            // Abfrage des Alone at Work-Modules
             byte[] sendstream = sendarraysAAW[currentMessageAAW];
             currentMessageAAW++;
             totalMessageCount++;
-
-            System.out.println(totalMessageCount);
-            System.out.println(totalLength);
-
             if (currentMessageAAW == messageLengthAAW) {
                 currentMessageAAW = 0;
                 aloneatwork_msgsend = true;
@@ -561,10 +650,6 @@ public class OeffnenUndSenden extends JFrame {
             byte[] sendstream = sendarraysPL[currentMessagePL];
             currentMessagePL++;
             totalMessageCount++;
-
-            System.out.println(totalMessageCount);
-            System.out.println(totalLength);
-
             if (currentMessagePL == messageLengthPL) {
                 currentMessagePL = 0;
                 panelleft_msgsend = true;
@@ -579,10 +664,6 @@ public class OeffnenUndSenden extends JFrame {
             byte[] sendstream = sendarraysPR[currentMessagePR];
             currentMessagePR++;
             totalMessageCount++;
-
-            System.out.println(totalMessageCount);
-            System.out.println(totalLength);
-
             if (currentMessagePR == messageLengthPR) {
                 currentMessagePR = 0;
                 panelright_msgsend = true;
@@ -594,19 +675,13 @@ public class OeffnenUndSenden extends JFrame {
         }
         // Abfrage des Senselight Head 1
         if (senslighthead1_status == true && panelright_msgsend == true && senslighthead1_msgsend == false || senslighthead1_status == true && panelright_status == false && panelleft_msgsend == true && senslighthead1_msgsend == false) {
-
             byte[] sendstream = sendarraysSH1[currentMessageSH1];
             currentMessageSH1++;
             totalMessageCount++;
-
             if (currentMessageSH1 == messageLengthSH1) {
                 currentMessageSH1 = 0;
                 senslighthead1_msgsend = true;
             }
-
-            System.out.println(totalMessageCount);
-            System.out.println(totalLength);
-
             CRC16 crc = new CRC16();
             crc.update(sendstream, 0, sendstream.length);
             crc.getAll();
@@ -615,19 +690,13 @@ public class OeffnenUndSenden extends JFrame {
 
         // Abfrage des Senselight Head 2
         if (senslighthead2_status == true && senslighthead1_msgsend == true && senslighthead2_msgsend == false || senslighthead2_status == true && senslighthead1_status == false && panelright_msgsend == true && senslighthead2_msgsend == false) {
-
             byte[] sendstream = sendarraysSH2[currentMessageSH2];
             currentMessageSH2++;
             totalMessageCount++;
-
             if (currentMessageSH2 == messageLengthSH2) {
                 currentMessageSH2 = 0;
                 senslighthead2_msgsend = true;
             }
-
-            System.out.println(totalMessageCount);
-            System.out.println(totalLength);
-
             CRC16 crc = new CRC16();
             crc.update(sendstream, 0, sendstream.length);
             crc.getAll();
@@ -636,19 +705,13 @@ public class OeffnenUndSenden extends JFrame {
 
         // Abfrage des Senselight Head 3
         if (senslighthead3_status == true && senslighthead2_msgsend == true && senslighthead3_msgsend == false || senslighthead3_status == true && senslighthead2_status == false && senslighthead1_msgsend == true && senslighthead3_msgsend == false) {
-
             byte[] sendstream = sendarraysSH3[currentMessageSH3];
             currentMessageSH3++;
             totalMessageCount++;
-
             if (currentMessageSH3 == messageLengthSH3) {
                 currentMessageSH3 = 0;
                 senslighthead3_msgsend = true;
             }
-
-            System.out.println(totalMessageCount);
-            System.out.println(totalLength);
-
             CRC16 crc = new CRC16();
             crc.update(sendstream, 0, sendstream.length);
             crc.getAll();
@@ -657,19 +720,13 @@ public class OeffnenUndSenden extends JFrame {
 
         // Abfrage des Senselight Head 4
         if (senslighthead4_status == true && senslighthead3_msgsend == true && senslighthead4_msgsend == false || senslighthead4_status == true && senslighthead3_status == false && senslighthead2_msgsend == true && senslighthead4_msgsend == false) {
-
             byte[] sendstream = sendarraysSH2[currentMessageSH4];
             currentMessageSH4++;
             totalMessageCount++;
-
             if (currentMessageSH4 == messageLengthSH4) {
                 currentMessageSH4 = 0;
                 senslighthead4_msgsend = true;
             }
-
-            System.out.println(totalMessageCount);
-            System.out.println(totalLength);
-
             CRC16 crc = new CRC16();
             crc.update(sendstream, 0, sendstream.length);
             crc.getAll();
@@ -677,48 +734,43 @@ public class OeffnenUndSenden extends JFrame {
         }
         if (controlunitm4_status == false) {
             messageLengthCUM4 = 0;
-        }
-        if (controlunitm4_status == true) {
+        } else {
             messageLengthCUM4 = sendarraysCUM4.length;
         }
         if (aloneatwork_status == false) {
             messageLengthAAW = 0;
-        }
-        if (aloneatwork_status == true) {
+        } else {
             messageLengthAAW = sendarraysAAW.length;
         }
         if (panelleft_status == false) {
             messageLengthPL = 0;
-        }
-        if (panelleft_status == true) {
+        } else {
             messageLengthPL = sendarraysPL.length;
         }
         if (panelright_status == false) {
             messageLengthPR = 0;
-        }
-        if (panelright_status == true) {
+        } else {
             messageLengthPR = sendarraysPR.length;
         }
         if (senslighthead1_status == false) {
             messageLengthSH1 = 0;
-        }
-        if (senslighthead2_status == true) {
-            messageLengthSH2 = sendarraysSH2.length;
+        } else {
+            messageLengthSH1 = sendarraysSH1.length;
         }
         if (senslighthead2_status == false) {
             messageLengthSH2 = 0;
-        }
-        if (senslighthead3_status == true) {
-            messageLengthSH3 = sendarraysSH3.length;
+        } else {
+            messageLengthSH2 = sendarraysSH2.length;
         }
         if (senslighthead3_status == false) {
             messageLengthSH3 = 0;
-        }
-        if (senslighthead4_status == true) {
-            messageLengthSH4 = sendarraysSH4.length;
+        } else {
+            messageLengthSH3 = sendarraysSH3.length;
         }
         if (senslighthead4_status == false) {
             messageLengthSH4 = 0;
+        } else {
+            messageLengthSH4 = sendarraysSH4.length;
         }
         totalLength = messageLengthCUM4 + messageLengthAAW + messageLengthPL + messageLengthPR + messageLengthSH1 + messageLengthSH2 + messageLengthSH3 + messageLengthSH4;
 
@@ -726,37 +778,6 @@ public class OeffnenUndSenden extends JFrame {
         if (totalMessageCount == totalLength) {
             endtime = (System.currentTimeMillis() - starttime) / 1000;
             System.out.println(endtime + " Sekunden");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abrfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
             System.out.println("Alle Abfragen gesendet");
             System.out.println("Alle Abfragen gesendet");
 
@@ -783,18 +804,91 @@ public class OeffnenUndSenden extends JFrame {
             return;
         }
     }
-    
-    void response()
 
     void serialPortDatenVerfuegbar() throws InterruptedException {
         try {
             byte[] data = new byte[170];
+            byte[] responsebuffer = new byte[3];
+            byte[] requestbuffer = new byte[3];
             int num;
+            int lastMessageCUM4 = 0;
+
+            if (Diagnoseapplikation.currentMessageCUM4 != 0) {
+                lastMessageCUM4 = Diagnoseapplikation.currentMessageCUM4 - 1;
+            }
+            requestbuffer[0] = sendarraysCUM4[lastMessageCUM4][0];
+            requestbuffer[1] = sendarraysCUM4[lastMessageCUM4][1];
+            requestbuffer[2] = (byte) (2 * sendarraysCUM4[lastMessageCUM4][5]);
+            String sendstreamCUM4bufferstring = ConvertionHelper.byteArrayToHexString(sendarraysCUM4[Diagnoseapplikation.currentMessageCUM4]);
 
             while (inputStream.available() > 0) {
+
                 num = inputStream.read(data, 0, data.length);
-                String byteArrayToHex = byteArrayToHexString(data);
+                String byteArrayToHex = ConvertionHelper.byteArrayToHexString(data);
                 System.out.println("Empfange: " + byteArrayToHex);
+
+                System.arraycopy(data, 0, responsebuffer, 0, 3);
+                String responsebufferstring = ConvertionHelper.byteArrayToHexString(responsebuffer);
+                System.out.println("Responsebufferstring = " + responsebufferstring);
+
+                String requestbufferstring = ConvertionHelper.byteArrayToHexString(requestbuffer);
+                System.out.println("Requestbufferstring = " + requestbufferstring);
+
+                int datalength = byteArrayToHex.length() / 2;
+                int length = 0;
+                boolean msgend = false;
+                boolean lengtheven = false;
+                while ("00".equals(byteArrayToHex.substring(datalength - 2, datalength))) {
+                    datalength -= 2;
+                    length++;
+                    msgend = true;
+                }
+                System.out.println("datalength: " + datalength);
+                System.out.println("length: " + length);
+                System.out.println("msgsend: " + msgend);
+                System.out.println("bytearraylength: " + byteArrayToHex.length());
+
+                String dataHexFull = byteArrayToHex.substring(0, datalength);
+                System.out.println("dataHex: " + dataHexFull);
+
+                System.arraycopy(data, 0, responsebuffer, 0, 3);
+
+                String dataHexCRC = byteArrayToHex.substring(datalength - 4, datalength);
+                System.out.println("dataHexCRC: " + dataHexCRC);
+
+                String dataHexMSG = byteArrayToHex.substring(6, datalength - 4);
+                System.out.println("dataHexMSG: " + dataHexMSG);
+
+                String dataunHexMSG = new ConvertionHelper().convertHexToString(dataHexMSG);
+                System.out.println("dataunHexMSG: " + dataunHexMSG);
+
+//                for (int i = 0; i < requestbuffer.length; i++) {
+//                    if (requestbuffer[i] == responsebuffer[i]) {
+//                        System.out.println("Requestbuffer = Responsebuffer");
+//                        DefaultTableModel model = (DefaultTableModel) geraeteDatenTabelle.getModel();
+//                        model.addRow(new Object[]{null, sendstreamCUM4bufferstring, responsedatabufferstring, null, null, null});
+//                    }
+//                }
+//                CRC16 crc = new CRC16();
+//                crc.update(sendstream, 0, sendstream.length);
+//                crc.getAll();
+//                byte[] responsedatabuffer = new byte[datalength];
+//                System.arraycopy(data, 0, responsedatabuffer, 0, 0);
+//                String responsedatabufferstring = ConvertionHelper.byteArrayToHexString(responsedatabuffer);
+//
+////                responsedatabufferstring = ConvertionHelper.byteArrayToHexString(responsedatabuffer);
+//                byte[] responsedatabufferchar = decode(responsedatabufferstring);
+//                System.out.println("Length: " + responsedatabufferchar.length);
+//                for (int i = 0; i > responsedatabufferchar.length; i++) {
+//                    System.out.println("Responsedatabufferchar Nr. " + responsedatabufferchar[i]
+//                    );
+//                }
+//                System.out.println("Responsedatabufferstring = " + responsedatabufferstring);
+//                if (msgend == true && lengtheven == true) {
+//                    System.arraycopy(data, 3, responsedatabuffer, 0, responsedatabuffer.length);
+//                    responsedatabufferstring = ConvertionHelper.byteArrayToHexString(responsedatabuffer);
+//                    System.out.println("Responsedatabufferstring = " + responsedatabufferstring);
+//                }
                 if ("100302".equals(byteArrayToHex.substring(0, 6))) {
                     aloneatwork_status = true;
                     System.out.println("byteArrayToHex = 100302");
@@ -841,6 +935,7 @@ public class OeffnenUndSenden extends JFrame {
                     System.out.println("byteArrayToHex = 0F03");
                     System.out.println("PC-Bridge initialisiert: " + System.currentTimeMillis());
                     requestSend();
+//                    responseReceive();
                 }
                 empfangen.append(byteArrayToHex + "\n");
             }
@@ -848,36 +943,8 @@ public class OeffnenUndSenden extends JFrame {
             System.out.println("");
         } catch (IOException e) {
             System.out.println("Fehler beim Lesen empfangener Daten");
-            
+
         }
-    }
-
-    public static String byteArrayToHexString(byte[] byteArray) {
-        String hexString = "";
-
-        for (int i = 0; i < byteArray.length; i++) {
-            String thisByte = String.format("%02x", byteArray[i]);
-
-            hexString += thisByte;
-        }
-
-        return hexString;
-    }
-
-    public static byte[] hexStringToByteArray(String hexString) {
-        byte[] bytes = new byte[hexString.length() / 2];
-
-        for (int i = 0; i < hexString.length(); i += 2) {
-            String sub = hexString.substring(i, i + 2);
-            Integer intVal = Integer.parseInt(sub, 16);
-            bytes[i / 2] = intVal.byteValue();
-            String hex = "".format("%02x", bytes[i / 2]);
-            System.out.println(hex);
-        }
-        System.out.println(hexString);
-
-        return bytes;
-
     }
 
     class WindowListener extends WindowAdapter {
@@ -930,22 +997,17 @@ public class OeffnenUndSenden extends JFrame {
     /**
      *
      */
-//    public static long time() {
-//        final static loopstarttime  = System.currentTimeMillis()
-//        return loopstarttime;
-//    }
     class serialPortEventListener implements SerialPortEventListener {
 
         public void serialEvent(SerialPortEvent event) {
             System.out.println("serialPortEventlistener");
-//            public static native long whilestarttime = System.currentTimeMillis();
 
             switch (event.getEventType()) {
                 case SerialPortEvent.DATA_AVAILABLE: {
                     try {
                         serialPortDatenVerfuegbar();
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(OeffnenUndSenden.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
                 break;
