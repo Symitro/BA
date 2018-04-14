@@ -11,7 +11,7 @@ import java.nio.ByteBuffer;
  *
  * @author Julian
  */
-public class ConvertionHelper {
+public class ConversionHelper {
 
     public static byte[] decode(String hex) {
 

@@ -69,6 +69,20 @@ public class CRC16 implements Checksum {
         sum = 0xFFFF;
     }
 
+    public boolean check(byte[] msgbuffer, byte[] crcbuffer) {
+        update(msgbuffer, 0, msgbuffer.length);
+        byte[] crccalculatedbuffer = ByteBuffer.allocate(4).putInt(sum).array();
+        byte[] output = new byte[2];
+        System.arraycopy(crccalculatedbuffer, 3, output, 0, 1);
+        System.arraycopy(crccalculatedbuffer, 2, output, 1, 1);
+        for (int i = 0; i < 2; i++) {
+            if (output[i] != crcbuffer[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void update(byte[] b, int off, int len) {
         sendstream = b;
         for (int i = off; i < off + len; i++) {

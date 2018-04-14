@@ -11,8 +11,9 @@ package Bachelorarbeit_regent;
  */
 import Bachelorarbeit_regent.data.Datacollection;
 import Bachelorarbeit_regent.data.Dataentry;
-import Bachelorarbeit_regent.misc.ConvertionHelper;
+import Bachelorarbeit_regent.misc.ConversionHelper;
 import Bachelorarbeit_regent.misc.CRC16;
+import Bachelorarbeit_regent.misc.CSVReader;
 import javax.comm.*;
 import java.util.Enumeration;
 import java.io.*;
@@ -21,6 +22,8 @@ import java.util.TooManyListenersException;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
@@ -314,6 +317,7 @@ public class Diagnoseapplikation extends JFrame {
 
     byte[][] sendarraysSH4 = {sendstreamSH4_1, sendstreamSH4_2, sendstreamSH4_3, sendstreamSH4_4, sendstreamSH4_5, sendstreamSH4_6, sendstreamSH4_7, sendstreamSH4_8, sendstreamSH4_9, sendstreamSH4_10, sendstreamSH4_11, sendstreamSH4_12, sendstreamSH4_13, sendstreamSH4_14, sendstreamSH4_15, sendstreamSH4_16, sendstreamSH4_17};
 
+//    byte[][][] sendarrays = {sendarraysCUM4, sendarraysCU, sendarraysAAW, sendarraysPL, sendarraysPR, sendarraysSH1, sendarraysSH2, sendarraysSH3, sendarraysSH4};
     int messageLengthSH4 = sendarraysSH4.length;
     int currentMessageSH4 = 0;
 
@@ -381,6 +385,17 @@ public class Diagnoseapplikation extends JFrame {
         System.out.println("Konstruktor aufgerufen");
         //mainCollection = new Datacollection();
         initComponents();
+        //1. Step - Load data from csv file
+        CUM4Collection = CSVReader.getDataFromCsv("controlunit_m4");
+        CUCollection = CSVReader.getDataFromCsv("controlunit");
+        AAWCollection = CSVReader.getDataFromCsv("aloneatwork");
+        PLCollection = CSVReader.getDataFromCsv("panel");
+        PRCollection = CSVReader.getDataFromCsv("panel");
+        SH1Collection = CSVReader.getDataFromCsv("sensormodule");
+        SH2Collection = CSVReader.getDataFromCsv("sensormodule");
+        SH3Collection = CSVReader.getDataFromCsv("sensormodule");
+        SH4Collection = CSVReader.getDataFromCsv("sensormodule");
+
     }
 
     protected void finalize() {
@@ -604,19 +619,50 @@ public class Diagnoseapplikation extends JFrame {
     }
 
     public byte[] requestSend() throws IOException {
-        System.out.println(controlunitm4_status);
-        System.out.println(aloneatwork_status);
-        System.out.println(panelleft_status);
-        System.out.println(panelright_status);
-        System.out.println(senslighthead1_status);
-        System.out.println(senslighthead2_status);
-        System.out.println(senslighthead3_status);
-        System.out.println(senslighthead4_status);
+        System.out.println("controlunitm4_status: " + controlunitm4_status);
+        System.out.println("aloneatwork_status: " + aloneatwork_status);
+        System.out.println("panelleft_status: " + panelleft_status);
+        System.out.println("panelright_status: " + panelright_status);
+        System.out.println("senslighthead1_status: " + senslighthead1_status);
+        System.out.println("senslighthead2_status: " + senslighthead2_status);
+        System.out.println("senslighthead3_status: " + senslighthead3_status);
+        System.out.println("senslighthead4_status: " + senslighthead4_status);
 
         if (totalMessageCount == 0) {
             starttime = System.currentTimeMillis();
             System.out.println(starttime);
         }
+//        Object[] devices = new Object[9];
+//        devices[0] = sendarraysCUM4;
+//        devices[1] = sendarraysAAW;
+//        devices[2] = sendarraysPL;
+//        devices[3] = sendarraysPR;
+//        devices[4] = sendarraysSH1;
+//        devices[5] = sendarraysSH2;
+//        devices[6] = sendarraysSH3;
+//        devices[7] = sendarraysSH4;
+//        devices[8] = sendarraysCU;
+//
+//        Boolean[] deviceOnline = new Boolean[9];
+//        Boolean[] deviceFinished = new Boolean[9];
+//        Arrays.fill(deviceFinished, Boolean.FALSE);
+//        deviceOnline[0] = controlunitm4_status;
+//        deviceOnline[1] = aloneatwork_status;
+//        deviceOnline[2] = panelleft_status;
+//        deviceOnline[3] = panelright_status;
+//        deviceOnline[4] = senslighthead1_status;
+//        deviceOnline[5] = senslighthead2_status;
+//        deviceOnline[6] = senslighthead3_status;
+//        deviceOnline[7] = senslighthead4_status;
+//        deviceOnline[8] = controlunit_status;
+//
+//        for (int i = 0; i < deviceOnline.length; i++) {
+//            if (deviceOnline[i] == true && deviceFinished[i] == false) {
+//            System.out.println("deviceOnline: " + i + " " + deviceOnline[i]);
+//            System.out.println("deviceFinished: " + i + " " + deviceFinished[i]);
+//            }
+//        }
+
         // Abfrage der Control Unit M4
         if (controlunitm4_status == true && controlunitm4_msgsend == false) {
             byte[] sendstream = sendarraysCUM4[Diagnoseapplikation.currentMessageCUM4];
@@ -797,9 +843,9 @@ public class Diagnoseapplikation extends JFrame {
         return null;
     }
 
-    void sendeSerialPort(String nachricht) {
-        System.out.println("Sende: " + nachricht);
-
+    void sendeSerialPort() {
+        // Alte Daten mit neuen Daten vergleichen, falls Änderungen 
+        // Bsp. 08 06 0000 0001 CRC senden
         if (serialPortGeoeffnet != true) {
             return;
         }
@@ -808,75 +854,68 @@ public class Diagnoseapplikation extends JFrame {
     void serialPortDatenVerfuegbar() throws InterruptedException {
         try {
             byte[] data = new byte[170];
+            byte[] requestbuffercum = new byte[3];
             byte[] responsebuffer = new byte[3];
-            byte[] requestbuffer = new byte[3];
+            byte[] crcbuffer = new byte[2];
             int num;
             int lastMessageCUM4 = 0;
+            boolean msgreceived = false;
 
             if (Diagnoseapplikation.currentMessageCUM4 != 0) {
                 lastMessageCUM4 = Diagnoseapplikation.currentMessageCUM4 - 1;
             }
-            requestbuffer[0] = sendarraysCUM4[lastMessageCUM4][0];
-            requestbuffer[1] = sendarraysCUM4[lastMessageCUM4][1];
-            requestbuffer[2] = (byte) (2 * sendarraysCUM4[lastMessageCUM4][5]);
-            String sendstreamCUM4bufferstring = ConvertionHelper.byteArrayToHexString(sendarraysCUM4[Diagnoseapplikation.currentMessageCUM4]);
+            requestbuffercum[0] = sendarraysCUM4[lastMessageCUM4][0];
+            requestbuffercum[1] = sendarraysCUM4[lastMessageCUM4][1];
+            requestbuffercum[2] = (byte) (2 * sendarraysCUM4[lastMessageCUM4][5]);
 
             while (inputStream.available() > 0) {
 
                 num = inputStream.read(data, 0, data.length);
-                String byteArrayToHex = ConvertionHelper.byteArrayToHexString(data);
-                System.out.println("Empfange: " + byteArrayToHex);
-
-                System.arraycopy(data, 0, responsebuffer, 0, 3);
-                String responsebufferstring = ConvertionHelper.byteArrayToHexString(responsebuffer);
-                System.out.println("Responsebufferstring = " + responsebufferstring);
-
-                String requestbufferstring = ConvertionHelper.byteArrayToHexString(requestbuffer);
-                System.out.println("Requestbufferstring = " + requestbufferstring);
-
+                String byteArrayToHex = ConversionHelper.byteArrayToHexString(data);
                 int datalength = byteArrayToHex.length() / 2;
-                int length = 0;
-                boolean msgend = false;
-                boolean lengtheven = false;
                 while ("00".equals(byteArrayToHex.substring(datalength - 2, datalength))) {
                     datalength -= 2;
-                    length++;
-                    msgend = true;
                 }
+                System.out.println("Empfange: " + byteArrayToHex);
                 System.out.println("datalength: " + datalength);
-                System.out.println("length: " + length);
-                System.out.println("msgsend: " + msgend);
-                System.out.println("bytearraylength: " + byteArrayToHex.length());
+                if (datalength > 6) {
+                    // Array mit ersten 3 Byte für die Überprüfung der Antwort
+                    System.arraycopy(data, 0, responsebuffer, 0, 3);
 
-                String dataHexFull = byteArrayToHex.substring(0, datalength);
-                System.out.println("dataHex: " + dataHexFull);
+                    // Array für CRC-Teil der empfangenen Nachricht, zur Gegenprüfung des CRC
+                    System.arraycopy(data, (datalength / 2) - 2, crcbuffer, 0, 2);
+                    String crcbufferstring = ConversionHelper.byteArrayToHexString(crcbuffer);
+                    System.out.println("crcbufferstring: " + crcbufferstring);
 
-                System.arraycopy(data, 0, responsebuffer, 0, 3);
+                    // Array für Nachricht ohne CRC, zur Gegenprüfung des CRC
+                    byte[] msgbuffer = new byte[(datalength / 2) - 2];
+                    System.arraycopy(data, 0, msgbuffer, 0, (datalength / 2) - 2);
+                    String msgbufferstring = ConversionHelper.byteArrayToHexString(msgbuffer);
+                    System.out.println("msgbufferstring: " + msgbufferstring);
 
-                String dataHexCRC = byteArrayToHex.substring(datalength - 4, datalength);
-                System.out.println("dataHexCRC: " + dataHexCRC);
+                    CRC16 crcreverse = new CRC16();
+                    if (crcreverse.check(msgbuffer, crcbuffer)) {
+                        System.out.println("crcreverse.check = true");
+                    }
 
-                String dataHexMSG = byteArrayToHex.substring(6, datalength - 4);
-                System.out.println("dataHexMSG: " + dataHexMSG);
-
-                String dataunHexMSG = new ConvertionHelper().convertHexToString(dataHexMSG);
-                System.out.println("dataunHexMSG: " + dataunHexMSG);
-
-//                for (int i = 0; i < requestbuffer.length; i++) {
-//                    if (requestbuffer[i] == responsebuffer[i]) {
-//                        System.out.println("Requestbuffer = Responsebuffer");
+//////////////                for (int i = 0; i < requestbuffercum.length; i++) {
+//////////////                    if (requestbuffercum[i] == responsebuffer[i]) {
+//////////////                        for (Map.Entry entry : CUM4Collection.dataEntryCollection.entrySet()) {
+//////////////                            if (entry.getKey() == "HEx") {
+//////////////                                CUM4Collection.addLiveValue((String) entry.getKey(), "sdaasd");
+//////////////                            }
+//////////////                        }
+//////////////                    }
+//////////////                }
+//                        if (requestbuffer [startadresse] == CUM4Collection.equals(hexIdentifier)){
+//                        CUM4Collection.addLiveValue(data.hexIdentifier, currentValue);
 //                        DefaultTableModel model = (DefaultTableModel) geraeteDatenTabelle.getModel();
 //                        model.addRow(new Object[]{null, sendstreamCUM4bufferstring, responsedatabufferstring, null, null, null});
-//                    }
-//                }
-//                CRC16 crc = new CRC16();
-//                crc.update(sendstream, 0, sendstream.length);
-//                crc.getAll();
 //                byte[] responsedatabuffer = new byte[datalength];
 //                System.arraycopy(data, 0, responsedatabuffer, 0, 0);
-//                String responsedatabufferstring = ConvertionHelper.byteArrayToHexString(responsedatabuffer);
+//                String responsedatabufferstring = ConversionHelper.byteArrayToHexString(responsedatabuffer);
 //
-////                responsedatabufferstring = ConvertionHelper.byteArrayToHexString(responsedatabuffer);
+////                responsedatabufferstring = ConversionHelper.byteArrayToHexString(responsedatabuffer);
 //                byte[] responsedatabufferchar = decode(responsedatabufferstring);
 //                System.out.println("Length: " + responsedatabufferchar.length);
 //                for (int i = 0; i > responsedatabufferchar.length; i++) {
@@ -886,60 +925,64 @@ public class Diagnoseapplikation extends JFrame {
 //                System.out.println("Responsedatabufferstring = " + responsedatabufferstring);
 //                if (msgend == true && lengtheven == true) {
 //                    System.arraycopy(data, 3, responsedatabuffer, 0, responsedatabuffer.length);
-//                    responsedatabufferstring = ConvertionHelper.byteArrayToHexString(responsedatabuffer);
+//                    responsedatabufferstring = ConversionHelper.byteArrayToHexString(responsedatabuffer);
 //                    System.out.println("Responsedatabufferstring = " + responsedatabufferstring);
 //                }
-                if ("100302".equals(byteArrayToHex.substring(0, 6))) {
-                    aloneatwork_status = true;
-                    System.out.println("byteArrayToHex = 100302");
-                    System.out.println("Alone at Work 2.0");
-                }
-                if ("110302".equals(byteArrayToHex.substring(0, 6))) {
-                    panelleft_status = true;
-                    System.out.println("byteArrayToHex = 110302");
-                    System.out.println("Panel left aktiv");
-                }
-                if ("120302".equals(byteArrayToHex.substring(0, 6))) {
-                    panelright_status = true;
-                    System.out.println("byteArrayToHex = 120302");
-                    System.out.println("Panel right aktiv");
-                }
-                if ("150302".equals(byteArrayToHex.substring(0, 6))) {
-                    connectedlighting_status = true;
-                    System.out.println("byteArrayToHex = 150302");
-                    System.out.println("Connected Lighting aktiv");
-                }
-                if ("170304".equals(byteArrayToHex.substring(0, 6))) {
-                    senslighthead1_status = true;
-                    System.out.println("byteArrayToHex = 170302");
-                    System.out.println("Senslight Head 1 aktiv");
-                }
-                if ("180304".equals(byteArrayToHex.substring(0, 6))) {
-                    senslighthead2_status = true;
-                    System.out.println("byteArrayToHex = 180302");
-                    System.out.println("Senslight Head 2 aktiv");
-                }
-                if ("190304".equals(byteArrayToHex.substring(0, 6))) {
-                    senslighthead3_status = true;
-                    System.out.println("byteArrayToHex = 190302");
-                    System.out.println("Senslight Head 3 aktiv");
-                }
-                if ("200304".equals(byteArrayToHex.substring(0, 6))) {
-                    senslighthead4_status = true;
-                    System.out.println("byteArrayToHex = 200302");
-                    System.out.println("Senslight Head 4 aktiv");
-                }
-                if ("0f03".equals(byteArrayToHex.substring(0, 4)) || "0F03".equals(byteArrayToHex.substring(0, 4))) {
-                    // Falls Antwort, Abfragen auslösen mit Device + CRC, gesplittet auf HR-Abfolgen
-                    controlunitm4_status = true;
-                    System.out.println("byteArrayToHex = 0F03");
-                    System.out.println("PC-Bridge initialisiert: " + System.currentTimeMillis());
-                    requestSend();
+                    if ("100302".equals(byteArrayToHex.substring(0, 6))) {
+                        aloneatwork_status = true;
+                        System.out.println("byteArrayToHex = 100302");
+                        System.out.println("Alone at Work 2.0");
+                    }
+                    if ("110302".equals(byteArrayToHex.substring(0, 6))) {
+                        panelleft_status = true;
+                        System.out.println("byteArrayToHex = 110302");
+                        System.out.println("Panel left aktiv");
+                    }
+                    if ("120302".equals(byteArrayToHex.substring(0, 6))) {
+                        panelright_status = true;
+                        System.out.println("byteArrayToHex = 120302");
+                        System.out.println("Panel right aktiv");
+                    }
+                    if ("150302".equals(byteArrayToHex.substring(0, 6))) {
+                        connectedlighting_status = true;
+                        System.out.println("byteArrayToHex = 150302");
+                        System.out.println("Connected Lighting aktiv");
+                    }
+                    if ("170304".equals(byteArrayToHex.substring(0, 6))) {
+                        senslighthead1_status = true;
+                        System.out.println("byteArrayToHex = 170302");
+                        System.out.println("Senslight Head 1 aktiv");
+                    }
+                    if ("180304".equals(byteArrayToHex.substring(0, 6))) {
+                        senslighthead2_status = true;
+                        System.out.println("byteArrayToHex = 180302");
+                        System.out.println("Senslight Head 2 aktiv");
+                    }
+                    if ("190304".equals(byteArrayToHex.substring(0, 6))) {
+                        senslighthead3_status = true;
+                        System.out.println("byteArrayToHex = 190302");
+                        System.out.println("Senslight Head 3 aktiv");
+                    }
+                    if ("200304".equals(byteArrayToHex.substring(0, 6))) {
+                        senslighthead4_status = true;
+                        System.out.println("byteArrayToHex = 200302");
+                        System.out.println("Senslight Head 4 aktiv");
+                    }
+                    if ("0f03".equals(byteArrayToHex.substring(0, 4)) || "0F03".equals(byteArrayToHex.substring(0, 4))) {
+                        // Falls Antwort, Abfragen auslösen mit Device + CRC, gesplittet auf HR-Abfolgen
+                        controlunitm4_status = true;
+                        System.out.println("byteArrayToHex = 0F03");
+                        System.out.println("PC-Bridge initialisiert: " + System.currentTimeMillis());
+                        requestSend();
+//                    writeSend();
 //                    responseReceive();
+                    }
+                    empfangen.append(byteArrayToHex + "\n");
+                } else {
+                    System.err.println("Empfangene Nachricht kleiner als 6");
                 }
-                empfangen.append(byteArrayToHex + "\n");
             }
-            System.out.println("while-Schleife durchlaufen: " + System.currentTimeMillis());
+//            System.out.println("while-Schleife durchlaufen: " + System.currentTimeMillis());
             System.out.println("");
         } catch (IOException e) {
             System.out.println("Fehler beim Lesen empfangener Daten");
@@ -990,7 +1033,7 @@ public class Diagnoseapplikation extends JFrame {
             if (echo.isSelected() == true) {
                 empfangen.append(nachricht.getText() + "\n");
             }
-            sendeSerialPort(nachricht.getText() + "\n");
+//            sendeSerialPort(nachricht.getText() + "\n");
         }
     }
 

@@ -16,50 +16,49 @@ import java.io.IOException;
  *
  * @author Julian
  */
+// https://www.mkyong.com/java/how-to-read-and-parse-csv-file-in-java/
 public class CSVReader {
 
-    public static void main(String[] args) {
-        Datacollection mainCollection = null;
-//        Datacollection CUCollection;
-//        Datacollection AAWCollection;
-//        Datacollection PLCollection;
-//        Datacollection PRCollection;
-//        Datacollection SH1Collection;
-//        Datacollection SH2Collection;
-//        Datacollection SH3Collection;
-//        Datacollection SH4Collection;
+    public static Datacollection getDataFromCsv(String deviceType) {
+        Datacollection mainCollection = new Datacollection();
 
-        String csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/controlunit_m4/modbus.CSV";
+        String csvFile = "";
+        switch (deviceType) {
+            case "controlunit_m4":
+                csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/controlunit_m4/modbus.CSV";
+                break;
+            case "controlunit":
+                csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/controlunit/modbus.CSV";
+                break;
+            case "aloneatwork":
+                csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/aloneatwork/modbus.CSV";
+                break;
+            case "panel":
+                csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/panel/modbus.CSV";
+                break;
+            case "sensormodule":
+                csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/sensormodule/modbus.CSV";
+                break;
+        }
+
         BufferedReader br = null;
         String line = "";
         String cvsSplitBy = ";";
-
         try {
-
             br = new BufferedReader(new FileReader(csvFile));
+            // 1. Zeile wird separat verwaltet, https://stackoverflow.com/questions/18306270/skip-first-line-while-reading-csv-file-in-java
             String headerLine = br.readLine();
-            System.out.println("headerLine: " + headerLine);
             while ((line = br.readLine()) != null) {
                 String[] cell = line.split(cvsSplitBy);
                 //New data object
                 Dataentry data = new Dataentry();
-//                data.varName = cell[0];
+                data.varName = cell[0];
                 data.hexIdentifier = cell[5];
                 data.valueType = cell[7];
                 data.min = Integer.parseInt(cell[9]);
                 data.max = Integer.parseInt(cell[10]);
                 data.defaultValue = cell[11];
-                data.currentValue = 1;
-
-                System.out.println("data.varName= " + data.varName);
-                System.out.println("data.hexIdentifier= " + data.hexIdentifier);
-                System.out.println("data.valueType= " + data.valueType);
-                System.out.println("data.min= " + data.min);
-                System.out.println("data.max= " + data.max);
-                System.out.println("data.defaultValue= " + data.defaultValue);
-                System.out.println("data.currentValue= " + data.currentValue);
-                mainCollection.addEntry("hex", data);
-
+                mainCollection.addEntry(data.hexIdentifier, data);
             }
 
         } catch (FileNotFoundException e) {
@@ -75,7 +74,7 @@ public class CSVReader {
                 }
             }
         }
-
+        return mainCollection;
     }
 
 }

@@ -12,9 +12,10 @@ import java.util.Map;
  *
  * @author Julian
  */
+// https://stackoverflow.com/questions/12663889/hashmapstring-object-how-to-put-object-itself-as-in-place-of-string
 public class Datacollection {
-    
-    Map<String, Dataentry> dataEntryCollection;
+
+    public Map<String, Dataentry> dataEntryCollection;
 
     public Datacollection() {
         dataEntryCollection = new HashMap<String, Dataentry>();
@@ -31,7 +32,11 @@ public class Datacollection {
         return dataEntryCollection.get(hexIdentifier).defaultValue;
     }
 
-    public void addLiveValue() {
-
+    public void addLiveValue(String hexIdentifier, Object value) {
+        dataEntryCollection.get(hexIdentifier).currentValue = value;
     }
+//    
+//    public void getDataByIdentifier(String hexIdentifier) {
+//        dataEntryCollection.get(hexIdentifier).currentValue = value;
+//    }
 }
