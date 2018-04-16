@@ -32,11 +32,26 @@ public class Datacollection {
         return dataEntryCollection.get(hexIdentifier).defaultValue;
     }
 
-    public void addLiveValue(String hexIdentifier, Object value) {
+    public void addCurrentValue(String hexIdentifier, Object value) {
         dataEntryCollection.get(hexIdentifier).currentValue = value;
     }
-//    
-//    public void getDataByIdentifier(String hexIdentifier) {
-//        dataEntryCollection.get(hexIdentifier).currentValue = value;
-//    }
+
+    public Object getDataByIdentifier(String hexIdentifier, String data) {
+        if (data.equals("varName")) {
+            return dataEntryCollection.get(hexIdentifier).varName;
+        }
+        if (data.equals("defaultValue")) {
+            return dataEntryCollection.get(hexIdentifier).defaultValue;
+        }
+        if (data.equals("currentValue")) {
+            return dataEntryCollection.get(hexIdentifier).currentValue;
+        }
+        if (data.equals("minValue")) {
+            return dataEntryCollection.get(hexIdentifier).minValue;
+        }
+        if (data.equals("maxValue")) {
+            return dataEntryCollection.get(hexIdentifier).maxValue;
+        }
+        return dataEntryCollection.get(hexIdentifier).valueType;
+    }
 }

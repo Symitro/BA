@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Bachelorarbeit_regent;
+package Examples;
 
 /**
  *
  * @author Julian
  */
+import Bachelorarbeit_regent.*;
 import Bachelorarbeit_regent.data.Datacollection;
 import Bachelorarbeit_regent.data.Dataentry;
 import Bachelorarbeit_regent.misc.ConversionHelper;
@@ -30,7 +31,7 @@ import javax.swing.table.DefaultTableModel;
 
 //https://www.mikrocontroller.net/articles/Serielle_Schnittstelle_unter_Java
 // TODO Dialog zur Konfiguration der Schnittstellenparameter
-public class Diagnoseapplikation extends JFrame {
+public class Diagnoseapplikationbk1604 extends JFrame {
 
     /**
      * Variable declaration
@@ -373,7 +374,7 @@ public class Diagnoseapplikation extends JFrame {
         System.out.println("Programm gestartet");
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new Diagnoseapplikation();
+                new Diagnoseapplikationbk1604();
             }
         });
         System.out.println("Main durchlaufen");
@@ -383,10 +384,10 @@ public class Diagnoseapplikation extends JFrame {
     /**
      * Konstruktor
      */
-    public Diagnoseapplikation() {
+    public Diagnoseapplikationbk1604() {
         System.out.println("Konstruktor aufgerufen");
         initComponents();
-
+        
         // Daten werden aus CSV gelesen
         CUM4Collection = CSVReader.getDataFromCsv("controlunit_m4");
         CUCollection = CSVReader.getDataFromCsv("controlunit");
@@ -445,7 +446,6 @@ public class Diagnoseapplikation extends JFrame {
         jmenuitem6.setText("?");
         setJMenuBar(jmenubar1);
 
-        // erste Zeile wird generiert, Auswahlbutton für COM-Port
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -453,32 +453,45 @@ public class Diagnoseapplikation extends JFrame {
         constraints.insets = new Insets(5, 5, 5, 5);
         panelSetup.add(auswahl, constraints);
 
-        // COM-Port wird geöffnet
         constraints.gridx = 1;
         constraints.weightx = 0;
         panelSetup.add(oeffnen, constraints);
 
-        // COM-Port wird geschlossen
         constraints.gridx = 2;
         panelSetup.add(schliessen, constraints);
 
-        // COM-Portliste wird aktualisiert
         constraints.gridx = 3;
         panelSetup.add(aktualisieren, constraints);
 
-        // Abfragen werden gestartet
-        constraints.gridx = 4;
+        constraints.gridx = 5;
+//        constraints.weightx = 0;
         panelSetup.add(abfragenbtn, constraints);
 
-        // Änderungen an aktiven Werten werden übernommen
-        constraints.gridx = 5;
+        constraints.gridx = 6;
+//        constraints.weightx = 0;
         panelSetup.add(uebernehmen, constraints);
 
-        // einzelne Elemente werden dem Panel hinzugefügt
+        
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.weightx = 2;
         panel.add(panelSetup, constraints);
+//
+//        constraints.gridx = 2;
+//        constraints.weightx = 0;
+//        panelKommuniziere.add(echo, constraints);
+//
+//        constraints.gridx = 0;
+//        constraints.gridy = 2;
+//        constraints.weightx = 2;
+//        panel.add(panelKommuniziere, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.weightx = 1;
+        constraints.weighty = 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        panel.add(empfangenJScrollPane, constraints);
 
         geraeteListe.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = {"Control Unit M4", "Alone at Work 2.0", "Panel Links", "Panel rechts", "Senselighthead 1", "Senselighthead 2", "Senselighthead 3", "Senselighthead 4"};
@@ -494,7 +507,7 @@ public class Diagnoseapplikation extends JFrame {
 
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.weightx = 0;
+        constraints.weightx = 0.3;
         constraints.gridwidth = 1;
         constraints.fill = GridBagConstraints.NONE;
         panelGeraeteDaten.add(geraeteListe, constraints);
@@ -513,23 +526,13 @@ public class Diagnoseapplikation extends JFrame {
 
         constraints.gridx = 1;
         constraints.gridy = 0;
-        constraints.weightx = 1;
-        constraints.gridwidth = 4;
         constraints.fill = GridBagConstraints.BOTH;
         panelGeraeteDaten.add(geraeteDatenJScrollPane);
 
         constraints.gridx = 0;
-        constraints.gridy = 2;
-//        constraints.weightx = 0;
+        constraints.gridy = 3;
         constraints.fill = GridBagConstraints.BOTH;
         panel.add(panelGeraeteDaten, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        constraints.weightx = 1;
-        constraints.weighty = 1;
-        constraints.fill = GridBagConstraints.BOTH;
-        panel.add(empfangenJScrollPane, constraints);
 
         aktualisiereSerialPort();
 
@@ -546,12 +549,9 @@ public class Diagnoseapplikation extends JFrame {
         Boolean foundPort = false;
         if (serialPortGeoeffnet != false) {
             System.out.println("Serialport bereits geöffnet");
-            empfangen.append("Serialport bereits geöffnet" + "\n");
-
             return false;
         }
         System.out.println("Öffne Serialport");
-        empfangen.append("Öffne Serialport" + "\n");
         enumComm = CommPortIdentifier.getPortIdentifiers();
         while (enumComm.hasMoreElements()) {
             serialPortId = (CommPortIdentifier) enumComm.nextElement();
@@ -562,39 +562,33 @@ public class Diagnoseapplikation extends JFrame {
         }
         if (foundPort != true) {
             System.out.println("Serialport nicht gefunden: " + portName);
-            empfangen.append("Serialport nicht gefunden: " + portName + "\n");
             return false;
         }
         try {
             serialPort = (SerialPort) serialPortId.open("Öffnen und Senden", 500);
         } catch (PortInUseException e) {
             System.out.println("Port belegt");
-            empfangen.append("Port belegt" + "\n");
         }
         try {
             outputStream = serialPort.getOutputStream();
         } catch (IOException e) {
             System.out.println("Keinen Zugriff auf OutputStream");
-            empfangen.append("Keinen Zugriff auf OutputStream" + "\n");
         }
         try {
             inputStream = serialPort.getInputStream();
         } catch (IOException e) {
             System.out.println("Keinen Zugriff auf InputStream");
-            empfangen.append("Keinen Zugriff auf InputStream" + "\n");
         }
         try {
             serialPort.addEventListener(new serialPortEventListener());
         } catch (TooManyListenersException e) {
             System.out.println("TooManyListenersException für Serialport");
-            empfangen.append("TooManyListenersException für Serialport" + "\n");
         }
         serialPort.notifyOnDataAvailable(true);
         try {
             serialPort.setSerialPortParams(baudrate, dataBits, stopBits, parity);
         } catch (UnsupportedCommOperationException e) {
             System.out.println("Konnte Schnittstellen-Paramter nicht setzen");
-            empfangen.append("Konnte Schnittstellen-Paramter nicht setzen" + "\n");
         }
 
         serialPortGeoeffnet = true;
@@ -604,14 +598,10 @@ public class Diagnoseapplikation extends JFrame {
     void schliesseSerialPort() {
         if (serialPortGeoeffnet == true) {
             System.out.println("Schließe Serialport");
-            empfangen.append("Schließe Serialport" + "\n");
-
             serialPort.close();
             serialPortGeoeffnet = false;
         } else {
             System.out.println("Serialport bereits geschlossen");
-            empfangen.append("Serialport bereits geschlossen");
-
         }
     }
 
@@ -619,8 +609,6 @@ public class Diagnoseapplikation extends JFrame {
         System.out.println("Akutalisiere Serialport-Liste");
         if (serialPortGeoeffnet != false) {
             System.out.println("Serialport ist geöffnet");
-            empfangen.append("Serialport ist geöffnet");
-
             return;
         }
         auswahl.removeAllItems();
@@ -628,11 +616,10 @@ public class Diagnoseapplikation extends JFrame {
         while (enumComm.hasMoreElements()) {
             serialPortId = (CommPortIdentifier) enumComm.nextElement();
             if (serialPortId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                System.out.println("Erkannter COM-Port:" + serialPortId.getName());
+                System.out.println("Found:" + serialPortId.getName());
                 auswahl.addItem(serialPortId.getName());
             }
         }
-        empfangen.append("COM-Portliste aktualisiert");
     }
 
     public byte[] requestSend() throws IOException {
@@ -682,11 +669,11 @@ public class Diagnoseapplikation extends JFrame {
 
         // Abfrage der Control Unit M4
         if (controlunitm4_status == true && controlunitm4_msgsend == false) {
-            byte[] sendstream = sendarraysCUM4[Diagnoseapplikation.currentMessageCUM4];
-            Diagnoseapplikation.currentMessageCUM4++;
+            byte[] sendstream = sendarraysCUM4[Diagnoseapplikationbk1604.currentMessageCUM4];
+            Diagnoseapplikationbk1604.currentMessageCUM4++;
             totalMessageCount++;
-            if (Diagnoseapplikation.currentMessageCUM4 == messageLengthCUM4) {
-                Diagnoseapplikation.currentMessageCUM4 = 0;
+            if (Diagnoseapplikationbk1604.currentMessageCUM4 == messageLengthCUM4) {
+                Diagnoseapplikationbk1604.currentMessageCUM4 = 0;
                 controlunitm4_msgsend = true;
             }
             CRC16 crc = new CRC16();
@@ -860,30 +847,12 @@ public class Diagnoseapplikation extends JFrame {
         return null;
     }
 
-    void writeSend() throws IOException {
+    void sendeSerialPort() {
         // Alte Daten mit neuen Daten vergleichen, falls Änderungen 
         // Bsp. 08 06 0000 0001 CRC senden
-
-        // Zeige Tabelle für Testzwecke
-        int collection = 9;
-        String collectionString;
-        switch (collection){
-            case 1: collectionString=
+        if (serialPortGeoeffnet != true) {
+            return;
         }
-                
-                
-        for (Map.Entry entry : CUM4Collection.dataEntryCollection.entrySet()) {
-            DefaultTableModel model = (DefaultTableModel) geraeteDatenTabelle.getModel();
-            model.addRow(new Object[]{CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-        }
-//        if (serialPortGeoeffnet != true) {
-//            byte[] sendstream = sendarraysSH2[currentMessageSH4];
-//            CRC16 crc = new CRC16();
-//            crc.update(sendstream, 0, sendstream.length);
-//            crc.getAll();
-//            outputStream.write(crc.getAll());
-//            return;
-//        }
     }
 
     void serialPortDatenVerfuegbar() throws InterruptedException {
@@ -897,8 +866,8 @@ public class Diagnoseapplikation extends JFrame {
             int lastMessageCUM4 = 0;
             boolean msgreceived = false;
 
-            if (Diagnoseapplikation.currentMessageCUM4 != 0) {
-                lastMessageCUM4 = Diagnoseapplikation.currentMessageCUM4 - 1;
+            if (Diagnoseapplikationbk1604.currentMessageCUM4 != 0) {
+                lastMessageCUM4 = Diagnoseapplikationbk1604.currentMessageCUM4 - 1;
             }
             requestbuffercum[0] = sendarraysCUM4[lastMessageCUM4][0];
             requestbuffercum[1] = sendarraysCUM4[lastMessageCUM4][1];
@@ -946,7 +915,7 @@ public class Diagnoseapplikation extends JFrame {
                     byte[] dataentry = new byte[dataentrylength / 2];
                     System.arraycopy(data, 3, dataentry, 0, dataentrylength / 2);
                     String dataentrystring = ConversionHelper.byteArrayToHexString(dataentry);
-                    System.out.println("dataenty: " + dataentrystring);
+                    System.out.println("dataenty[0]: " + dataentrystring);
 
 //                    for (int i = 0; i < dataentrylength; i++) {
 //                        byte[] dataentity = new byte[2];
@@ -957,15 +926,14 @@ public class Diagnoseapplikation extends JFrame {
                         if (requestbuffercum[i] == responsebuffer[i]) {
                             for (Map.Entry entry : CUM4Collection.dataEntryCollection.entrySet()) {
                                 if (entry.getKey() == startadresscumstring) {
-//                                    for (int j = 0; j < dataentrylength; j += 2) {
-//                                        byte[] dataentity = new byte[2];
-//                                        System.arraycopy(dataentry, j, dataentity, j, 2);
-                                    Dataentry currentValue = new Dataentry();
-//                                        currentValue.currentValue = dataentity[j];
-                                    currentValue.currentValue = dataentry;
-                                    CUM4Collection.addEntry((String) entry.getKey(), currentValue);
+                                    for (int j = 0; j < dataentrylength; j += 2) {
+                                        byte[] dataentity = new byte[2];
+                                        System.arraycopy(dataentry, j, dataentity, j, 2);
+                                        Dataentry currentValue = new Dataentry();
+                                        currentValue.currentValue = dataentity[j];
+                                        CUM4Collection.addEntry((String) entry.getKey(), currentValue);
 //                                        CUM4Collection.addCurrentValue((String) entry.getKey(), dataentry[j]);
-//                                    }
+                                    }
                                 }
                             }
                         }
@@ -1054,7 +1022,7 @@ public class Diagnoseapplikation extends JFrame {
                             requestSend();
                         }
                         if (schreiben = true) {
-                            writeSend();
+//                            writeSend();
                         }
                     }
                     empfangen.append("Empfangene Nachricht: " + msgbufferstring + "\n" + "Empfangener CRC: " + crcbufferstring + "\n" + "CRC-Überprüfung: " + crcreverse.check(msgbuffer, crcbuffer) + "\n" + "\n");
@@ -1082,8 +1050,6 @@ public class Diagnoseapplikation extends JFrame {
 
         public void actionPerformed(ActionEvent event) {
             System.out.println("oeffnenActionListener");
-            empfangen.append("Port geöffnet");
-
             // TODO sperre Button Öffnen und Aktualisieren
             // TODO entsperre Nachricht senden und Schließen
             oeffneSerialPort((String) auswahl.getSelectedItem());
@@ -1147,7 +1113,7 @@ public class Diagnoseapplikation extends JFrame {
                     try {
                         serialPortDatenVerfuegbar();
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Diagnoseapplikationbk1604.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
                 break;

@@ -126,6 +126,11 @@ public class Diagnoseapplikation_GUI extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        geraeteListe.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                geraeteListeMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(geraeteListe);
 
         textarea.setColumns(20);
@@ -302,6 +307,10 @@ public class Diagnoseapplikation_GUI extends javax.swing.JFrame {
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_refreshButtonActionPerformed
+
+    private void geraeteListeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_geraeteListeMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_geraeteListeMouseClicked
 
     /**
      * @param args the command line arguments

@@ -15,8 +15,8 @@ public class Dataentry {
     public String hexIdentifier;
     public Object defaultValue;
     public Object currentValue;
-    public int min;
-    public int max;
+    public int minValue;
+    public int maxValue;
     public String valueType;
 
 }
