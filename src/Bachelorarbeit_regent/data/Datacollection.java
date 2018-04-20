@@ -5,6 +5,7 @@
  */
 package Bachelorarbeit_regent.data;
 
+import Bachelorarbeit_regent.misc.ConversionHelper;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,12 +34,21 @@ public class Datacollection {
     }
 
     public void addCurrentValue(String hexIdentifier, Object value) {
-        dataEntryCollection.get(hexIdentifier).currentValue = value;
+//        if (dataEntryCollection.get(hexIdentifier).valueType == "char") {
+////            String valuestring = ConversionHelper.byteArrayToHexString(value);
+////            dataEntryCollection.get(hexIdentifier).currentValue = valuestring;
+//
+//        } else {
+            dataEntryCollection.get(hexIdentifier).currentValue = value;
+//        }
     }
 
     public Object getDataByIdentifier(String hexIdentifier, String data) {
         if (data.equals("varName")) {
             return dataEntryCollection.get(hexIdentifier).varName;
+        }
+        if (data.equals("index")) {
+            return dataEntryCollection.get(hexIdentifier).index;
         }
         if (data.equals("defaultValue")) {
             return dataEntryCollection.get(hexIdentifier).defaultValue;

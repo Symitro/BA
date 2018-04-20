@@ -5,8 +5,11 @@
         <group>
             <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/data/Dataentry.java</file>
             <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/Diagnoseapplikation.java</file>
+            <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/misc/adressList.java</file>
             <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/misc/CSVReader.java</file>
+            <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/misc/CRC16.java</file>
             <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/data/Datacollection.java</file>
+            <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/misc/ConversionHelper.java</file>
         </group>
     </open-files>
 </project-private>

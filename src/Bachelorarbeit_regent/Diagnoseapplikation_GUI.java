@@ -126,9 +126,9 @@ public class Diagnoseapplikation_GUI extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        geraeteListe.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                geraeteListeMouseClicked(evt);
+        geraeteListe.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                geraeteListeValueChanged(evt);
             }
         });
         jScrollPane2.setViewportView(geraeteListe);
@@ -308,9 +308,9 @@ public class Diagnoseapplikation_GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_refreshButtonActionPerformed
 
-    private void geraeteListeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_geraeteListeMouseClicked
+    private void geraeteListeValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_geraeteListeValueChanged
         // TODO add your handling code here:
-    }//GEN-LAST:event_geraeteListeMouseClicked
+    }//GEN-LAST:event_geraeteListeValueChanged
 
     /**
      * @param args the command line arguments

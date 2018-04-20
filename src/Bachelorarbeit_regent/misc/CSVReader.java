@@ -54,6 +54,7 @@ public class CSVReader {
                 Dataentry data = new Dataentry();
                 data.varName = cell[0];
                 data.hexIdentifier = cell[5];
+                data.index = cell[6];
                 data.valueType = cell[7];
                 data.minValue = Integer.parseInt(cell[9]);
                 data.maxValue = Integer.parseInt(cell[10]);
