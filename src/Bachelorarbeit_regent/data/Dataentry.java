@@ -13,8 +13,8 @@ public class Dataentry {
 
     public String varName;
     public String hexIdentifier;
-    public String index;
-    public Object defaultValue;
+    public int index;
+    public int defaultValue;
     public Object currentValue;
     public int minValue;
     public int maxValue;

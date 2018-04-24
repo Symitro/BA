@@ -98,6 +98,12 @@ public class Diagnoseapplikation_GUI extends javax.swing.JFrame {
                 "Variablenname", "HEX-Adresse", "Aktueller Wert?", "Min-Wert", "Max-Wert", "Default-Wert"
             }
         ));
+        geraeteDaten.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
+        geraeteDaten.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                geraeteDatenPropertyChange(evt);
+            }
+        });
         jScrollPane5.setViewportView(geraeteDaten);
 
         jTabbedPane1.addTab("Gerätedaten", jScrollPane5);
@@ -311,6 +317,10 @@ public class Diagnoseapplikation_GUI extends javax.swing.JFrame {
     private void geraeteListeValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_geraeteListeValueChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_geraeteListeValueChanged
+
+    private void geraeteDatenPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_geraeteDatenPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_geraeteDatenPropertyChange
 
     /**
      * @param args the command line arguments

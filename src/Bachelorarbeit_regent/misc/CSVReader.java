@@ -31,7 +31,7 @@ public class CSVReader {
                 csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/controlunit/modbus.CSV";
                 break;
             case "aloneatwork":
-                csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/aloneatwork/modbus.CSV";
+                csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/aloneatwork/modbus2.CSV";
                 break;
             case "panel":
                 csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/panel/modbus.CSV";
@@ -52,13 +52,13 @@ public class CSVReader {
                 String[] cell = line.split(cvsSplitBy);
                 //New data object
                 Dataentry data = new Dataentry();
-                data.varName = cell[0];
+                data.varName = cell[3];
                 data.hexIdentifier = cell[5];
-                data.index = cell[6];
+                data.index = Integer.parseInt(cell[6]);
                 data.valueType = cell[7];
                 data.minValue = Integer.parseInt(cell[9]);
                 data.maxValue = Integer.parseInt(cell[10]);
-                data.defaultValue = cell[11];
+                data.defaultValue = Integer.parseInt(cell[11]);
                 mainCollection.addEntry(data.hexIdentifier, data);
             }
 
