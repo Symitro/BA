@@ -10,6 +10,8 @@ package Bachelorarbeit_regent;
  * @author Julian
  */
 import Bachelorarbeit_regent.data.Datacollection;
+import Bachelorarbeit_regent.data.Livedatacollection;
+import Bachelorarbeit_regent.data.Livedataentry;
 import Bachelorarbeit_regent.misc.ConversionHelper;
 import Bachelorarbeit_regent.misc.CRC16;
 import Bachelorarbeit_regent.misc.CSVReader;
@@ -22,10 +24,15 @@ import java.util.TooManyListenersException;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -35,7 +42,7 @@ import javax.swing.table.*;
 
 //https://www.mikrocontroller.net/articles/Serielle_Schnittstelle_unter_Java
 // TODO Dialog zur Konfiguration der Schnittstellenparameter
-public class Diagnoseapplikation extends JFrame {
+public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     /**
      * Variable declaration
@@ -50,19 +57,34 @@ public class Diagnoseapplikation extends JFrame {
     public Datacollection SH3Collection;
     public Datacollection SH4Collection;
 
+    public Livedatacollection liveCUM4Collection;
+    public Livedatacollection liveCUCollection;
+    public Livedatacollection liveAAWCollection;
+    public Livedatacollection livePLCollection;
+    public Livedatacollection livePRCollection;
+    public Livedatacollection liveSH1Collection;
+    public Livedatacollection liveSH2Collection;
+    public Livedatacollection liveSH3Collection;
+    public Livedatacollection liveSH4Collection;
+
     CommPortIdentifier serialPortId;
     Enumeration enumComm;
     SerialPort serialPort;
     OutputStream outputStream;
     InputStream inputStream;
     Boolean serialPortGeoeffnet = false;
-    Boolean abfragen = false;
-    Boolean schreiben = false;
 
     int baudrate = 115200;
     int dataBits = SerialPort.DATABITS_8;
     int stopBits = SerialPort.STOPBITS_2;
     int parity = SerialPort.PARITY_NONE;
+
+    Boolean abfragen = false;
+    Boolean schreiben = false;
+    String device;
+    int changedvalue;
+    String hexofchangedvalue;
+    Boolean abfrageabgeschlossen = false;
 
     boolean controlunitm4_status;
     boolean controlunit_status;
@@ -86,6 +108,18 @@ public class Diagnoseapplikation extends JFrame {
     boolean senslighthead3_msgsend;
     boolean senslighthead4_msgsend;
 
+    Boolean[] deviceOnline = new Boolean[9];
+    Boolean[] deviceFinished = new Boolean[9];
+//        Arrays.fill(deviceFinished, Boolean.FALSE);
+//        deviceOnline[0] = controlunitm4_status;
+//        deviceOnline[1] = aloneatwork_status;
+//        deviceOnline[2] = panelleft_status;
+//        deviceOnline[3] = panelright_status;
+//        deviceOnline[4] = senslighthead1_status;
+//        deviceOnline[5] = senslighthead2_status;
+//        deviceOnline[6] = senslighthead3_status;
+//        deviceOnline[7] = senslighthead4_status;
+//        deviceOnline[8] = controlunit_status;
     // Abfragen für Control Unit M4, maximal 16 HR pro Abfrage für Performance
     byte[] sendstreamCUM4_1 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
     byte[] sendstreamCUM4_2 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //^
@@ -304,26 +338,36 @@ public class Diagnoseapplikation extends JFrame {
     int currentMessageSH3 = 0;
 
     // Abfrage des Senselight Head 4
-    byte[] sendstreamSH4_1 = {(byte) 0x20, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
-    byte[] sendstreamSH4_2 = {(byte) 0x20, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //^
-    byte[] sendstreamSH4_3 = {(byte) 0x20, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x10}; //37
-    byte[] sendstreamSH4_4 = {(byte) 0x20, (byte) 0x03, (byte) 0x00, (byte) 0x40, (byte) 0x00, (byte) 0x10}; //^
-    byte[] sendstreamSH4_5 = {(byte) 0x20, (byte) 0x03, (byte) 0x00, (byte) 0x50, (byte) 0x00, (byte) 0x05}; //^
-    byte[] sendstreamSH4_6 = {(byte) 0x20, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x05}; //05
-    byte[] sendstreamSH4_7 = {(byte) 0x20, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamSH4_8 = {(byte) 0x20, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //44
-    byte[] sendstreamSH4_9 = {(byte) 0x20, (byte) 0x03, (byte) 0x02, (byte) 0x20, (byte) 0x00, (byte) 0x10}; //^
-    byte[] sendstreamSH4_10 = {(byte) 0x20, (byte) 0x03, (byte) 0x02, (byte) 0x30, (byte) 0x00, (byte) 0x0C}; //^
-    byte[] sendstreamSH4_11 = {(byte) 0x20, (byte) 0x03, (byte) 0x12, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamSH4_12 = {(byte) 0x20, (byte) 0x03, (byte) 0x13, (byte) 0x00, (byte) 0x00, (byte) 0x0B}; //11
-    byte[] sendstreamSH4_13 = {(byte) 0x20, (byte) 0x03, (byte) 0x14, (byte) 0x00, (byte) 0x00, (byte) 0x06}; //06
-    byte[] sendstreamSH4_14 = {(byte) 0x20, (byte) 0x03, (byte) 0x15, (byte) 0x00, (byte) 0x00, (byte) 0x07}; //07
-    byte[] sendstreamSH4_15 = {(byte) 0x20, (byte) 0x03, (byte) 0x16, (byte) 0x00, (byte) 0x00, (byte) 0x02}; //02
-    byte[] sendstreamSH4_16 = {(byte) 0x20, (byte) 0x03, (byte) 0x27, (byte) 0x18, (byte) 0x00, (byte) 0x02}; //02
-    byte[] sendstreamSH4_17 = {(byte) 0x20, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x09}; //09
+    byte[] sendstreamSH4_1 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
+    byte[] sendstreamSH4_2 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //^
+    byte[] sendstreamSH4_3 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x10}; //37
+    byte[] sendstreamSH4_4 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0x40, (byte) 0x00, (byte) 0x10}; //^
+    byte[] sendstreamSH4_5 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0x50, (byte) 0x00, (byte) 0x05}; //^
+    byte[] sendstreamSH4_6 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x05}; //05
+    byte[] sendstreamSH4_7 = {(byte) 0x1A, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
+    byte[] sendstreamSH4_8 = {(byte) 0x1A, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //44
+    byte[] sendstreamSH4_9 = {(byte) 0x1A, (byte) 0x03, (byte) 0x02, (byte) 0x20, (byte) 0x00, (byte) 0x10}; //^
+    byte[] sendstreamSH4_10 = {(byte) 0x1A, (byte) 0x03, (byte) 0x02, (byte) 0x30, (byte) 0x00, (byte) 0x0C}; //^
+    byte[] sendstreamSH4_11 = {(byte) 0x1A, (byte) 0x03, (byte) 0x12, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
+    byte[] sendstreamSH4_12 = {(byte) 0x1A, (byte) 0x03, (byte) 0x13, (byte) 0x00, (byte) 0x00, (byte) 0x0B}; //11
+    byte[] sendstreamSH4_13 = {(byte) 0x1A, (byte) 0x03, (byte) 0x14, (byte) 0x00, (byte) 0x00, (byte) 0x06}; //06
+    byte[] sendstreamSH4_14 = {(byte) 0x1A, (byte) 0x03, (byte) 0x15, (byte) 0x00, (byte) 0x00, (byte) 0x07}; //07
+    byte[] sendstreamSH4_15 = {(byte) 0x1A, (byte) 0x03, (byte) 0x16, (byte) 0x00, (byte) 0x00, (byte) 0x02}; //02
+    byte[] sendstreamSH4_16 = {(byte) 0x1A, (byte) 0x03, (byte) 0x27, (byte) 0x18, (byte) 0x00, (byte) 0x02}; //02
+    byte[] sendstreamSH4_17 = {(byte) 0x1A, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x09}; //09
 
     byte[][] sendarraysSH4 = {sendstreamSH4_1, sendstreamSH4_2, sendstreamSH4_3, sendstreamSH4_4, sendstreamSH4_5, sendstreamSH4_6, sendstreamSH4_7, sendstreamSH4_8, sendstreamSH4_9, sendstreamSH4_10, sendstreamSH4_11, sendstreamSH4_12, sendstreamSH4_13, sendstreamSH4_14, sendstreamSH4_15, sendstreamSH4_16, sendstreamSH4_17};
 
+//        Object[] devices = new Object[9];
+//        devices[0] = sendarraysCUM4;
+//        devices[1] = sendarraysAAW;
+//        devices[2] = sendarraysPL;
+//        devices[3] = sendarraysPR;
+//        devices[4] = sendarraysSH1;
+//        devices[5] = sendarraysSH2;
+//        devices[6] = sendarraysSH3;
+//        devices[7] = sendarraysSH4;
+//        devices[8] = sendarraysCU;
 //    byte[][][] sendarrays = {sendarraysCUM4, sendarraysCU, sendarraysAAW, sendarraysPL, sendarraysPR, sendarraysSH1, sendarraysSH2, sendarraysSH3, sendarraysSH4};
     int messageLengthSH4 = sendarraysSH4.length;
     int currentMessageSH4 = 0;
@@ -354,7 +398,8 @@ public class Diagnoseapplikation extends JFrame {
     JPanel panelGeraeteListe = new JPanel(new GridBagLayout());
     JPanel panelGeraete = new JPanel(new GridBagLayout());
     JPanel panelSetup = new JPanel(new GridBagLayout());
-    JPanel panelKommuniziere = new JPanel(new GridBagLayout());
+    JPanel panelFirmware = new JPanel(new GridBagLayout());
+    JPanel panelEmpfangen = new JPanel(new GridBagLayout());
 
     JComboBox auswahl = new JComboBox();
     JButton oeffnen = new JButton("Öffnen");
@@ -363,14 +408,16 @@ public class Diagnoseapplikation extends JFrame {
 
     JButton abfragenbtn = new JButton("Abfragen starten");
     JButton uebernehmen = new JButton("Änderungen übernehmen");
-    JCheckBox echo = new JCheckBox("Echo");
+    JButton firmware = new JButton("Gesamte Lampen-Firmware aktualisieren");
+    JButton modulfirmware = new JButton("einzelne Modul-Firmware aktualisieren");
+//    JCheckBox echo = new JCheckBox("Echo");
 
     JTextArea empfangen = new JTextArea();
     JScrollPane empfangenJScrollPane = new JScrollPane();
+    JLabel console = new JLabel("Konsole");
 
     JList geraeteListe = new JList<>();
-    JLabel geraeteNamen = new JLabel();
-    JLabel geraeteDaten = new JLabel();
+    JLabel geraeteNamen = new JLabel("Geräteliste");
 
     Object[][] data = {null, null, null, null, null, null, null};
     Object[] columns = {"Index", "Variablenname", "HEX-Adresse", "Aktueller Wert", "Min-Wert", "Max-Wert", "Default-Wert"};
@@ -390,6 +437,7 @@ public class Diagnoseapplikation extends JFrame {
         }
 
     };
+    JTabbedPane jTabbedPane1 = new JTabbedPane();
 
     JTable geraeteDatenTabelle = new JTable(model) {
         public boolean isCellEditable(int row, int column) {
@@ -397,7 +445,33 @@ public class Diagnoseapplikation extends JFrame {
             return (modelColumn != 3) ? false : true;
         }
     };
+
+    Object[][] livedata = {null, null, null, null, null, null, null};
+    Object[] livecolumns = {"Nachrichteneingang", "Geräteadresse", "Funktionscode", "1. Byte", "2. Byte", "3. Byte", "4. Byte", "5. Byte", "6. Byte"};
+    DefaultTableModel livemodel = new DefaultTableModel(livedata, livecolumns) {
+        @Override
+        public Class getColumnClass(int column) {
+            switch (column) {
+                case 0:
+                    return Integer.class;
+                case 1:
+                    return String.class;
+                case 2:
+                    return Integer.class;
+                default:
+                    return String.class;
+            }
+        }
+
+    };
+    JTable liveDatenTabelle = new JTable(livemodel) {
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+
     JScrollPane geraeteDatenJScrollPane = new JScrollPane(geraeteDatenTabelle);
+    JScrollPane liveDatenJScrollPane = new JScrollPane(liveDatenTabelle);
 
     /**
      * @param args
@@ -434,21 +508,6 @@ public class Diagnoseapplikation extends JFrame {
 
     }
 
-    public void tableChanged(TableModelEvent e) {
-        if (e.getType() == TableModelEvent.UPDATE) {
-            int row = e.getFirstRow();
-            int column = e.getColumn();
-
-            if (column == 3) {
-                TableModel model = (TableModel) e.getSource();
-                int changedvalue = Integer.parseInt((String) model.getValueAt(row, 3));
-                String hexofchangedvalue = ((String) model.getValueAt(row, 2));
-                System.out.println("changedvalue: " + changedvalue);
-                System.out.println("hexofchangedvalue: " + hexofchangedvalue);
-            }
-        }
-    }
-
     protected void finalize() {
         System.out.println("Destruktor aufgerufen");
     }
@@ -465,6 +524,8 @@ public class Diagnoseapplikation extends JFrame {
         aktualisieren.addActionListener(new aktualisierenActionListener());
         abfragenbtn.addActionListener(new abfragenActionListener());
         uebernehmen.addActionListener(new schreibenActionListener());
+        firmware.addActionListener(new firmwareActionListener());
+        modulfirmware.addActionListener(new modulfirmwareActionListener());
 
         empfangenJScrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -513,28 +574,26 @@ public class Diagnoseapplikation extends JFrame {
         constraints.gridx = 3;
         panelSetup.add(aktualisieren, constraints);
 
-        // Abfragen werden gestartet
-        constraints.gridx = 4;
-        panelSetup.add(abfragenbtn, constraints);
-
-        // Änderungen an aktiven Werten werden übernommen
-        constraints.gridx = 5;
-        panelSetup.add(uebernehmen, constraints);
-
         // einzelne Elemente werden dem Panel hinzugefügt
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.weightx = 1;
-        constraints.weighty = 1;
+        constraints.weighty = 0;
+        constraints.gridwidth = 10;
+        constraints.gridheight = 1;
         constraints.anchor = GridBagConstraints.NORTHWEST;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
 
         panel.add(panelSetup, constraints);
 
         // Label für Geräteliste
         constraints.gridx = 0;
         constraints.gridy = 0;
+        constraints.weightx = 0;
+        constraints.weighty = 0;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
         constraints.anchor = GridBagConstraints.NORTHWEST;
-        geraeteNamen.setText("Geräteliste");
 
         panelGeraeteListe.add(geraeteNamen, constraints);
 
@@ -554,9 +613,13 @@ public class Diagnoseapplikation extends JFrame {
 
                     switch (geraet) {
                         case "Control Unit M4":
-                            if (controlunitm4_status) {
+                            if (controlunitm4_status) { //                            if (controlunitm4_status && abfrageabgeschlossen) {
+                                device = "cum4";
                                 for (Map.Entry entry : CUM4Collection.dataEntryCollection.entrySet()) {
                                     model.addRow(new Object[]{CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "index"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
+                                }
+                                for (Map.Entry entry : liveCUM4Collection.liveDataEntryCollection.entrySet()) {
+                                    livemodel.addRow(new Object[]{liveCUM4Collection.getDataByIdentifier((Long) entry.getKey(), "time")});
                                 }
                                 empfangen.append("CUM4 angewählt \n");
                             } else {
@@ -565,6 +628,7 @@ public class Diagnoseapplikation extends JFrame {
                             break;
                         case "Control Unit":
                             if (controlunit_status) {
+                                device = "cu";
                                 for (Map.Entry entry : CUCollection.dataEntryCollection.entrySet()) {
                                     model.addRow(new Object[]{CUCollection.getDataByIdentifier(entry.getKey().toString(), "index"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), CUCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
                                 }
@@ -575,6 +639,7 @@ public class Diagnoseapplikation extends JFrame {
                             break;
                         case "Alone at Work 2.0":
                             if (aloneatwork_status) {
+                                device = "aaw";
                                 for (Map.Entry entry : AAWCollection.dataEntryCollection.entrySet()) {
                                     model.addRow(new Object[]{AAWCollection.getDataByIdentifier(entry.getKey().toString(), "index"), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
                                 }
@@ -585,6 +650,7 @@ public class Diagnoseapplikation extends JFrame {
                             break;
                         case "Panel Links":
                             if (panelleft_status) {
+                                device = "pl";
                                 for (Map.Entry entry : PLCollection.dataEntryCollection.entrySet()) {
                                     model.addRow(new Object[]{PLCollection.getDataByIdentifier(entry.getKey().toString(), "index"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), PLCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
                                 }
@@ -595,6 +661,7 @@ public class Diagnoseapplikation extends JFrame {
                             break;
                         case "Panel Rechts":
                             if (panelright_status) {
+                                device = "pr";
                                 for (Map.Entry entry : PRCollection.dataEntryCollection.entrySet()) {
                                     model.addRow(new Object[]{PRCollection.getDataByIdentifier(entry.getKey().toString(), "index"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), PRCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
                                 }
@@ -606,6 +673,7 @@ public class Diagnoseapplikation extends JFrame {
 
                         case "Senselighthead 1":
                             if (senslighthead1_status) {
+                                device = "sh1";
                                 for (Map.Entry entry : SH1Collection.dataEntryCollection.entrySet()) {
                                     model.addRow(new Object[]{SH1Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
                                 }
@@ -617,6 +685,7 @@ public class Diagnoseapplikation extends JFrame {
 
                         case "Senselighthead 2":
                             if (senslighthead2_status) {
+                                device = "sh2";
                                 for (Map.Entry entry : SH2Collection.dataEntryCollection.entrySet()) {
                                     model.addRow(new Object[]{SH2Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
                                 }
@@ -628,6 +697,7 @@ public class Diagnoseapplikation extends JFrame {
 
                         case "Senselighthead 3":
                             if (senslighthead3_status) {
+                                device = "sh3";
                                 for (Map.Entry entry : SH3Collection.dataEntryCollection.entrySet()) {
                                     model.addRow(new Object[]{SH3Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
                                 }
@@ -639,6 +709,7 @@ public class Diagnoseapplikation extends JFrame {
 
                         case "Senselighthead 4":
                             if (senslighthead4_status) {
+                                device = "sh4";
                                 for (Map.Entry entry : SH4Collection.dataEntryCollection.entrySet()) {
                                     model.addRow(new Object[]{SH4Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
                                 }
@@ -656,63 +727,138 @@ public class Diagnoseapplikation extends JFrame {
 
         constraints.gridx = 0;
         constraints.gridy = 1;
+        constraints.weightx = 0;
+        constraints.weighty = 0;
         constraints.fill = GridBagConstraints.NONE;
 
         panelGeraeteListe.add(geraeteListe, constraints);
 
         constraints.gridx = 0;
         constraints.gridy = 1;
-        constraints.weightx = 0.1;
+        constraints.weightx = 0;
+        constraints.weighty = 0;
+        constraints.gridwidth = 1;
         constraints.anchor = GridBagConstraints.NORTHWEST;
         constraints.fill = GridBagConstraints.NONE;
 
         panel.add(panelGeraeteListe, constraints);
 
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.weightx = 1;
-        constraints.fill = GridBagConstraints.NONE;
-        geraeteDaten.setText("Gerätedaten");
-        panelGeraeteDaten.add(geraeteDaten, constraints);
-
         geraeteDatenTabelle.setAutoCreateRowSorter(true);
+        geraeteDatenTabelle.getRowSorter().toggleSortOrder(0);
+        liveDatenTabelle.setAutoCreateRowSorter(true);
+        liveDatenTabelle.getRowSorter().toggleSortOrder(0);
         model.setRowCount(0);
-        constraints.gridx = 0;
+        livemodel.setRowCount(0);
+
+        jTabbedPane1.addTab("Liveview", liveDatenJScrollPane);
+        jTabbedPane1.addTab("Gerätedaten", geraeteDatenJScrollPane);
+
+        constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.weightx = 1;
-        constraints.fill = GridBagConstraints.NONE;
-
-        panelGeraeteDaten.add(geraeteDatenJScrollPane);
-
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.anchor = GridBagConstraints.NORTH;
-        constraints.fill = GridBagConstraints.NONE;
-
-        panel.add(panelGeraeteDaten, constraints);
-
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        constraints.weightx = 1;
-        constraints.weighty = 0.3;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
+        constraints.weighty = 1;
         constraints.anchor = GridBagConstraints.SOUTH;
         constraints.fill = GridBagConstraints.BOTH;
+        panel.add(jTabbedPane1, constraints);
 
-        panel.add(empfangenJScrollPane, constraints);
+        jTabbedPane1.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                if (e.getSource() instanceof JTabbedPane) {
+                    JTabbedPane pane = (JTabbedPane) e.getSource();
+                    System.out.println("Selected paneNo : " + pane.getSelectedIndex());
+                }
+            }
+        });
+        // Abfragen werden gestartet
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.weightx = 0.7;
+        constraints.weighty = 0.7;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        panelFirmware.add(abfragenbtn, constraints);
+
+        // Änderungen an aktiven Werten werden übernommen
+        constraints.gridy = 1;
+        panelFirmware.add(uebernehmen, constraints);
+
+        // Änderungen an aktiven Werten werden übernommen
+        constraints.gridy = 2;
+        panelFirmware.add(firmware, constraints);
+
+        // Änderungen an aktiven Werten werden übernommen
+        constraints.gridy = 3;
+        panelFirmware.add(modulfirmware, constraints);
+
+        // Firmarepanel wird dem Panel hinzugefügt
+        constraints.gridx = 2;
+        constraints.gridy = 1;
+        constraints.weightx = 0;
+        constraints.weighty = 0;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.anchor = GridBagConstraints.NORTHEAST;
+        constraints.fill = GridBagConstraints.NONE;
+        panel.add(panelFirmware, constraints);
+
+        // Label für Konsole
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.weightx = 0.1;
+        constraints.weighty = 0.1;
+        constraints.anchor = GridBagConstraints.NORTHWEST;
+        constraints.fill = GridBagConstraints.NONE;
+        panelEmpfangen.add(console, constraints);
+
+        // Input-Konsole
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.weightx = 0.9;
+        constraints.weighty = 0.9;
+        constraints.gridwidth = 1;
+        constraints.gridheight = 1;
+        constraints.anchor = GridBagConstraints.NORTHWEST;
+        constraints.fill = GridBagConstraints.BOTH;
+        panelEmpfangen.add(empfangenJScrollPane, constraints);
+
+        // Konsole wird dem Panel hinzugefügt
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.weightx = 1;
+        constraints.weighty = 0.3;
+        constraints.gridwidth = 10;
+        constraints.gridheight = 2;
+        constraints.anchor = GridBagConstraints.SOUTH;
+        constraints.fill = GridBagConstraints.BOTH;
+        panel.add(panelEmpfangen, constraints);
 
         aktualisiereSerialPort();
 
         add(panel);
 
         pack();
-
 //        setSize(1200, 800);
         setVisible(true);
         setLocationRelativeTo(null);
-
         System.out.println("Fenster erzeugt");
+    }
+
+    public void tableChanged(TableModelEvent e) {
+        if (e.getType() == TableModelEvent.UPDATE) {
+            int row = e.getFirstRow();
+            int column = e.getColumn();
+
+            if (column == 3) {
+                TableModel model = (TableModel) e.getSource();
+                int changedvalue = Integer.parseInt((String) model.getValueAt(row, 3));
+                String hexofchangedvalue = ((String) model.getValueAt(row, 2));
+                System.out.println("changedvalue: " + changedvalue);
+                System.out.println("hexofchangedvalue: " + hexofchangedvalue);
+                System.out.println("Device: " + device);
+            }
+        }
     }
 
     boolean oeffneSerialPort(String portName
@@ -806,7 +952,7 @@ public class Diagnoseapplikation extends JFrame {
                 auswahl.addItem(serialPortId.getName());
             }
         }
-        empfangen.append("COM-Portliste aktualisiert");
+        empfangen.append("COM-Portliste aktualisiert\n");
     }
 
     public byte[] requestSend() throws IOException {
@@ -823,29 +969,7 @@ public class Diagnoseapplikation extends JFrame {
             starttime = System.currentTimeMillis();
             System.out.println(starttime);
         }
-//        Object[] devices = new Object[9];
-//        devices[0] = sendarraysCUM4;
-//        devices[1] = sendarraysAAW;
-//        devices[2] = sendarraysPL;
-//        devices[3] = sendarraysPR;
-//        devices[4] = sendarraysSH1;
-//        devices[5] = sendarraysSH2;
-//        devices[6] = sendarraysSH3;
-//        devices[7] = sendarraysSH4;
-//        devices[8] = sendarraysCU;
-//
-//        Boolean[] deviceOnline = new Boolean[9];
-//        Boolean[] deviceFinished = new Boolean[9];
-//        Arrays.fill(deviceFinished, Boolean.FALSE);
-//        deviceOnline[0] = controlunitm4_status;
-//        deviceOnline[1] = aloneatwork_status;
-//        deviceOnline[2] = panelleft_status;
-//        deviceOnline[3] = panelright_status;
-//        deviceOnline[4] = senslighthead1_status;
-//        deviceOnline[5] = senslighthead2_status;
-//        deviceOnline[6] = senslighthead3_status;
-//        deviceOnline[7] = senslighthead4_status;
-//        deviceOnline[8] = controlunit_status;
+
 //
 //        for (int i = 0; i < deviceOnline.length; i++) {
 //            if (deviceOnline[i] == true && deviceFinished[i] == false) {
@@ -853,7 +977,6 @@ public class Diagnoseapplikation extends JFrame {
 //            System.out.println("deviceFinished: " + i + " " + deviceFinished[i]);
 //            }
 //        }
-
         // Abfrage der Control Unit M4
         if (controlunitm4_status == true && controlunitm4_msgsend == false) {
             byte[] sendstream = sendarraysCUM4[Diagnoseapplikation.currentMessageCUM4];
@@ -1038,26 +1161,61 @@ public class Diagnoseapplikation extends JFrame {
     void writeSend() throws IOException {
         // Alte Daten mit neuen Daten vergleichen, falls Änderungen 
         // Bsp. 08 06 0000 0001 "CRC" senden
+        boolean valuedifferent = false;
+        byte devicetype = 0;
 
-        // Zeige Tabelle für Testzwecke
-//        int collection = 9;
-//        String collectionString;
-        // Get tablename, hexidentifier, currentvalue
-//        switch (collection){
-//            case 1: collectionString=
+        switch (device) {
+            case "cum4":
+                devicetype = 0x08;
+                break;
+            case "cu":
+                devicetype = 0x08;
+                break;
+            case "aaw":
+                devicetype = 0x10;
+                break;
+            case "pl":
+                devicetype = 0x11;
+                break;
+            case "pr":
+                devicetype = 0x11;
+                break;
+            case "sh1":
+                devicetype = 0x17;
+                break;
+            case "sh2":
+                devicetype = 0x18;
+                break;
+            case "sh3":
+                devicetype = 0x19;
+                break;
+            case "sh4":
+                devicetype = 0x1A;
+                break;
+        }
+
+        // Wert in List zwischenspeichern, dannach mit Collection vergleichen und falls anderst, neue Abfrage starten
+//        if (SH4Collection.getDataByIdentifier(entry.getKey().toString(), "hexIdentifier"){
+//            valuedifferent = true;
 //        }
-//        for (Map.Entry entry : CUM4Collection.dataEntryCollection.entrySet()) {
-//            DefaultTableModel model = (DefaultTableModel) geraeteDatenTabelle.getModel();
-//            model.addRow(new Object[]{CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-//        }
-//        if (serialPortGeoeffnet != true) {
-//            byte[] sendstream = sendarraysSH2[currentMessageSH4];
-//            CRC16 crc = new CRC16();
-//            crc.update(sendstream, 0, sendstream.length);
-//            crc.getAll();
-//            outputStream.write(crc.getAll());
-//            return;
-//        }
+        byte[] hexbuffer = ConversionHelper.hexStringToByteArray(hexofchangedvalue);
+        byte[] changedvaluearray = new byte[2];
+        changedvaluearray[0] = (byte) (changedvalue & 0xFF);
+        changedvaluearray[1] = (byte) ((changedvalue >> 8) & 0xFF);
+
+        byte[] sendstream = {(byte) devicetype, (byte) 0x06, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00};
+        System.arraycopy(hexbuffer, 0, sendstream, 2, 2);
+        System.arraycopy(changedvaluearray, 0, sendstream, 4, 2);
+
+        String sendstreamstring = ConversionHelper.byteArrayToHexString(sendstream);
+        System.out.println("sendstreamstring: " + sendstreamstring);
+
+        CRC16 crc = new CRC16();
+        crc.update(sendstream, 0, sendstream.length);
+        crc.getAll();
+        outputStream.write(crc.getAll());
+        return;
+
     }
 
     void deviceRequest() throws IOException {
@@ -1071,8 +1229,7 @@ public class Diagnoseapplikation extends JFrame {
     void serialPortDatenVerfuegbar() throws InterruptedException {
         try {
             byte[] data = new byte[170];
-            byte[] requestbuffercum = new byte[3];
-            byte[] startadresscum = new byte[2];
+            byte[] requestbuffer = new byte[3];
             byte[] responsebuffer = new byte[3];
             byte[] crcbuffer = new byte[2];
             int num;
@@ -1082,19 +1239,12 @@ public class Diagnoseapplikation extends JFrame {
             if (Diagnoseapplikation.currentMessageCUM4 != 0) {
                 lastMessageCUM4 = Diagnoseapplikation.currentMessageCUM4 - 1;
             }
-            requestbuffercum[0] = sendarraysCUM4[lastMessageCUM4][0];
-            requestbuffercum[1] = sendarraysCUM4[lastMessageCUM4][1];
-            requestbuffercum[2] = (byte) (2 * sendarraysCUM4[lastMessageCUM4][5]);
+            requestbuffer[0] = sendarraysCUM4[lastMessageCUM4][0];
+            requestbuffer[1] = sendarraysCUM4[lastMessageCUM4][1];
+            requestbuffer[2] = (byte) (2 * sendarraysCUM4[lastMessageCUM4][5]);
 
-            startadresscum[0] = sendarraysCUM4[lastMessageCUM4][2];
-            startadresscum[1] = sendarraysCUM4[lastMessageCUM4][3];
+            ArrayList<String> adresscum4 = adressList.adress(sendarraysCUM4, lastMessageCUM4);
 
-            ArrayList<String> adress = adressList.adress(sendarraysCUM4, lastMessageCUM4);
-//            String adresslist = Arrays.toString(adress.toArray());
-//            String adress1 = adress.get(1);
-//            System.out.println("Adress 1:"+ adress.get(1));
-
-//            System.out.println("Adressen ausgegeben" + adress.size());
             while (inputStream.available() > 0) {
 
                 num = inputStream.read(data, 0, data.length);
@@ -1134,9 +1284,9 @@ public class Diagnoseapplikation extends JFrame {
                     String dataentrystring = ConversionHelper.byteArrayToHexString(dataentry);
                     System.out.println("dataentry: " + dataentrystring);
 
-                    if (requestbuffercum[0] == responsebuffer[0]) {
-                        if (requestbuffercum[1] == responsebuffer[1]) {
-                            if (requestbuffercum[2] == responsebuffer[2]) {
+                    if (requestbuffer[0] == responsebuffer[0]) {
+                        if (requestbuffer[1] == responsebuffer[1]) {
+                            if (requestbuffer[2] == responsebuffer[2]) {
                                 responsetrue = true;
                                 System.err.println("response: " + responsetrue);
                             }
@@ -1144,10 +1294,12 @@ public class Diagnoseapplikation extends JFrame {
                     } else {
                         responsetrue = false;
                     }
-                    if (responsetrue) {
+
+                    // Werte aus Anfrage speichern
+                    if (responsetrue && controlunitm4_status) {
                         for (Map.Entry entry : CUM4Collection.dataEntryCollection.entrySet()) {
-                            for (int j = 0; j < adress.size(); j++) {
-                                if (entry.getKey().toString().equals(adress.get(j))) {
+                            for (int j = 0; j < adresscum4.size(); j++) {
+                                if (entry.getKey().toString().equals(adresscum4.get(j))) {
                                     byte[] dataentity = new byte[2];
                                     System.arraycopy(dataentry, j * 2, dataentity, 0, 2);
                                     String dataentitystring = ConversionHelper.byteArrayToHexString(dataentity);
@@ -1157,58 +1309,48 @@ public class Diagnoseapplikation extends JFrame {
                             }
                         }
                     }
-//                    if (responsetrue) {
-//                        for (Map.Entry entry : CUM4Collection.dataEntryCollection.entrySet()) {
-//                            for (int j = 0; j < adress.size(); j++) {
-//                                if (entry.getKey().toString().equals(adress.get(j))) {
-//
-//                                    byte[] dataentity = new byte[2];
-//                                    System.arraycopy(dataentry, j * 2, dataentity, 0, 2);
-//                                    String dataentitystring = ConversionHelper.byteArrayToHexString(dataentity);
-//
-//                                    CUM4Collection.setCurrentValue(entry.getKey().toString(), dataentitystring);
-//                                    System.out.println("test");
-//                                }
-//                            }
-//                        }
-//                    }
 
+                    // Livewerte speichern
+                    if ("0803".equals(byteArrayToHex.substring(0, 4)) && controlunitm4_status) {
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                        Date date = new Date();
+                        System.out.println(dateFormat.format(date)); //2016/11/16 12:08:43
+
+                        Livedataentry livedata = new Livedataentry();
+                        livedata.time = Long.parseLong(dateFormat.format(date));
+
+                        liveCUM4Collection.addEntry(livedata.time, livedata);
+
+                    }
                     if ("100302".equals(byteArrayToHex.substring(0, 6))) {
                         aloneatwork_status = true;
-
                     }
                     if ("110302".equals(byteArrayToHex.substring(0, 6))) {
                         panelleft_status = true;
-
                     }
                     if ("120302".equals(byteArrayToHex.substring(0, 6))) {
                         panelright_status = true;
-
                     }
                     if ("150302".equals(byteArrayToHex.substring(0, 6))) {
                         connectedlighting_status = true;
                     }
                     if ("170304".equals(byteArrayToHex.substring(0, 6))) {
                         senslighthead1_status = true;
-
                     }
                     if ("180304".equals(byteArrayToHex.substring(0, 6))) {
                         senslighthead2_status = true;
-
                     }
                     if ("190304".equals(byteArrayToHex.substring(0, 6))) {
                         senslighthead3_status = true;
-
                     }
                     if ("200304".equals(byteArrayToHex.substring(0, 6))) {
                         senslighthead4_status = true;
-
                     }
-                    if ("0f03".equals(byteArrayToHex.substring(0, 4)) || "0F03".equals(byteArrayToHex.substring(0, 4))) {
-                        controlunitm4_status = true;
+                    if ("0F03".equals(byteArrayToHex.substring(0, 4))) { // "0f03".equals(byteArrayToHex.substring(0, 4)) || 
+//                        controlunitm4_status = true;
 
-                        // Falls Antwort, Abfragen auslösen mit Device + CRC, gesplittet auf HR-Abfolgen
-                        if (controlunitm4_status != true || controlunit_status != true) {
+//                        // Falls Antwort, Abfragen auslösen mit Device + CRC, gesplittet auf HR-Abfolgen
+                        if (controlunitm4_status != true && controlunit_status != true) {
                             deviceRequest();
                         }
 //                        System.out.println("PC-Bridge initialisiert: " + System.currentTimeMillis());
@@ -1224,10 +1366,14 @@ public class Diagnoseapplikation extends JFrame {
 //                        controlunitm4_status = true;
 //                        System.err.println("controlunitm4_status");
 //                    }
-//                    if ("0803020002E584".equals(byteArrayToHex.substring(0, 6))) {
+//                    if ("0803020002E584".equals(byteArrayToHex.substring(0, 14))) {
 //                        // Antwort von Control Unit
-//                        controlunit_status = true;
+//                        controlunitm4_status = true; // anpassen sobald updated
 //                    }
+                    if ("0803020002E584".equals(byteArrayToHex.substring(0, 14))) {
+                        // Antwort von Control Unit
+                        controlunitm4_status = true; // anpassen sobald updated
+                    }
 
                     empfangen.append("Empfangene Nachricht: " + msgbufferstring + "\n" + "Empfangener CRC: " + crcbufferstring + "\n" + "CRC-Überprüfung: " + crcreverse.check(msgbuffer, crcbuffer) + "\n" + "\n");
                 } else {
@@ -1303,23 +1449,32 @@ public class Diagnoseapplikation extends JFrame {
         public void actionPerformed(ActionEvent event) {
 //            geraeteDatenCUM4.setVisible(true);
 
-//            if (schreiben == false) {
+//            if (schreiben == false) { 
 //                System.out.println("schreibennActionListener true");
+//                empfangen.append("Änderungen gesendet \n");
 //                schreiben = true;
 //            } else {
 //                System.out.println("schreibennActionListener false");
+//                empfangen.append("Änderungen senden abgebrochen \n");
 //                schreiben = false;
 //            }
         }
     }
 
-//    private void geraeteListeValueChanged(javax.swing.event.ListSelectionEvent evt) {
-//        System.out.println(evt.getValueIsAdjusting());
-//
-////        if (evt.getSelectedValue().toString().equals("Control Unit M4")) {
-//        System.err.println("triggered");
-////        }
-//    }
+    class firmwareActionListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent event) {
+
+        }
+    }
+
+    class modulfirmwareActionListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent event) {
+
+        }
+    }
+
     /**
      *
      */

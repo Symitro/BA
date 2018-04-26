@@ -3,15 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/data/Dataentry.java</file>
             <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/Diagnoseapplikation.java</file>
-            <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Examples/TableProcessing.java</file>
-            <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/misc/adressList.java</file>
-            <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/misc/CRC16.java</file>
             <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/misc/CSVReader.java</file>
-            <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/data/Datacollection.java</file>
-            <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Examples/Diagnoseapplikation_Test.java</file>
-            <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/Diagnoseapplikation_GUI.java</file>
+            <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/data/Livedatacollection.java</file>
+            <file>file:/C:/Users/Julian/Documents/NetBeansProjects/BA/src/Bachelorarbeit_regent/data/Livedataentry.java</file>
         </group>
     </open-files>
 </project-private>

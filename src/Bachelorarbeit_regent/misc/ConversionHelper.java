@@ -30,7 +30,7 @@ public class ConversionHelper {
         String hexString = "";
 
         for (int i = 0; i < byteArray.length; i++) {
-            String thisByte = String.format("%02x", byteArray[i]);
+            String thisByte = String.format("%02x", byteArray[i]).toUpperCase();
 
             hexString += thisByte;
         }
