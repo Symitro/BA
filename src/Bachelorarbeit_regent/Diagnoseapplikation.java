@@ -86,44 +86,32 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     Boolean schreiben = false;
     Boolean abfrageabgeschlossen = false;
     String device;
+    Byte devicebyte;
     int changedvalue;
     String hexofchangedvalue;
     int selectedtab;
 
-    boolean controlunitm4_status;
-    boolean controlunit_status;
-    boolean aloneatwork_status;
-    boolean panelleft_status;
-    boolean panelright_status;
-    boolean connectedlighting_status;
-    boolean senslighthead1_status;
-    boolean senslighthead2_status;
-    boolean senslighthead3_status;
-    boolean senslighthead4_status;
-
-    boolean controlunitm4_msgsend;
-    boolean controlunit_msgsend;
-    boolean aloneatwork_msgsend;
-    boolean panelleft_msgsend;
-    boolean panelright_msgsend;
-    boolean connectedlighting_msgsend;
-    boolean senslighthead1_msgsend;
-    boolean senslighthead2_msgsend;
-    boolean senslighthead3_msgsend;
-    boolean senslighthead4_msgsend;
-
-    Boolean[] deviceOnline = new Boolean[9];
-    Boolean[] deviceFinished = new Boolean[9];
-//        Arrays.fill(deviceFinished, Boolean.FALSE);
-//        deviceOnline[0] = controlunitm4_status;
-//        deviceOnline[1] = aloneatwork_status;
-//        deviceOnline[2] = panelleft_status;
-//        deviceOnline[3] = panelright_status;
-//        deviceOnline[4] = senslighthead1_status;
-//        deviceOnline[5] = senslighthead2_status;
-//        deviceOnline[6] = senslighthead3_status;
-//        deviceOnline[7] = senslighthead4_status;
-//        deviceOnline[8] = controlunit_status;
+//    boolean controlunitm4_status;
+//    boolean controlunit_status;
+//    boolean aloneatwork_status;
+//    boolean panelleft_status;
+//    boolean panelright_status;
+//    boolean connectedlighting_status;
+//    boolean senslighthead1_status;
+//    boolean senslighthead2_status;
+//    boolean senslighthead3_status;
+//    boolean senslighthead4_status;
+//
+//    boolean controlunitm4_msgsend;
+//    boolean controlunit_msgsend;
+//    boolean aloneatwork_msgsend;
+//    boolean panelleft_msgsend;
+//    boolean panelright_msgsend;
+//    boolean connectedlighting_msgsend;
+//    boolean senslighthead1_msgsend;
+//    boolean senslighthead2_msgsend;
+//    boolean senslighthead3_msgsend;
+//    boolean senslighthead4_msgsend;
     // Abfragen für Control Unit M4, maximal 16 HR pro Abfrage für Performance
     byte[] sendstreamCUM4_1 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
     byte[] sendstreamCUM4_2 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //^
@@ -163,9 +151,8 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     byte[][] sendarraysCUM4 = {sendstreamCUM4_1, sendstreamCUM4_2, sendstreamCUM4_3, sendstreamCUM4_4, sendstreamCUM4_5, sendstreamCUM4_6, sendstreamCUM4_7, sendstreamCUM4_8, sendstreamCUM4_9, sendstreamCUM4_10, sendstreamCUM4_11, sendstreamCUM4_12, sendstreamCUM4_13, sendstreamCUM4_14, sendstreamCUM4_15, sendstreamCUM4_16, sendstreamCUM4_17, sendstreamCUM4_18, sendstreamCUM4_19, sendstreamCUM4_20, sendstreamCUM4_21, sendstreamCUM4_22, sendstreamCUM4_23, sendstreamCUM4_24, sendstreamCUM4_25, sendstreamCUM4_26, sendstreamCUM4_27, sendstreamCUM4_28, sendstreamCUM4_29, sendstreamCUM4_30, sendstreamCUM4_31, sendstreamCUM4_32, sendstreamCUM4_33, sendstreamCUM4_34, sendstreamCUM4_35};
 
-    int messageLengthCUM4 = sendarraysCUM4.length;
-    static int currentMessageCUM4 = 0;
-
+//    int messageLengthCUM4 = sendarraysCUM4.length;
+//    static int currentMessageCUM4 = 0;
     // Abfragen für Control Unit, maximal 16 HR pro Abfrage für Performance
     byte[] sendstreamCU_1 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
     byte[] sendstreamCU_2 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //^
@@ -196,9 +183,8 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     byte[][] sendarraysCU = {sendstreamCU_1, sendstreamCU_2, sendstreamCU_3, sendstreamCU_4, sendstreamCU_5, sendstreamCU_6, sendstreamCU_7, sendstreamCU_8, sendstreamCU_9, sendstreamCU_10, sendstreamCU_11, sendstreamCU_12, sendstreamCU_13, sendstreamCU_14, sendstreamCU_15, sendstreamCU_16, sendstreamCU_17, sendstreamCU_18, sendstreamCU_19, sendstreamCU_20, sendstreamCU_21, sendstreamCU_22, sendstreamCU_23, sendstreamCU_24, sendstreamCU_25, sendstreamCU_26};
 
-    int messageLengthCU = sendarraysCU.length;
-    int currentMessageCU = 0;
-
+//    int messageLengthCU = sendarraysCU.length;
+//    int currentMessageCU = 0;
     // Abfragen des Alone at Works 2.0
     byte[] sendstreamAAW_1 = {(byte) 0x10, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
     byte[] sendstreamAAW_2 = {(byte) 0x10, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //^
@@ -220,9 +206,8 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     byte[][] sendarraysAAW = {sendstreamAAW_1, sendstreamAAW_2, sendstreamAAW_3, sendstreamAAW_4, sendstreamAAW_5, sendstreamAAW_6, sendstreamAAW_7, sendstreamAAW_8, sendstreamAAW_9, sendstreamAAW_10, sendstreamAAW_11, sendstreamAAW_12, sendstreamAAW_13, sendstreamAAW_14, sendstreamAAW_15, sendstreamAAW_16, sendstreamAAW_17};
 
-    int messageLengthAAW = sendarraysAAW.length;
-    int currentMessageAAW = 0;
-
+//    int messageLengthAAW = sendarraysAAW.length;
+//    int currentMessageAAW = 0;
     // Abfragen des linken Panel
     byte[] sendstreamPL_1 = {(byte) 0x11, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
     byte[] sendstreamPL_2 = {(byte) 0x11, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //^
@@ -243,9 +228,8 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     byte[][] sendarraysPL = {sendstreamPL_1, sendstreamPL_2, sendstreamPL_3, sendstreamPL_4, sendstreamPL_5, sendstreamPL_6, sendstreamPL_7, sendstreamPL_8, sendstreamPL_9, sendstreamPL_10, sendstreamPL_11, sendstreamPL_12, sendstreamPL_13, sendstreamPL_14, sendstreamPL_15, sendstreamPL_16};
 
-    int messageLengthPL = sendarraysPL.length;
-    int currentMessagePL = 0;
-
+//    int messageLengthPL = sendarraysPL.length;
+//    int currentMessagePL = 0;
     // Abfrage des rechten Panel
     byte[] sendstreamPR_1 = {(byte) 0x12, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
     byte[] sendstreamPR_2 = {(byte) 0x12, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //^
@@ -266,9 +250,8 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     byte[][] sendarraysPR = {sendstreamPR_1, sendstreamPR_2, sendstreamPR_3, sendstreamPR_4, sendstreamPR_5, sendstreamPR_6, sendstreamPR_7, sendstreamPR_8, sendstreamPR_9, sendstreamPR_10, sendstreamPR_11, sendstreamPR_12, sendstreamPR_13, sendstreamPR_14, sendstreamPR_15, sendstreamPR_16};
 
-    int messageLengthPR = sendarraysPR.length;
-    int currentMessagePR = 0;
-
+//    int messageLengthPR = sendarraysPR.length;
+//    int currentMessagePR = 0;
     // Abfrage des Senselight Head 1
     byte[] sendstreamSH1_1 = {(byte) 0x17, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
     byte[] sendstreamSH1_2 = {(byte) 0x17, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //^
@@ -290,9 +273,8 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     byte[][] sendarraysSH1 = {sendstreamSH1_1, sendstreamSH1_2, sendstreamSH1_3, sendstreamSH1_4, sendstreamSH1_5, sendstreamSH1_6, sendstreamSH1_7, sendstreamSH1_8, sendstreamSH1_9, sendstreamSH1_10, sendstreamSH1_11, sendstreamSH1_12, sendstreamSH1_13, sendstreamSH1_14, sendstreamSH1_15, sendstreamSH1_16, sendstreamSH1_17};
 
-    int messageLengthSH1 = sendarraysSH1.length;
-    int currentMessageSH1 = 0;
-
+//    int messageLengthSH1 = sendarraysSH1.length;
+//    int currentMessageSH1 = 0;
     // Abfrage des Senselight Head 2
     byte[] sendstreamSH2_1 = {(byte) 0x18, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
     byte[] sendstreamSH2_2 = {(byte) 0x18, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //^
@@ -314,9 +296,8 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     byte[][] sendarraysSH2 = {sendstreamSH2_1, sendstreamSH2_2, sendstreamSH2_3, sendstreamSH2_4, sendstreamSH2_5, sendstreamSH2_6, sendstreamSH2_7, sendstreamSH2_8, sendstreamSH2_9, sendstreamSH2_10, sendstreamSH2_11, sendstreamSH2_12, sendstreamSH2_13, sendstreamSH2_14, sendstreamSH2_15, sendstreamSH2_16, sendstreamSH2_17};
 
-    int messageLengthSH2 = sendarraysSH2.length;
-    int currentMessageSH2 = 0;
-
+//    int messageLengthSH2 = sendarraysSH2.length;
+//    int currentMessageSH2 = 0;
     // Abfrage des Senselight Head 3
     byte[] sendstreamSH3_1 = {(byte) 0x19, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
     byte[] sendstreamSH3_2 = {(byte) 0x19, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //^
@@ -338,9 +319,8 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     byte[][] sendarraysSH3 = {sendstreamSH3_1, sendstreamSH3_2, sendstreamSH3_3, sendstreamSH3_4, sendstreamSH3_5, sendstreamSH3_6, sendstreamSH3_7, sendstreamSH3_8, sendstreamSH3_9, sendstreamSH3_10, sendstreamSH3_11, sendstreamSH3_12, sendstreamSH3_13, sendstreamSH3_14, sendstreamSH3_15, sendstreamSH3_16, sendstreamSH3_17};
 
-    int messageLengthSH3 = sendarraysSH3.length;
-    int currentMessageSH3 = 0;
-
+//    int messageLengthSH3 = sendarraysSH3.length;
+//    int currentMessageSH3 = 0;
     // Abfrage des Senselight Head 4
     byte[] sendstreamSH4_1 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10}; //32
     byte[] sendstreamSH4_2 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x10}; //^
@@ -362,25 +342,37 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     byte[][] sendarraysSH4 = {sendstreamSH4_1, sendstreamSH4_2, sendstreamSH4_3, sendstreamSH4_4, sendstreamSH4_5, sendstreamSH4_6, sendstreamSH4_7, sendstreamSH4_8, sendstreamSH4_9, sendstreamSH4_10, sendstreamSH4_11, sendstreamSH4_12, sendstreamSH4_13, sendstreamSH4_14, sendstreamSH4_15, sendstreamSH4_16, sendstreamSH4_17};
 
-//        Object[] devices = new Object[9];
-//        devices[0] = sendarraysCUM4;
-//        devices[1] = sendarraysAAW;
-//        devices[2] = sendarraysPL;
-//        devices[3] = sendarraysPR;
-//        devices[4] = sendarraysSH1;
-//        devices[5] = sendarraysSH2;
-//        devices[6] = sendarraysSH3;
-//        devices[7] = sendarraysSH4;
-//        devices[8] = sendarraysCU;
 //    byte[][][] sendarrays = {sendarraysCUM4, sendarraysCU, sendarraysAAW, sendarraysPL, sendarraysPR, sendarraysSH1, sendarraysSH2, sendarraysSH3, sendarraysSH4};
-    int messageLengthSH4 = sendarraysSH4.length;
-    int currentMessageSH4 = 0;
-
+//    int messageLengthSH4 = sendarraysSH4.length;
+//    int currentMessageSH4 = 0;
     int totalLength;
     int totalMessageCount;
     long starttime;
     long endtime;
     long loopstarttime;
+
+    // Datacollections werden in ein Array gefüllt
+    Datacollection[] datacollectionArray = {
+        CUM4Collection, CUCollection, AAWCollection, PLCollection, PRCollection,
+        SH1Collection, SH2Collection, SH3Collection, SH4Collection};
+
+    // Livedatacollections werden in ein Array gefüllt
+    Livedatacollection[] livedatacollectionArray = {
+        liveCUM4Collection, liveCUCollection, liveAAWCollection, livePLCollection, livePRCollection,
+        liveSH1Collection, liveSH2Collection, liveSH3Collection, liveSH4Collection};
+
+    Device[] deviceArray = {
+        new Device(sendarraysCUM4, "Control Unit M4", "0803020002E584", (byte) 0x08),
+        new Device(sendarraysCU, "Control Unit", "0803020006E447", (byte) 0x08),
+        new Device(sendarraysAAW, "Alone at Work 2.0", "100302", (byte) 0x10),
+        new Device(sendarraysPL, "Panel Links", "110302", (byte) 0x11),
+        new Device(sendarraysPR, "Panel Rechts", "120302", (byte) 0x12),
+        new Device(sendarraysSH1, "Senselighthead 1", "170304", (byte) 0x17),
+        new Device(sendarraysSH2, "Senselighthead 2", "180304", (byte) 0x18),
+        new Device(sendarraysSH3, "Senselighthead 3", "190304", (byte) 0x19),
+        new Device(sendarraysSH4, "Senselighthead 4", "1A0304", (byte) 0x1A)};
+
+    int actualDeviceCounter = 0;
 
     /**
      * Fenster
@@ -414,7 +406,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     JButton uebernehmen = new JButton("Änderungen übernehmen");
     JButton firmware = new JButton("Gesamte Lampen-Firmware aktualisieren");
     JButton modulfirmware = new JButton("einzelne Modul-Firmware aktualisieren");
-//    JCheckBox echo = new JCheckBox("Echo");
+    JButton statusabfrage = new JButton("manuelle Statusabfrage");
 
     JTextArea empfangen = new JTextArea();
     JScrollPane empfangenJScrollPane = new JScrollPane();
@@ -422,6 +414,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     JList geraeteListe = new JList<>();
     JLabel geraeteNamen = new JLabel("Geräteliste");
+    DefaultListModel<String> geraeteListeModel = new DefaultListModel<>();
 
     Object[][] data = {null, null, null, null, null, null, null};
     Object[] columns = {"Index", "Variablenname", "HEX-Adresse", "Aktueller Wert", "Min-Wert", "Max-Wert", "Default-Wert"};
@@ -498,7 +491,6 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
             }
         });
         System.out.println("Main durchlaufen");
-//        NewJFrame GUI = new NewJFrame();
     }
 
     /**
@@ -506,6 +498,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
      */
     public Diagnoseapplikation() {
         System.out.println("Konstruktor aufgerufen");
+        // TableModelListener wird dem model hinzugefügt
         model.addTableModelListener(this);
 
         // Daten werden aus CSV gelesen
@@ -518,6 +511,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         SH2Collection = CSVReader.getDataFromCsv("sensormodule");
         SH3Collection = CSVReader.getDataFromCsv("sensormodule");
         SH4Collection = CSVReader.getDataFromCsv("sensormodule");
+
         initComponents();
 
     }
@@ -611,224 +605,260 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
         panelGeraeteListe.add(geraeteNamen, constraints);
 
+        //        geraeteListe.setSelectionModel(new DisabledItemSelectionModel());
+//        geraeteListe.setCellRenderer(new DisabledItemListCellRenderer());
         // Geräteliste
-        String[] geraeteNamen = {"Control Unit M4", "Alone at Work 2.0", "Panel Links", "Panel Rechts", "Senselighthead 1", "Senselighthead 2", "Senselighthead 3", "Senselighthead 4"};
-        final JList geraeteListe = new JList(geraeteNamen);
+        for (int i = 0; i < deviceArray.length; i++) {
+            if (!deviceArray[i].deviceStatus) {
+                deviceArray[i].deviceStatus = true;
+                geraeteListeModel.addElement(deviceArray[i].deviceName);
+            }
+        }
+        JList geraeteListe = new JList(geraeteListeModel);
+        geraeteListe.setCellRenderer(new DisabledItemListCellRenderer());
+
         geraeteListe.addListSelectionListener(new ListSelectionListener() {
 
             @Override
             public void valueChanged(ListSelectionEvent evt) {
                 if (!evt.getValueIsAdjusting()) {
-                    String geraet = geraeteListe.getSelectedValue().toString();
+//                    String geraet = geraeteListe.getSelectedValue().toString();
                     if (selectedtab == 1) {
                         DefaultTableModel model = (DefaultTableModel) geraeteDatenTabelle.getModel();
                         model.setRowCount(0);
 
-                        switch (geraet) {
-                            case "Control Unit M4":
-                                if (controlunitm4_status) { //                            if (controlunitm4_status && abfrageabgeschlossen) {
-                                    device = "cum4";
-                                    for (Map.Entry entry : CUM4Collection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "index"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-
-                                    empfangen.append("CUM4 angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Control Unit M4", "nicht Online"});
+                        for (int i = 0; i < deviceArray.length; i++) {
+                            if (deviceArray[i].deviceStatus) {
+                                devicebyte = deviceArray[i].devicebyte;
+                                for (Map.Entry entry : datacollectionArray[i].dataEntryCollection.entrySet()) {
+                                    model.addRow(new Object[]{datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "index"), datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "currentValue"), datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "defaultValue"), datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "minValue"), datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "maxValue")});
                                 }
-                                break;
-                            case "Control Unit":
-                                if (controlunit_status) {
-                                    device = "cu";
-                                    for (Map.Entry entry : CUCollection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{CUCollection.getDataByIdentifier(entry.getKey().toString(), "index"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), CUCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("CU angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Control Unit", "nicht Online"});
-                                }
-                                break;
-                            case "Alone at Work 2.0":
-                                if (aloneatwork_status) {
-                                    device = "aaw";
-                                    for (Map.Entry entry : AAWCollection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{AAWCollection.getDataByIdentifier(entry.getKey().toString(), "index"), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("AAW angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Alone at Work 2.0", "nicht Online"});
-                                }
-                                break;
-                            case "Panel Links":
-                                if (panelleft_status) {
-                                    device = "pl";
-                                    for (Map.Entry entry : PLCollection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{PLCollection.getDataByIdentifier(entry.getKey().toString(), "index"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), PLCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("PR angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Panel left", "nicht Online"});
-                                }
-                                break;
-                            case "Panel Rechts":
-                                if (panelright_status) {
-                                    device = "pr";
-                                    for (Map.Entry entry : PRCollection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{PRCollection.getDataByIdentifier(entry.getKey().toString(), "index"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), PRCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("PR angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Panel right", "nicht Online"});
-                                }
-                                break;
-                            case "Senselighthead 1":
-                                if (senslighthead1_status) {
-                                    device = "sh1";
-                                    for (Map.Entry entry : SH1Collection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{SH1Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("SH1 angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Senselighthead 1", "nicht Online"});
-                                }
-                                break;
-                            case "Senselighthead 2":
-                                if (senslighthead2_status) {
-                                    device = "sh2";
-                                    for (Map.Entry entry : SH2Collection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{SH2Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("SH2 angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Senselighthead 2", "nicht Online"});
-                                }
-                                break;
-                            case "Senselighthead 3":
-                                if (senslighthead3_status) {
-                                    device = "sh3";
-                                    for (Map.Entry entry : SH3Collection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{SH3Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("SH3 angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Senselighthead 3", "nicht Online"});
-                                }
-                                break;
-                            case "Senselighthead 4":
-                                if (senslighthead4_status) {
-                                    device = "sh4";
-                                    for (Map.Entry entry : SH4Collection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{SH4Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("SH4 angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Senselighthead 4", "nicht Online"});
-                                }
-                                break;
+                                empfangen.append(deviceArray[i].deviceName + "angewählt");
+                            } else {
+                                model.setRowCount(0);
+                            }
                         }
                     } else {
                         DefaultTableModel model = (DefaultTableModel) liveDatenTabelle.getModel();
                         model.setRowCount(0);
-
-                        switch (geraet) {
-                            case "Control Unit M4":
-                                if (controlunitm4_status) { //                            if (controlunitm4_status && abfrageabgeschlossen) {
-                                    device = "cum4";
-                                    for (Map.Entry entry : liveCUM4Collection.liveDataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{liveCUM4Collection.getDataByIdentifier(entry.getKey().toString(), "time"), "08", "03", "0001"});
-                                    }
-                                    empfangen.append("CUM4 angewählt \n");
+                        
+                        for (int i = 0; i < deviceArray.length; i++) {
+                            if (deviceArray[i].deviceStatus) {
+                                devicebyte = deviceArray[i].devicebyte;
+                                for (Map.Entry entry : livedatacollectionArray[i].liveDataEntryCollection.entrySet()) {
+                                    model.addRow(new Object[]{livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "index"), livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "currentValue"), livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "defaultValue"), livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "minValue"), livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "maxValue")});
                                 }
-                                break;
-                            case "Control Unit":
-                                if (controlunit_status) {
-                                    device = "cu";
-                                    for (Map.Entry entry : CUCollection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{CUCollection.getDataByIdentifier(entry.getKey().toString(), "index"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), CUCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("CU angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Control Unit", "nicht Online"});
-                                }
-                                break;
-                            case "Alone at Work 2.0":
-                                if (aloneatwork_status) {
-                                    device = "aaw";
-                                    for (Map.Entry entry : liveAAWCollection.liveDataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{liveAAWCollection.getDataByIdentifier(entry.getKey().toString(), "time"), liveAAWCollection.getDataByIdentifier(entry.getKey().toString(), "deviceadress"), liveAAWCollection.getDataByIdentifier(entry.getKey().toString(), "functioncode"), liveAAWCollection.getDataByIdentifier(entry.getKey().toString(), "message")});
-                                    }
-                                    empfangen.append("AAW angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Alone at Work 2.0", "nicht Online"});
-                                }
-                                break;
-                            case "Panel Links":
-                                if (panelleft_status) {
-                                    device = "pl";
-                                    for (Map.Entry entry : PLCollection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{PLCollection.getDataByIdentifier(entry.getKey().toString(), "index"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), PLCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("PR angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Panel left", "nicht Online"});
-                                }
-                                break;
-                            case "Panel Rechts":
-                                if (panelright_status) {
-                                    device = "pr";
-                                    for (Map.Entry entry : PRCollection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{PRCollection.getDataByIdentifier(entry.getKey().toString(), "index"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), PRCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("PR angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Panel right", "nicht Online"});
-                                }
-                                break;
-                            case "Senselighthead 1":
-                                if (senslighthead1_status) {
-                                    device = "sh1";
-                                    for (Map.Entry entry : SH1Collection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{SH1Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("SH1 angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Senselighthead 1", "nicht Online"});
-                                }
-                                break;
-                            case "Senselighthead 2":
-                                if (senslighthead2_status) {
-                                    device = "sh2";
-                                    for (Map.Entry entry : SH2Collection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{SH2Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("SH2 angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Senselighthead 2", "nicht Online"});
-                                }
-                                break;
-                            case "Senselighthead 3":
-                                if (senslighthead3_status) {
-                                    device = "sh3";
-                                    for (Map.Entry entry : SH3Collection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{SH3Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("SH3 angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Senselighthead 3", "nicht Online"});
-                                }
-                                break;
-                            case "Senselighthead 4":
-                                if (senslighthead4_status) {
-                                    device = "sh4";
-                                    for (Map.Entry entry : SH4Collection.dataEntryCollection.entrySet()) {
-                                        model.addRow(new Object[]{SH4Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
-                                    }
-                                    empfangen.append("SH4 angewählt \n");
-                                } else {
-                                    model.addRow(new Object[]{"Senselighthead 4", "nicht Online"});
-                                }
-                                break;
+                                empfangen.append(deviceArray[i].deviceName + "angewählt");
+                            } else {
+                                model.setRowCount(0);
+                            }
                         }
+
+//                        switch (geraet) {
+//                            case "Control Unit M4":
+//                                if (deviceArray[0].deviceStatus) {
+//                                    devicebyte = 0x08;
+//                                    for (Map.Entry entry : CUM4Collection.dataEntryCollection.entrySet()) {
+//                                        model.addRow(new Object[]{CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "index"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), CUM4Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
+//                                    }
+//                                    empfangen.append("CUM4 angewählt \n");
+//                                } else {
+//                                    model.setRowCount(0);
+//                                }
+//                                break;
+//                            case "Control Unit":
+//                                if (deviceArray[1].deviceStatus) {
+//                                    devicebyte = 0x08;
+//                                    for (Map.Entry entry : CUCollection.dataEntryCollection.entrySet()) {
+//                                        model.addRow(new Object[]{CUCollection.getDataByIdentifier(entry.getKey().toString(), "index"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), CUCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), CUCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
+//                                    }
+//                                    empfangen.append("CU angewählt \n");
+//                                } else {
+//                                    model.setRowCount(0);
+//                                }
+//                                break;
+//                            case "Alone at Work 2.0":
+//                                if (deviceArray[2].deviceStatus) {
+//                                    devicebyte = 0x10;
+//                                    for (Map.Entry entry : AAWCollection.dataEntryCollection.entrySet()) {
+//                                        model.addRow(new Object[]{AAWCollection.getDataByIdentifier(entry.getKey().toString(), "index"), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), AAWCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
+//                                    }
+//                                    empfangen.append("AAW angewählt \n");
+//                                } else {
+//                                    model.setRowCount(0);
+//                                }
+//                                break;
+//                            case "Panel Links":
+//                                if (deviceArray[3].deviceStatus) {
+//                                    devicebyte = 0x11;
+//                                    for (Map.Entry entry : PLCollection.dataEntryCollection.entrySet()) {
+//                                        model.addRow(new Object[]{PLCollection.getDataByIdentifier(entry.getKey().toString(), "index"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), PLCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), PLCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
+//                                    }
+//                                    empfangen.append("PR angewählt \n");
+//                                } else {
+//                                    model.setRowCount(0);
+//                                }
+//                                break;
+//                            case "Panel Rechts":
+//                                if (deviceArray[4].deviceStatus) {
+//                                    devicebyte = 0x12;
+//                                    for (Map.Entry entry : PRCollection.dataEntryCollection.entrySet()) {
+//                                        model.addRow(new Object[]{PRCollection.getDataByIdentifier(entry.getKey().toString(), "index"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), PRCollection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "minValue"), PRCollection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
+//                                    }
+//                                    empfangen.append("PR angewählt \n");
+//                                } else {
+//                                    model.setRowCount(0);
+//                                }
+//                                break;
+//                            case "Senselighthead 1":
+//                                if (deviceArray[5].deviceStatus) {
+//                                    devicebyte = 0x13;
+//                                    for (Map.Entry entry : SH1Collection.dataEntryCollection.entrySet()) {
+//                                        model.addRow(new Object[]{SH1Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH1Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
+//                                    }
+//                                    empfangen.append("SH1 angewählt \n");
+//                                } else {
+//                                    model.setRowCount(0);
+//                                }
+//                                break;
+//                            case "Senselighthead 2":
+//                                if (deviceArray[6].deviceStatus) {
+//                                    devicebyte = 0x14;
+//                                    for (Map.Entry entry : SH2Collection.dataEntryCollection.entrySet()) {
+//                                        model.addRow(new Object[]{SH2Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH2Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
+//                                    }
+//                                    empfangen.append("SH2 angewählt \n");
+//                                } else {
+//                                    model.setRowCount(0);
+//                                }
+//                                break;
+//                            case "Senselighthead 3":
+//                                if (deviceArray[7].deviceStatus) {
+//                                    device = deviceArray[7].deviceName;
+//                                    for (Map.Entry entry : SH3Collection.dataEntryCollection.entrySet()) {
+//                                        model.addRow(new Object[]{SH3Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH3Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
+//                                    }
+//                                    empfangen.append("SH3 angewählt \n");
+//                                } else {
+//                                    model.setRowCount(0);
+//                                }
+//                                break;
+//                            case "Senselighthead 4":
+//                                if (deviceArray[8].deviceStatus) {
+//                                    device = deviceArray[8].deviceName;
+//                                    for (Map.Entry entry : SH4Collection.dataEntryCollection.entrySet()) {
+//                                        model.addRow(new Object[]{SH4Collection.getDataByIdentifier(entry.getKey().toString(), "index"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "varName"), entry.getKey(), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "currentValue"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "defaultValue"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "minValue"), SH4Collection.getDataByIdentifier(entry.getKey().toString(), "maxValue")});
+//                                    }
+//                                    empfangen.append("SH4 angewählt \n");
+//                                } else {
+//                                    model.setRowCount(0);
+//                                }
+//                                break;
+//                        }
+//                } else {
+//                    DefaultTableModel model = (DefaultTableModel) liveDatenTabelle.getModel();
+//                    model.setRowCount(0);
+//
+//                    switch (geraet) {
+//                        case "Control Unit M4":
+//                            if (deviceArray[0].deviceStatus) { //                            if (controlunitm4_status && abfrageabgeschlossen) {
+//                                device = deviceArray[0].deviceName;
+//                                for (Map.Entry entry : liveCUM4Collection.liveDataEntryCollection.entrySet()) {
+//                                    model.addRow(new Object[]{liveCUM4Collection.getDataByIdentifier(entry.getKey().toString(), "time"), liveCUM4Collection.getDataByIdentifier(entry.getKey().toString(), "deviceadress"), liveCUM4Collection.getDataByIdentifier(entry.getKey().toString(), "functioncode"), liveCUM4Collection.getDataByIdentifier(entry.getKey().toString(), "message")});
+//                                }
+//                                empfangen.append("CUM4 angewählt \n");
+//                            } else {
+//                                model.setRowCount(0);
+//                            }
+//                            break;
+//                        case "Control Unit":
+//                            if (deviceArray[1].deviceStatus) {
+//                                device = deviceArray[1].deviceName;
+//                                for (Map.Entry entry : liveCUCollection.liveDataEntryCollection.entrySet()) {
+//                                    model.addRow(new Object[]{liveCUCollection.getDataByIdentifier(entry.getKey().toString(), "time"), liveCUCollection.getDataByIdentifier(entry.getKey().toString(), "deviceadress"), liveCUCollection.getDataByIdentifier(entry.getKey().toString(), "functioncode"), liveCUCollection.getDataByIdentifier(entry.getKey().toString(), "message")});
+//                                }
+//                                empfangen.append("CU angewählt \n");
+//                            } else {
+//                                model.setRowCount(0);
+//                            }
+//                            break;
+//                        case "Alone at Work 2.0":
+//                            if (deviceArray[2].deviceStatus) {
+//                                device = deviceArray[2].deviceName;
+//                                for (Map.Entry entry : liveAAWCollection.liveDataEntryCollection.entrySet()) {
+//                                    model.addRow(new Object[]{liveAAWCollection.getDataByIdentifier(entry.getKey().toString(), "time"), liveAAWCollection.getDataByIdentifier(entry.getKey().toString(), "deviceadress"), liveAAWCollection.getDataByIdentifier(entry.getKey().toString(), "functioncode"), liveAAWCollection.getDataByIdentifier(entry.getKey().toString(), "message")});
+//                                }
+//                                empfangen.append("AAW angewählt \n");
+//                            } else {
+//                                model.setRowCount(0);
+//                            }
+//                            break;
+//                        case "Panel Links":
+//                            if (deviceArray[3].deviceStatus) {
+//                                device = deviceArray[3].deviceName;
+//                                for (Map.Entry entry : livePLCollection.liveDataEntryCollection.entrySet()) {
+//                                    model.addRow(new Object[]{livePLCollection.getDataByIdentifier(entry.getKey().toString(), "time"), livePLCollection.getDataByIdentifier(entry.getKey().toString(), "deviceadress"), livePLCollection.getDataByIdentifier(entry.getKey().toString(), "functioncode"), livePLCollection.getDataByIdentifier(entry.getKey().toString(), "message")});
+//                                }
+//                                empfangen.append("PR angewählt \n");
+//                            } else {
+//                                model.setRowCount(0);
+//                            }
+//                            break;
+//                        case "Panel Rechts":
+//                            if (deviceArray[4].deviceStatus) {
+//                                device = deviceArray[4].deviceName;
+//                                for (Map.Entry entry : livePRCollection.liveDataEntryCollection.entrySet()) {
+//                                    model.addRow(new Object[]{livePRCollection.getDataByIdentifier(entry.getKey().toString(), "time"), livePRCollection.getDataByIdentifier(entry.getKey().toString(), "deviceadress"), livePRCollection.getDataByIdentifier(entry.getKey().toString(), "functioncode"), livePRCollection.getDataByIdentifier(entry.getKey().toString(), "message")});
+//                                }
+//                                empfangen.append("PR angewählt \n");
+//                            } else {
+//                                model.setRowCount(0);
+//                            }
+//                            break;
+//                        case "Senselighthead 1":
+//                            if (deviceArray[5].deviceStatus) {
+//                                device = deviceArray[5].deviceName;
+//                                for (Map.Entry entry : liveSH1Collection.liveDataEntryCollection.entrySet()) {
+//                                    model.addRow(new Object[]{liveSH1Collection.getDataByIdentifier(entry.getKey().toString(), "time"), liveSH1Collection.getDataByIdentifier(entry.getKey().toString(), "deviceadress"), liveSH1Collection.getDataByIdentifier(entry.getKey().toString(), "functioncode"), liveSH1Collection.getDataByIdentifier(entry.getKey().toString(), "message")});
+//                                }
+//                                empfangen.append("SH1 angewählt \n");
+//                            } else {
+//                                model.setRowCount(0);
+//                            }
+//                            break;
+//                        case "Senselighthead 2":
+//                            if (deviceArray[6].deviceStatus) {
+//                                device = deviceArray[6].deviceName;
+//                                for (Map.Entry entry : liveSH2Collection.liveDataEntryCollection.entrySet()) {
+//                                    model.addRow(new Object[]{liveSH2Collection.getDataByIdentifier(entry.getKey().toString(), "time"), liveSH2Collection.getDataByIdentifier(entry.getKey().toString(), "deviceadress"), liveSH2Collection.getDataByIdentifier(entry.getKey().toString(), "functioncode"), liveSH2Collection.getDataByIdentifier(entry.getKey().toString(), "message")});
+//                                }
+//                                empfangen.append("SH2 angewählt \n");
+//                            } else {
+//                                model.setRowCount(0);
+//                            }
+//                            break;
+//                        case "Senselighthead 3":
+//                            if (deviceArray[7].deviceStatus) {
+//                                device = deviceArray[7].deviceName;
+//                                for (Map.Entry entry : liveSH3Collection.liveDataEntryCollection.entrySet()) {
+//                                    model.addRow(new Object[]{liveSH3Collection.getDataByIdentifier(entry.getKey().toString(), "time"), liveSH3Collection.getDataByIdentifier(entry.getKey().toString(), "deviceadress"), liveSH3Collection.getDataByIdentifier(entry.getKey().toString(), "functioncode"), liveSH3Collection.getDataByIdentifier(entry.getKey().toString(), "message")});
+//                                }
+//                                empfangen.append("SH3 angewählt \n");
+//                            } else {
+//                                model.setRowCount(0);
+//                            }
+//                            break;
+//                        case "Senselighthead 4":
+//                            if (deviceArray[8].deviceStatus) {
+//                                device = deviceArray[8].deviceName;
+//                                for (Map.Entry entry : liveSH4Collection.liveDataEntryCollection.entrySet()) {
+//                                    model.addRow(new Object[]{liveSH4Collection.getDataByIdentifier(entry.getKey().toString(), "time"), liveSH4Collection.getDataByIdentifier(entry.getKey().toString(), "deviceadress"), liveSH4Collection.getDataByIdentifier(entry.getKey().toString(), "functioncode"), liveSH4Collection.getDataByIdentifier(entry.getKey().toString(), "message")});
+//                                }
+//                                empfangen.append("SH4 angewählt \n");
+//                            } else {
+//                                model.setRowCount(0);
+//                            }
+//                            break;
                     }
                 }
             }
@@ -874,7 +904,8 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.weightx = 1;
-        constraints.weighty = 1;
+        constraints.weighty = 0.5;
+        constraints.gridheight = 1;
         constraints.anchor = GridBagConstraints.SOUTH;
         constraints.fill = GridBagConstraints.BOTH;
 
@@ -918,6 +949,11 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
         panelFirmware.add(modulfirmware, constraints);
 
+        // Änderungen an aktiven Werten werden übernommen
+        constraints.gridy = 4;
+
+        panelFirmware.add(statusabfrage, constraints);
+
         // Firmarepanel wird dem Panel hinzugefügt
         constraints.gridx = 2;
         constraints.gridy = 1;
@@ -956,9 +992,9 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.weightx = 1;
-        constraints.weighty = 0.3;
+        constraints.weighty = 1;
         constraints.gridwidth = 10;
-        constraints.gridheight = 2;
+        constraints.gridheight = 5;
         constraints.anchor = GridBagConstraints.SOUTH;
         constraints.fill = GridBagConstraints.BOTH;
 
@@ -1089,207 +1125,33 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         empfangen.append("COM-Portliste aktualisiert\n");
     }
 
-    public byte[] requestSend() throws IOException {
-//        System.out.println("controlunitm4_status: " + controlunitm4_status);
-//        System.out.println("aloneatwork_status: " + aloneatwork_status);
-//        System.out.println("panelleft_status: " + panelleft_status);
-//        System.out.println("panelright_status: " + panelright_status);
-//        System.out.println("senslighthead1_status: " + senslighthead1_status);
-//        System.out.println("senslighthead2_status: " + senslighthead2_status);
-//        System.out.println("senslighthead3_status: " + senslighthead3_status);
-//        System.out.println("senslighthead4_status: " + senslighthead4_status);
-
-        if (totalMessageCount == 0) {
-            starttime = System.currentTimeMillis();
-            System.out.println(starttime);
-        }
-
-//
-//        for (int i = 0; i < deviceOnline.length; i++) {
-//            if (deviceOnline[i] == true && deviceFinished[i] == false) {
-//            System.out.println("deviceOnline: " + i + " " + deviceOnline[i]);
-//            System.out.println("deviceFinished: " + i + " " + deviceFinished[i]);
-//            }
-//        }
-        // Abfrage der Control Unit M4
-        if (controlunitm4_status == true && controlunitm4_msgsend == false) {
-            byte[] sendstream = sendarraysCUM4[Diagnoseapplikation.currentMessageCUM4];
-            Diagnoseapplikation.currentMessageCUM4++;
-            totalMessageCount++;
-            if (Diagnoseapplikation.currentMessageCUM4 == messageLengthCUM4) {
-                Diagnoseapplikation.currentMessageCUM4 = 0;
-                controlunitm4_msgsend = true;
+    public void requestSend() throws IOException {
+        if (deviceArray[actualDeviceCounter].deviceStatus) {
+            if (!deviceArray[actualDeviceCounter].isRequestFinished()) {
+                byte[] sendstream = deviceArray[actualDeviceCounter].getNextByteArray();
+                CRC16 crc = new CRC16();
+                crc.update(sendstream, 0, sendstream.length);
+                crc.getAll();
+                outputStream.write(crc.getAll());
+                System.out.println("Senden erfolgreich");
+                System.out.println("Senden erfolgreich");
+                System.out.println("Senden erfolgreich");
+                System.out.println("Senden erfolgreich");
+            } else {
+                actualDeviceCounter++;
+                byte[] sendstream = deviceArray[actualDeviceCounter].getNextByteArray();
+                CRC16 crc = new CRC16();
+                crc.update(sendstream, 0, sendstream.length);
+                crc.getAll();
+                outputStream.write(crc.getAll());
+                System.out.println("Senden der letzten Nachricht erfolgreich");
+                System.out.println("Senden der letzten Nachricht erfolgreich");
+                System.out.println("Senden der letzten Nachricht erfolgreich");
+                System.out.println("Senden der letzten Nachricht erfolgreich");
             }
-            CRC16 crc = new CRC16();
-            crc.update(sendstream, 0, sendstream.length);
-            crc.getAll();
-            outputStream.write(crc.getAll());
-        }
-        if (aloneatwork_status == true && controlunitm4_msgsend == true && aloneatwork_msgsend == false) {
-            // Abfrage des Alone at Work-Modules
-            byte[] sendstream = sendarraysAAW[currentMessageAAW];
-            currentMessageAAW++;
-            totalMessageCount++;
-            if (currentMessageAAW == messageLengthAAW) {
-                currentMessageAAW = 0;
-                aloneatwork_msgsend = true;
-            }
-            CRC16 crc = new CRC16();
-            crc.update(sendstream, 0, sendstream.length);
-            crc.getAll();
-            outputStream.write(crc.getAll());
-        }
-        // Abfrage des linken Panels
-        if (panelleft_status == true && aloneatwork_msgsend == true && panelleft_msgsend == false || panelleft_status == true && aloneatwork_status == false && controlunitm4_msgsend == true && panelleft_msgsend == false) {
-            byte[] sendstream = sendarraysPL[currentMessagePL];
-            currentMessagePL++;
-            totalMessageCount++;
-            if (currentMessagePL == messageLengthPL) {
-                currentMessagePL = 0;
-                panelleft_msgsend = true;
-            }
-            CRC16 crc = new CRC16();
-            crc.update(sendstream, 0, sendstream.length);
-            crc.getAll();
-            outputStream.write(crc.getAll());
-        }
-        // Abfrage des rechten Panels
-        if (panelright_status == true && panelleft_msgsend == true && panelright_msgsend == false || panelright_status == true && panelleft_status == false && aloneatwork_msgsend == true && panelright_msgsend == false) {
-            byte[] sendstream = sendarraysPR[currentMessagePR];
-            currentMessagePR++;
-            totalMessageCount++;
-            if (currentMessagePR == messageLengthPR) {
-                currentMessagePR = 0;
-                panelright_msgsend = true;
-            }
-            CRC16 crc = new CRC16();
-            crc.update(sendstream, 0, sendstream.length);
-            crc.getAll();
-            outputStream.write(crc.getAll());
-        }
-        // Abfrage des Senselight Head 1
-        if (senslighthead1_status == true && panelright_msgsend == true && senslighthead1_msgsend == false || senslighthead1_status == true && panelright_status == false && panelleft_msgsend == true && senslighthead1_msgsend == false) {
-            byte[] sendstream = sendarraysSH1[currentMessageSH1];
-            currentMessageSH1++;
-            totalMessageCount++;
-            if (currentMessageSH1 == messageLengthSH1) {
-                currentMessageSH1 = 0;
-                senslighthead1_msgsend = true;
-            }
-            CRC16 crc = new CRC16();
-            crc.update(sendstream, 0, sendstream.length);
-            crc.getAll();
-            outputStream.write(crc.getAll());
-        }
-
-        // Abfrage des Senselight Head 2
-        if (senslighthead2_status == true && senslighthead1_msgsend == true && senslighthead2_msgsend == false || senslighthead2_status == true && senslighthead1_status == false && panelright_msgsend == true && senslighthead2_msgsend == false) {
-            byte[] sendstream = sendarraysSH2[currentMessageSH2];
-            currentMessageSH2++;
-            totalMessageCount++;
-            if (currentMessageSH2 == messageLengthSH2) {
-                currentMessageSH2 = 0;
-                senslighthead2_msgsend = true;
-            }
-            CRC16 crc = new CRC16();
-            crc.update(sendstream, 0, sendstream.length);
-            crc.getAll();
-            outputStream.write(crc.getAll());
-        }
-
-        // Abfrage des Senselight Head 3
-        if (senslighthead3_status == true && senslighthead2_msgsend == true && senslighthead3_msgsend == false || senslighthead3_status == true && senslighthead2_status == false && senslighthead1_msgsend == true && senslighthead3_msgsend == false) {
-            byte[] sendstream = sendarraysSH3[currentMessageSH3];
-            currentMessageSH3++;
-            totalMessageCount++;
-            if (currentMessageSH3 == messageLengthSH3) {
-                currentMessageSH3 = 0;
-                senslighthead3_msgsend = true;
-            }
-            CRC16 crc = new CRC16();
-            crc.update(sendstream, 0, sendstream.length);
-            crc.getAll();
-            outputStream.write(crc.getAll());
-        }
-
-        // Abfrage des Senselight Head 4
-        if (senslighthead4_status == true && senslighthead3_msgsend == true && senslighthead4_msgsend == false || senslighthead4_status == true && senslighthead3_status == false && senslighthead2_msgsend == true && senslighthead4_msgsend == false) {
-            byte[] sendstream = sendarraysSH2[currentMessageSH4];
-            currentMessageSH4++;
-            totalMessageCount++;
-            if (currentMessageSH4 == messageLengthSH4) {
-                currentMessageSH4 = 0;
-                senslighthead4_msgsend = true;
-            }
-            CRC16 crc = new CRC16();
-            crc.update(sendstream, 0, sendstream.length);
-            crc.getAll();
-            outputStream.write(crc.getAll());
-        }
-        if (controlunitm4_status == false) {
-            messageLengthCUM4 = 0;
         } else {
-            messageLengthCUM4 = sendarraysCUM4.length;
+            actualDeviceCounter++;
         }
-        if (aloneatwork_status == false) {
-            messageLengthAAW = 0;
-        } else {
-            messageLengthAAW = sendarraysAAW.length;
-        }
-        if (panelleft_status == false) {
-            messageLengthPL = 0;
-        } else {
-            messageLengthPL = sendarraysPL.length;
-        }
-        if (panelright_status == false) {
-            messageLengthPR = 0;
-        } else {
-            messageLengthPR = sendarraysPR.length;
-        }
-        if (senslighthead1_status == false) {
-            messageLengthSH1 = 0;
-        } else {
-            messageLengthSH1 = sendarraysSH1.length;
-        }
-        if (senslighthead2_status == false) {
-            messageLengthSH2 = 0;
-        } else {
-            messageLengthSH2 = sendarraysSH2.length;
-        }
-        if (senslighthead3_status == false) {
-            messageLengthSH3 = 0;
-        } else {
-            messageLengthSH3 = sendarraysSH3.length;
-        }
-        if (senslighthead4_status == false) {
-            messageLengthSH4 = 0;
-        } else {
-            messageLengthSH4 = sendarraysSH4.length;
-        }
-        totalLength = messageLengthCUM4 + messageLengthAAW + messageLengthPL + messageLengthPR + messageLengthSH1 + messageLengthSH2 + messageLengthSH3 + messageLengthSH4;
-
-        // Ende der Abfragen und Reset des Zustandes
-        if (totalMessageCount == totalLength) {
-            endtime = (System.currentTimeMillis() - starttime) / 1000;
-            System.out.println(endtime + " Sekunden");
-            System.out.println("Alle Abfragen gesendet");
-            System.out.println("Alle Abfragen gesendet");
-
-            totalMessageCount = 0;
-            controlunitm4_msgsend = false;
-            aloneatwork_msgsend = false;
-            panelleft_msgsend = false;
-            panelright_msgsend = false;
-            senslighthead1_msgsend = false;
-            senslighthead2_msgsend = false;
-            senslighthead3_msgsend = false;
-            senslighthead4_msgsend = false;
-//            System.out.println("Alle msgsend zurück gesetzt");
-//            schliesseSerialPort();
-            abfragen = false;
-
-        }
-        return null;
     }
 
     void writeSend() throws IOException {
@@ -1298,36 +1160,35 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         boolean valuedifferent = false;
         byte devicetype = 0;
 
-        switch (device) {
-            case "cum4":
-                devicetype = 0x08;
-                break;
-            case "cu":
-                devicetype = 0x08;
-                break;
-            case "aaw":
-                devicetype = 0x10;
-                break;
-            case "pl":
-                devicetype = 0x11;
-                break;
-            case "pr":
-                devicetype = 0x11;
-                break;
-            case "sh1":
-                devicetype = 0x17;
-                break;
-            case "sh2":
-                devicetype = 0x18;
-                break;
-            case "sh3":
-                devicetype = 0x19;
-                break;
-            case "sh4":
-                devicetype = 0x1A;
-                break;
-        }
-
+//        switch (device) {
+//            case deviceArray[0].deviceName:
+//                devicetype = 0x08;
+//                break;
+//            case "cu":
+//                devicetype = 0x08;
+//                break;
+//            case "aaw":
+//                devicetype = 0x10;
+//                break;
+//            case "pl":
+//                devicetype = 0x11;
+//                break;
+//            case "pr":
+//                devicetype = 0x12;
+//                break;
+//            case "sh1":
+//                devicetype = 0x17;
+//                break;
+//            case "sh2":
+//                devicetype = 0x18;
+//                break;
+//            case "sh3":
+//                devicetype = 0x19;
+//                break;
+//            case "sh4":
+//                devicetype = 0x1A;
+//                break;
+//        }
         // Wert in List zwischenspeichern, dannach mit Collection vergleichen und falls anderst, neue Abfrage starten
 //        if (SH4Collection.getDataByIdentifier(entry.getKey().toString(), "hexIdentifier"){
 //            valuedifferent = true;
@@ -1337,7 +1198,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         changedvaluearray[0] = (byte) (changedvalue & 0xFF);
         changedvaluearray[1] = (byte) ((changedvalue >> 8) & 0xFF);
 
-        byte[] sendstream = {(byte) devicetype, (byte) 0x06, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00};
+        byte[] sendstream = {(byte) devicebyte, (byte) 0x06, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01};
         System.arraycopy(hexbuffer, 0, sendstream, 2, 2);
         System.arraycopy(changedvaluearray, 0, sendstream, 4, 2);
 
@@ -1367,42 +1228,52 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
             byte[] responsebuffer = new byte[3];
             byte[] crcbuffer = new byte[2];
             int num;
-            int lastMessageCUM4 = 0;
             boolean responsetrue = false;
 
-            if (Diagnoseapplikation.currentMessageCUM4 != 0) {
-                lastMessageCUM4 = Diagnoseapplikation.currentMessageCUM4 - 1;
-            }
-            requestbuffer[0] = sendarraysCUM4[lastMessageCUM4][0];
-            requestbuffer[1] = sendarraysCUM4[lastMessageCUM4][1];
-            requestbuffer[2] = (byte) (2 * sendarraysCUM4[lastMessageCUM4][5]);
+            requestbuffer[0] = deviceArray[actualDeviceCounter].getSingleByteArray(0);
+            requestbuffer[1] = deviceArray[actualDeviceCounter].getSingleByteArray(1);
+            requestbuffer[2] = (byte) (2 * deviceArray[actualDeviceCounter].getSingleByteArray(5));
 
-            ArrayList<String> adresscum4 = adressList.adress(sendarraysCUM4, lastMessageCUM4);
+            ArrayList<String> adresslist = adressList.adress(deviceArray[actualDeviceCounter].requestArray, deviceArray[actualDeviceCounter].lastmessageCounter);
 
             while (inputStream.available() > 0) {
 
                 num = inputStream.read(data, 0, data.length);
                 String byteArrayToHex = ConversionHelper.byteArrayToHexString(data);
+//                System.out.println("Empfangene Nachricht: " + byteArrayToHex);
+
                 int datalength = byteArrayToHex.length() / 2;
                 while ("00".equals(byteArrayToHex.substring(datalength - 2, datalength))) {
                     datalength -= 2;
                 }
-                System.out.println("Empfange: " + byteArrayToHex);
-                System.out.println("datalength: " + datalength);
-                if (datalength > 6) {
+                byte[] message = new byte[datalength / 2];
+                System.arraycopy(data, 0, message, 0, message.length);
+                String messagestring = ConversionHelper.byteArrayToHexString(message);
+                System.out.println("Empfangene Nachricht: " + messagestring);
+                ArrayList<Integer> repeatpositions = new ArrayList<Integer>();
+
+                // Livewerte speichern
+                for (int i = 0; i < deviceArray.length; i++) {
+                    if (deviceArray[i].shortHexRead.equals(byteArrayToHex.substring(0, 4)) || deviceArray[i].shortHexWrite.equals(byteArrayToHex.substring(0, 4))) {
+                        for (int z = 0; z < byteArrayToHex.length() - 4; z++) {
+                            if (deviceArray[i].shortHexRead.equals(byteArrayToHex.substring(z, z + 4)) || deviceArray[i].shortHexWrite.equals(byteArrayToHex.substring(z, z + 4))) {
+                                repeatpositions.add(z);
+                                System.out.println("Wiederholung gefunden bei: " + z);
+                            }
+                        }
+                    }
+                }
+                // Unvollständige Nachrichten werden gefiltert
+                if (datalength >= 6) {
                     // Array mit ersten 3 Byte für die Überprüfung der Antwort
                     System.arraycopy(data, 0, responsebuffer, 0, 3);
 
                     // Array für CRC-Teil der empfangenen Nachricht, zur Gegenprüfung des CRC
                     System.arraycopy(data, (datalength / 2) - 2, crcbuffer, 0, 2);
-                    String crcbufferstring = ConversionHelper.byteArrayToHexString(crcbuffer);
-                    System.out.println("crcbufferstring: " + crcbufferstring);
 
                     // Array für Nachricht ohne CRC, zur Gegenprüfung des CRC
                     byte[] msgbuffer = new byte[(datalength / 2) - 2];
                     System.arraycopy(data, 0, msgbuffer, 0, (datalength / 2) - 2);
-                    String msgbufferstring = ConversionHelper.byteArrayToHexString(msgbuffer);
-                    System.out.println("msgbufferstring: " + msgbufferstring);
 
                     // Überprüfung des CRCs, Empfangene Nachricht und CRC werden verglichen
                     CRC16 crcreverse = new CRC16();
@@ -1411,100 +1282,15 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                     }
 
                     int dataentrylength = datalength - 10;
-                    System.out.println("dataentrylenght: " + dataentrylength);
 
                     byte[] dataentry = new byte[dataentrylength / 2];
                     System.arraycopy(data, 3, dataentry, 0, dataentrylength / 2);
-                    String dataentrystring = ConversionHelper.byteArrayToHexString(dataentry);
-                    System.out.println("dataentry: " + dataentrystring);
 
-                    if (requestbuffer[0] == responsebuffer[0]) {
-                        if (requestbuffer[1] == responsebuffer[1]) {
-                            if (requestbuffer[2] == responsebuffer[2]) {
-                                responsetrue = true;
-                                System.err.println("response: " + responsetrue);
-                            }
-                        }
-                    } else {
-                        responsetrue = false;
-                    }
-
-                    // Werte aus Anfrage speichern
-                    if (responsetrue && controlunitm4_status) {
-                        for (Map.Entry entry : CUM4Collection.dataEntryCollection.entrySet()) {
-                            for (int j = 0; j < adresscum4.size(); j++) {
-                                if (entry.getKey().toString().equals(adresscum4.get(j))) {
-                                    byte[] dataentity = new byte[2];
-                                    System.arraycopy(dataentry, j * 2, dataentity, 0, 2);
-                                    String dataentitystring = ConversionHelper.byteArrayToHexString(dataentity);
-                                    CUM4Collection.setCurrentValue(entry.getKey().toString(), dataentitystring);
-                                }
-                            }
-                        }
-                    }
-
-                    // Livewerte speichern
-                    if ("1003".equals(byteArrayToHex.substring(0, 4)) && aloneatwork_status) {
-                        boolean repeat;
-                        ArrayList<Integer> repeatpositions = new ArrayList<Integer>();
-                        for (int i = 0; i < byteArrayToHex.length() - 4; i++) {
-                            if ("1003".equals(byteArrayToHex.substring(i, i + 4))) {
-                                repeat = true;
-                                repeatpositions.add(i);
-                                System.out.println("Wiederholung gefunden bei: " + i);
-                            }
-                        }
-                        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                        Date date = new Date();
-
-                        ListIterator<Integer> itr = repeatpositions.listIterator();
-                        while (itr.hasNext()) {
-                            int element = itr.next();
-                            int lastelement = itr.previous();
-                            System.out.print(element + " ");
-
-                            Livedataentry livedata = new Livedataentry();
-                            livedata.id = byteArrayToHex.substring(0, dataentrylength);
-                            livedata.time = dateFormat.format(date);
-                            livedata.deviceadress = byteArrayToHex.substring(element, element + 2);
-                            livedata.functioncode = byteArrayToHex.substring(element + 2, element + 4);
-                            livedata.message = byteArrayToHex.substring(element + 4, dataentrylength);
-                            liveAAWCollection.addEntry(livedata.id, livedata);
-                        }
-
-                    }
-                    if ("100302".equals(byteArrayToHex.substring(0, 6))) {
-                        aloneatwork_status = true;
-                    }
-                    if ("110302".equals(byteArrayToHex.substring(0, 6))) {
-                        panelleft_status = true;
-                    }
-                    if ("120302".equals(byteArrayToHex.substring(0, 6))) {
-                        panelright_status = true;
-                    }
-                    if ("150302".equals(byteArrayToHex.substring(0, 6))) {
-                        connectedlighting_status = true;
-                    }
-                    if ("170304".equals(byteArrayToHex.substring(0, 6))) {
-                        senslighthead1_status = true;
-                    }
-                    if ("180304".equals(byteArrayToHex.substring(0, 6))) {
-                        senslighthead2_status = true;
-                    }
-                    if ("190304".equals(byteArrayToHex.substring(0, 6))) {
-                        senslighthead3_status = true;
-                    }
-                    if ("200304".equals(byteArrayToHex.substring(0, 6))) {
-                        senslighthead4_status = true;
-                    }
-                    if ("0F03".equals(byteArrayToHex.substring(0, 4))) { // "0f03".equals(byteArrayToHex.substring(0, 4)) || 
-//                        controlunitm4_status = true;
-
-//                        // Falls Antwort, Abfragen auslösen mit Device + CRC, gesplittet auf HR-Abfolgen
-                        if (controlunitm4_status != true && controlunit_status != true) {
+                    // Control Unit Typ abfragen, Abfragen auslösen, Änderungen senden
+                    if ("0F03".equals(byteArrayToHex.substring(0, 4))) {
+                        if (!deviceArray[0].deviceStatus && !deviceArray[1].deviceStatus) {
                             deviceRequest();
                         }
-//                        System.out.println("PC-Bridge initialisiert: " + System.currentTimeMillis());
                         if (abfragen) {
                             requestSend();
                         }
@@ -1512,32 +1298,110 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                             writeSend();
                         }
                     }
-//                    if ("0803020006E447".equals(byteArrayToHex.substring(0, 14))) {
-//                        // Antwort von Control Unit M4
-//                        controlunitm4_status = true;
-//                        System.err.println("controlunitm4_status");
-//                    }
-//                    if ("0803020002E584".equals(byteArrayToHex.substring(0, 14))) {
-//                        // Antwort von Control Unit
-//                        controlunitm4_status = true; // anpassen sobald updated
-//                    }
-                    if ("0803020002E584".equals(byteArrayToHex.substring(0, 14))) {
-                        // Antwort von Control Unit
-                        controlunitm4_status = true; // anpassen sobald updated
+
+                    // Gerätestatus auslesen
+                    for (int i = 0; i < deviceArray.length; i++) {
+                        if (i < 2 && deviceArray[i].hexIdentifier.equals(byteArrayToHex.substring(0, 14))) {
+                            if (!deviceArray[i].deviceStatus) {
+                                deviceArray[i].deviceStatus = true;
+                            }
+                        } else if (i > 1 && deviceArray[i].hexIdentifier.equals(byteArrayToHex.substring(0, 6))) {
+                            if (!deviceArray[i].deviceStatus) {
+                                deviceArray[i].deviceStatus = true;
+                            }
+                        }
+                        System.out.println("Device: " + deviceArray[i].hexIdentifier + "\nDevicestatus: " + deviceArray[i].deviceStatus);
                     }
 
-//                    empfangen.append("Empfangene Nachricht: " + msgbufferstring + "\n" + "Empfangener CRC: " + crcbufferstring + "\n" + "CRC-Überprüfung: " + crcreverse.check(msgbuffer, crcbuffer) + "\n" + "\n");
+                    if (requestbuffer == responsebuffer) {
+                        responsetrue = true;
+                        System.err.println("response: " + responsetrue);
+                    } else {
+                        responsetrue = false;
+                    }
+
+                    // Werte aus Anfrage speichern
+                    if (responsetrue && deviceArray[actualDeviceCounter].deviceStatus) {
+                        for (Map.Entry entry : datacollectionArray[actualDeviceCounter].dataEntryCollection.entrySet()) {
+                            for (int j = 0; j < adresslist.size(); j++) {
+                                if (entry.getKey().toString().equals(adresslist.get(j))) {
+                                    byte[] dataentity = new byte[2];
+                                    System.arraycopy(dataentry, j * 2, dataentity, 0, 2);
+                                    String dataentitystring = ConversionHelper.byteArrayToHexString(dataentity);
+                                    datacollectionArray[actualDeviceCounter].setCurrentValue(entry.getKey().toString(), dataentitystring);
+                                }
+                            }
+                        }
+                    }
+//                    if (datacollectionArray[actualDeviceCounter].getDataByIdentifier("0", "currentValue") != null) {
+//                        System.out.println("Current Value" + datacollectionArray[actualDeviceCounter].getDataByIdentifier("0", "currentValue"));
+//                    }
+//                    for (int i = 0; i < deviceArray.length; i++) {
+//                        System.out.println("deviceArray: " + deviceArray[i].toString());
+//                        System.out.println("deviceArray.requestArray: " + deviceArray[i].requestArray.toString());
+//                        System.out.println("deviceArray.hexIdentifier: " + deviceArray[i].hexIdentifier);
+//                    }
+
+                    // Livewerte speichern
+                    for (int i = 0; i < deviceArray.length; i++) {
+                        if (!responsetrue && deviceArray[i].shortHexRead.equals(byteArrayToHex.substring(0, 2))) {
+
+                            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                            Date date = new Date();
+
+                            Livedataentry livedata = new Livedataentry();
+                            livedata.id = byteArrayToHex.substring(0, dataentrylength);
+                            livedata.time = dateFormat.format(date);
+                            livedata.deviceadress = byteArrayToHex.substring(0, 0 + 2);
+                            livedata.functioncode = byteArrayToHex.substring(0 + 2, 0 + 4);
+                            livedata.message = byteArrayToHex.substring(0 + 4, dataentrylength);
+                            livedatacollectionArray[i].addEntry(livedata.id, livedata);
+                        }
+                    }
+
+//                    // Livewerte speichern
+//                    for (int i = 0; i < deviceArray.length; i++) {
+//                        if (!responsetrue && deviceArray[i].shortHex.equals(byteArrayToHex.substring(0, 2))) {
+//                            ArrayList<Integer> repeatpositions = new ArrayList<Integer>();
+//                            for (int z = 0; z < byteArrayToHex.length() - 4; z++) {
+//                                if (deviceArray[i].shortHex.equals(byteArrayToHex.substring(z, z + 4))) {
+//                                    repeatpositions.add(z);
+//                                    System.out.println("Wiederholung gefunden bei: " + z);
+//                                }
+//                            }
+//                            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+//                            Date date = new Date();
+//
+//                            ListIterator<Integer> itr = repeatpositions.listIterator();
+//                            while (itr.hasNext()) {
+//                                int element = itr.next();
+//                                int lastelement = itr.previous();
+//                                System.out.print(element + " ");
+//
+//                                Livedataentry livedata = new Livedataentry();
+//                                livedata.id = byteArrayToHex.substring(0, dataentrylength);
+//                                livedata.time = dateFormat.format(date);
+//                                livedata.deviceadress = byteArrayToHex.substring(element, element + 2);
+//                                livedata.functioncode = byteArrayToHex.substring(element + 2, element + 4);
+//                                livedata.message = byteArrayToHex.substring(element + 4, dataentrylength);
+//                                livedatacollectionArray[i].addEntry(livedata.id, livedata);
+//                            }
+//                        }
+//                    }
                 } else {
                     System.err.println("Empfangene Nachricht kleiner als 6");
                 }
             }
 //            System.out.println("while-Schleife durchlaufen: " + System.currentTimeMillis());
+
             System.out.println("");
         } catch (IOException e) {
             System.out.println("Fehler beim Lesen empfangener Daten");
         } catch (java.lang.NegativeArraySizeException e) {
             System.out.println("1. Nachricht nicht vollständig");
             empfangen.append("1. Nachricht nicht vollständig");
+//        } catch (java.lang.NullPointerException e) {
+//            System.out.println("Nullpointer Exception");
 
         }
     }
@@ -1598,17 +1462,16 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     class schreibenActionListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
-//            geraeteDatenCUM4.setVisible(true);
 
-//            if (schreiben == false) { 
-//                System.out.println("schreibennActionListener true");
-//                empfangen.append("Änderungen gesendet \n");
-//                schreiben = true;
-//            } else {
-//                System.out.println("schreibennActionListener false");
-//                empfangen.append("Änderungen senden abgebrochen \n");
-//                schreiben = false;
-//            }
+            if (schreiben == false) {
+                System.out.println("schreibennActionListener true");
+                empfangen.append("Änderungen gesendet \n");
+                schreiben = true;
+            } else {
+                System.out.println("schreibennActionListener false");
+                empfangen.append("Änderungen senden abgebrochen \n");
+                schreiben = false;
+            }
         }
     }
 
@@ -1623,6 +1486,32 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
         public void actionPerformed(ActionEvent event) {
 
+        }
+    }
+
+    private class DisabledItemListCellRenderer extends DefaultListCellRenderer {
+
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            Component comp = super.getListCellRendererComponent(list, value, index, false, false);
+//            JComponent jc = (JComponent) comp;
+            if (deviceArray[index].deviceStatus) {
+                if (isSelected & cellHasFocus) {
+                    comp.setForeground(Color.white);
+                    comp.setBackground(Color.gray);
+                } else {
+                    comp.setBackground(Color.white);
+                }
+
+                return comp;
+            } else {
+                comp.setForeground(Color.black);
+                comp.setBackground(Color.green);
+            }
+//            comp.setEnabled(false);
+            return comp;
         }
     }
 
