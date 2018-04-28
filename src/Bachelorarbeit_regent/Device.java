@@ -14,24 +14,32 @@ public class Device {
     public int messageCounter = 0;
     public int lastmessageCounter = 0;
     public boolean deviceStatus = false;
+    public boolean manualrequest = false;
     public byte[][] requestArray;
     public String hexIdentifier;
     public String deviceName;
     public String shortHexRead;
     public String shortHexWrite;
+    public String Read = "03";
+    public String Write = "06";
     public byte devicebyte;
 
     public Device(byte[][] requestArray, String deviceName, String hexIdentifier, byte deviceByte) {
         this.requestArray = requestArray;
         this.deviceName = deviceName;
         this.hexIdentifier = hexIdentifier;
-        this.shortHexRead = hexIdentifier.substring(2) + "03";
-        this.shortHexWrite = hexIdentifier.substring(2) + "06";
         this.devicebyte = deviceByte;
+        this.shortHexRead = hexIdentifier.substring(0, 2) + Read;
+        this.shortHexWrite = hexIdentifier.substring(0, 2) + Write;
     }
 
     public boolean isRequestFinished() {
         return this.requestArray.length == this.messageCounter + 1 ? true : false;
+    }
+
+    public void setDeviceStatus(boolean deviceStatus) {
+        this.deviceStatus = deviceStatus;
+//        Diagnoseapplikation.geraeteListe.repaint();
     }
 
     public byte[] getNextByteArray() {

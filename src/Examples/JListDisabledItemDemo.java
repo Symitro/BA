@@ -53,6 +53,25 @@ public class JListDisabledItemDemo implements ItemListener, Runnable {
         scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
+        // ---------------------Testabschnitt
+        
+//        ActionListener actionListener = new ActionListener() {
+//            public void actionPerformed(ActionEvent actionEvent) {
+//                System.out.println("Hello World Timer");
+//                model.clear();
+//                tid++;
+//                ListItem li = new ListItem(Color.cyan, "test line one " + tid);
+//                model.addElement(li);
+//                li = new ListItem(Color.yellow, "foo foo foo foo foo");
+//                model.addElement(li);
+//                li = new ListItem(Color.green, "quick brown fox");
+//                model.addElement(li);
+//            }
+//        };
+//        javax.swing.Timer t2 = new javax.swing.Timer(1000, actionListener);
+//        t2.start();
+
+        // ---------------------------------
         Container contentPane = f.getContentPane();
         contentPane.setLayout(new GridLayout(1, 2));
         contentPane.add(pnlEnablers);
