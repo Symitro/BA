@@ -28,7 +28,7 @@ public class Device {
         this.requestArray = requestArray;
         this.deviceName = deviceName;
         this.hexIdentifier = hexIdentifier;
-        this.devicebyte = deviceByte;
+        this.devicebyte = (byte) deviceByte;
         this.shortHexRead = hexIdentifier.substring(0, 2) + Read;
         this.shortHexWrite = hexIdentifier.substring(0, 2) + Write;
     }

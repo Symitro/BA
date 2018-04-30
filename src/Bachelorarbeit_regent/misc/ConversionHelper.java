@@ -46,9 +46,9 @@ public class ConversionHelper {
             Integer intVal = Integer.parseInt(sub, 16);
             bytes[i / 2] = intVal.byteValue();
             String hex = "".format("%02x", bytes[i / 2]);
-            System.out.println(hex);
+//            System.out.println(hex);
         }
-        System.out.println(hexString);
+//        System.out.println(hexString);
 
         return bytes;
 

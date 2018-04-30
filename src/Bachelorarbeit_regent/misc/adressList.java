@@ -14,7 +14,7 @@ import java.util.Arrays;
  */
 public class adressList {
 
-    public static ArrayList<String> adress(byte[][] request, int lastMessage) {
+    public static ArrayList<String> adressArray(byte[][] request, int lastMessage) {
         byte[] requestbuffer = new byte[1];
         requestbuffer[0] = (byte) request[lastMessage][5];
         String requeststring = ConversionHelper.byteArrayToHexString(requestbuffer);
@@ -36,6 +36,22 @@ public class adressList {
         }
 
 //        String adress = Long.toHexString(Float.floatToIntBits(requestfloat));
+        return responseadresses;
+    }
+
+    public static ArrayList<String> adressString(String hexAdress, String requestLength) {
+        Long requestlong = Long.parseLong(hexAdress, 16);
+        Long adresslong = Long.parseLong(requestLength, 16);
+
+        ArrayList<String> responseadresses = new ArrayList<String>();
+
+        for (int i = 0; i < requestlong; i++) {
+            Long adress = adresslong;
+            adresslong++;
+            String nextadress = Long.toHexString(adress).toUpperCase();
+            responseadresses.add(nextadress);
+        }
+
         return responseadresses;
     }
 }

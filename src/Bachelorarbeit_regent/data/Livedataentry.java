@@ -13,8 +13,9 @@ public class Livedataentry {
 
     public String id;
     public String time;
-    public String deviceadress;
-    public String functioncode;
-    public String message;
+    public String deviceAdress;
+    public String functionCode;
+    public String hexAdress;
+    public String value;
 
 }

@@ -35,14 +35,17 @@ public class Livedatacollection {
         if (data.equals("time")) {
             return liveDataEntryCollection.get(id).time;
         }
-        if (data.equals("deviceadress")) {
-            return liveDataEntryCollection.get(id).deviceadress;
+        if (data.equals("deviceAdress")) {
+            return liveDataEntryCollection.get(id).deviceAdress;
         }
-        if (data.equals("functioncode")) {
-            return liveDataEntryCollection.get(id).functioncode;
+        if (data.equals("functionCode")) {
+            return liveDataEntryCollection.get(id).functionCode;
         }
-        if (data.equals("message")) {
-            return liveDataEntryCollection.get(id).message;
+        if (data.equals("hexAdress")) {
+            return liveDataEntryCollection.get(id).hexAdress;
+        }
+        if (data.equals("value")) {
+            return liveDataEntryCollection.get(id).value;
         }
         return liveDataEntryCollection.get(id).id;
     }
