@@ -5,7 +5,6 @@
  */
 package Examples;
 
-import Bachelorarbeit_regent.Diagnoseapplikation;
 import javax.swing.JFrame;
 
 /**
@@ -15,7 +14,7 @@ import javax.swing.JFrame;
 public class GUITest extends JFrame {
 
     public static void main(String[] args) {
-        Bachelorarbeit_regent.Diagnoseapplikation gui = new Bachelorarbeit_regent.Diagnoseapplikation();
+        Examples.Diagnoseapplikation gui = new Examples.Diagnoseapplikation();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Diagnoseapplikation().setVisible(true);

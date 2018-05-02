@@ -9,6 +9,7 @@ package Bachelorarbeit_regent;
  *
  * @author Julian
  */
+import Examples.Diagnoseapplikation;
 import Bachelorarbeit_regent.data.Datacollection;
 import Bachelorarbeit_regent.data.Livedatacollection;
 import Bachelorarbeit_regent.data.Livedataentry;
@@ -42,7 +43,7 @@ import javax.swing.table.*;
 
 //https://www.mikrocontroller.net/articles/Serielle_Schnittstelle_unter_Java
 // TODO Dialog zur Konfiguration der Schnittstellenparameter
-public class Diagnoseapplikation extends JFrame implements TableModelListener {
+public class Diagnoseapplikation_Test extends JFrame implements TableModelListener {
 
     /**
      * Variable declaration

@@ -12,7 +12,7 @@ import java.util.Arrays;
  *
  * @author Julian
  */
-public class adressList {
+public class AdressList {
 
     public static ArrayList<String> adressArray(byte[][] request, int lastMessage) {
         byte[] requestbuffer = new byte[1];

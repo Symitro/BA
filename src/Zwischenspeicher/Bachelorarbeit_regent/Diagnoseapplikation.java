@@ -13,7 +13,7 @@ import Bachelorarbeit_regent.data.Datacollection;
 import Bachelorarbeit_regent.misc.ConversionHelper;
 import Bachelorarbeit_regent.misc.CRC16;
 import Bachelorarbeit_regent.misc.CSVReader;
-import Bachelorarbeit_regent.misc.adressList;
+import Bachelorarbeit_regent.misc.AdressList;
 import javax.comm.*;
 import java.util.Enumeration;
 import java.io.*;
@@ -1226,7 +1226,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
             startadresscum[0] = sendarraysCUM4[lastMessageCUM4][2];
             startadresscum[1] = sendarraysCUM4[lastMessageCUM4][3];
 
-            ArrayList<String> adress = adressList.adress(sendarraysCUM4, lastMessageCUM4);
+            ArrayList<String> adress = AdressList.adress(sendarraysCUM4, lastMessageCUM4);
 //            String adresslist = Arrays.toString(adress.toArray());
 //            String adress1 = adress.get(1);
 //            System.out.println("Adress 1:"+ adress.get(1));
