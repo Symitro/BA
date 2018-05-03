@@ -17,7 +17,6 @@ import Bachelorarbeit_regent.misc.ConversionHelper;
 import Bachelorarbeit_regent.misc.CRC16;
 import Bachelorarbeit_regent.misc.CSVReader;
 import Bachelorarbeit_regent.misc.AdressList;
-import Bachelorarbeit_regent.misc.Request;
 import javax.comm.*;
 import java.util.Enumeration;
 import java.io.*;
@@ -29,12 +28,12 @@ import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.ListIterator;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.event.ChangeEvent;
@@ -91,10 +90,12 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     Boolean schreiben = false;
     Boolean abfrageabgeschlossen = false;
     Boolean manualrequest = false;
+    Boolean slaveStatus = false;
     byte changedDevice;
     int changedValue;
     String hexofchangedvalue;
     int selectedtab;
+    ArrayList<String> messageListCache;
 
     // Abfragen für Control Unit M4, maximal 16 HR pro Abfrage für Performance
     byte[] sendstreamCUM4_1 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //32
@@ -318,9 +319,11 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     // Livedatacollections werden in ein Array gefüllt
     Livedatacollection[] livedatacollectionArray;
 
-    Device[] deviceArray;
+    public Device[] deviceArray;
 
     int actualDeviceCounter = 0;
+
+    HashMap<String, String> liveRequest = new HashMap<String, String>();
 
     /**
      * Fenster
@@ -460,15 +463,15 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         SH4Collection = CSVReader.getDataFromCsv("sensormodule");
 
         this.deviceArray = new Device[]{
-            new Device(sendarraysCUM4, "Control Unit M4", "0803020006E447", (byte) 0x08),
-            new Device(sendarraysCU, "Control Unit", "0803020002E584", (byte) 0x08),
-            new Device(sendarraysAAW, "Alone at Work 2.0", "100302", (byte) 0x10),
-            new Device(sendarraysPL, "Panel Links", "110302", (byte) 0x11),
-            new Device(sendarraysPR, "Panel Rechts", "120302", (byte) 0x12),
-            new Device(sendarraysSH1, "Senselighthead 1", "170304", (byte) 0x17),
-            new Device(sendarraysSH2, "Senselighthead 2", "180304", (byte) 0x18),
-            new Device(sendarraysSH3, "Senselighthead 3", "190304", (byte) 0x19),
-            new Device(sendarraysSH4, "Senselighthead 4", "1A0304", (byte) 0x1A),
+            new Device(CUM4Collection, "Control Unit M4", "0803020006E447", (byte) 0x08),
+            new Device(CUCollection, "Control Unit", "0803020002E584", (byte) 0x08),
+            new Device(AAWCollection, "Alone at Work 2.0", "100302", (byte) 0x10),
+            new Device(PLCollection, "Panel Links", "110302", (byte) 0x11),
+            new Device(PRCollection, "Panel Rechts", "120302", (byte) 0x12),
+            new Device(SH1Collection, "Senselighthead 1", "170304", (byte) 0x17),
+            new Device(SH2Collection, "Senselighthead 2", "180304", (byte) 0x18),
+            new Device(SH3Collection, "Senselighthead 3", "190304", (byte) 0x19),
+            new Device(SH4Collection, "Senselighthead 4", "1A0304", (byte) 0x1A),
             new Device(null, "Connected Lighting", "150302", (byte) 0x15),
             new Device(null, "PC-Bridge", "0F0302", (byte) 0x0F)
         };
@@ -962,8 +965,11 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                 outputStream.write(crc.getAll());
 
                 String sendstreamstring = ConversionHelper.byteArrayToHexString(sendstream);
-                System.out.println("Aktuelle Abfrage: " + deviceArray[actualDeviceCounter].deviceName);
-                System.out.println("Senden erfolgreich: " + sendstreamstring);
+                System.err.println("Aktuelle Abfrage: " + deviceArray[actualDeviceCounter].deviceName);
+                System.err.println("Senden erfolgreich: " + sendstreamstring);
+                System.err.println("Senden erfolgreich: " + sendstreamstring);
+                System.err.println("Senden erfolgreich: " + sendstreamstring);
+                System.err.println("Senden erfolgreich: " + sendstreamstring);
 
             } else {
                 actualDeviceCounter++;
@@ -974,31 +980,21 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                 outputStream.write(crc.getAll());
 
                 String sendstreamstring = ConversionHelper.byteArrayToHexString(sendstream);
-                System.out.println("Aktuelle Abfrage: " + deviceArray[actualDeviceCounter].deviceName);
-                System.out.println("Senden der letzten Nachrichterfolgreich: " + sendstreamstring);
+                System.err.println("Aktuelle Abfrage: " + deviceArray[actualDeviceCounter].deviceName);
+                System.err.println("Senden der letzten Nachrichterfolgreich: " + sendstreamstring);
+                System.err.println("Senden der letzten Nachrichterfolgreich: " + sendstreamstring);
+                System.err.println("Senden der letzten Nachrichterfolgreich: " + sendstreamstring);
+                System.err.println("Senden der letzten Nachrichterfolgreich: " + sendstreamstring);
             }
         } else {
             actualDeviceCounter++;
         }
     }
 
+    // https://stackoverflow.com/questions/1735840/how-do-i-split-an-integer-into-2-byte-binary
     void writeSend() throws IOException {
         // Alte Daten mit neuen Daten vergleichen, falls Änderungen 
         // Bsp. 08 06 0000 0001 "CRC" senden
-//        String gereat = geraeteListe.getSelectedValue().toString();
-
-//        byte devicebyte = 0;
-//
-//        for (int i = 0; i < deviceArray.length; i++) {
-//            if (gereat.equals(deviceArray[i].deviceName)) {
-//                devicebyte = (byte) deviceArray[i].devicebyte;
-//            }
-//        }
-//        StringBuilder sb = new StringBuilder();
-////        sb.append(String.format("%02X ", devicebyte));
-////        System.out.println(sb.toString());
-//        System.out.println("Integer.toHexString: " + Integer.toHexString(devicebyte & 0xFF));
-//        System.out.println("devicebyte" + devicebyte);
         if (changedDevice != 0) {
             byte[] hexbuffer = ConversionHelper.hexStringToByteArray(hexofchangedvalue);
             byte[] changedvaluearray = new byte[2];
@@ -1058,6 +1054,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         }
     }
 
+    // https://www.javacodegeeks.com/2011/05/avoid-concurrentmodificationexception.html
     void serialPortDatenVerfuegbar() throws InterruptedException {
         try {
             System.out.println("Starttime" + getCurrentTimeStamp());
@@ -1070,8 +1067,9 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
             requestbuffer[1] = deviceArray[actualDeviceCounter].getSingleByteArray(1);
             requestbuffer[2] = (byte) (2 * deviceArray[actualDeviceCounter].getSingleByteArray(5));
             String requestbufferstring = ConversionHelper.byteArrayToHexString(requestbuffer);
-
-            ArrayList<String> adresslist = AdressList.adressArray(deviceArray[actualDeviceCounter].requestArray, deviceArray[actualDeviceCounter].lastmessageCounter);
+            String adress = deviceArray[actualDeviceCounter].getCurrentByteAdress();
+            System.err.println("adress: " + adress);
+//            ArrayList<String> adresslist = AdressList.adressArray(deviceArray[actualDeviceCounter].requestGenerate(SOMEBITS), deviceArray[actualDeviceCounter].lastmessageCounter);
 
             while (inputStream.available() > 0) {
 
@@ -1089,8 +1087,8 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
                 ArrayList<Integer> repeatList = new ArrayList<>();
                 ArrayList<String> messageList = new ArrayList<>();
-//                Iterator<Integer> repeatIterator = repeatList.iterator();
 
+//                Iterator<Integer> repeatIterator = repeatList.iterator();
                 // Multiple Nachrichten finden
                 for (int i = 0; i < deviceArray.length; i++) {
                     for (int z = 0; z < message.length() - 4; z++) {
@@ -1103,20 +1101,30 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                 }
                 // Sorting of arraylist using Collections.sort
                 Collections.sort(repeatList);
+                System.out.println("repeatList: " + repeatList);
                 // Multiple Nachrichten aufteilen
                 for (int i = 0; i < repeatList.size(); i++) {
-                    int repeatstartposition;
-                    int repeatendposition;
-
-                    if (i + 1 == repeatList.size()) {
-                        repeatstartposition = repeatList.get(i);
-                        repeatendposition = message.length();
+                    int repeatstartposition = repeatList.get(i);
+                    int repeatendposition = 0;
+                    int next = i + 1;
+                    if (1 < repeatList.size()) {
+                        if (repeatList.size() != next) {
+                            System.out.println("repeatList.get(next):" + repeatList.get(next));
+                            if (6 < ((repeatList.get(next)) - (repeatList.get(i)))) {
+                                repeatendposition = repeatList.get(next);
+                                System.out.println("repeatendposition: " + repeatendposition);
+                            }
+                            i++;
+                        } else {
+                            repeatendposition = message.length();
+                        }
                     } else {
-                        repeatstartposition = repeatList.get(i);
-                        repeatendposition = repeatList.get(i + 1);
+                        repeatendposition = message.length();
                     }
                     messageList.add(message.substring(repeatstartposition, repeatendposition));
                 }
+                messageListCache = messageList;
+
                 byte[] singleMessageArray = new byte[messageList.size()];
                 for (int z = 0; z < messageList.size(); z++) {
                     System.out.println("messageList: " + messageList.get(z));
@@ -1136,90 +1144,116 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                         String hexAdress = null;
                         String requestLength = null;
                         String dataValue = null;
+                        String liveValue = null;
                         ArrayList<String> dataValueArrayList = new ArrayList<>();
                         ArrayList<String> requestAdressList = new ArrayList<>();
+                        // Anfragenlänge = 8 Byte, Antwort dynamisch
                         if (messageList.get(z).length() == 16) {
                             hexAdress = singleMessageString.substring(4, 8);
                             System.out.println("hexadress: " + hexAdress);
                             requestLength = singleMessageString.substring(8, messageList.get(z).length() - 4);
-                            System.out.println("requestLength: " + requestLength);
+//                            System.out.println("requestLength: " + requestLength);
                             System.out.println("requestLength in int: " + Integer.parseInt(requestLength));
                             requestAdressList = AdressList.adressString(hexAdress, requestLength);
+//                        } else if (messageListCache.get(messageListCache.size() - 1).length() == 16) {
+
                         } else {
                             dataValue = singleMessageString.substring(6, messageList.get(z).length() - 4);
                             System.out.println("dataValue: " + dataValue);
                         }
-                        if (1 < requestAdressList.size() && dataValue != null) {
-                            dataValueArrayList.add(dataValue.substring(0, dataValue.length() / 2));
-                            dataValueArrayList.add(dataValue.substring(dataValue.length() / 2, dataValue.length() / 2));
-                        } else {
-                            dataValueArrayList.add(dataValue);
+                        // Antwort auf Anfrage in gleicher Zeile
+                        if (z + 1 < messageList.size() && messageList.get(z + 1).length() == 16) {
+                            liveValue = singleMessageString.substring(6, messageList.get(z + 1).length() - 4);
+                            System.out.println("liveValue: " + liveValue);
                         }
+//                        if (1 < requestAdressList.size() && dataValue != null) {
+//                            dataValueArrayList.add(dataValue.substring(0, dataValue.length() / 2));
+//                            dataValueArrayList.add(dataValue.substring(dataValue.length() / 2, dataValue.length() / 2));
+//                        } else {
+//                            dataValueArrayList.add(dataValue);
+//                        }
                         // Gerätestatus auslesen
                         for (int i = 0; i < deviceArray.length; i++) {
-                            if (i < 2 && deviceArray[i].hexIdentifier.equals(message.substring(0, 14))) {
-                                if (!deviceArray[i].deviceStatus) {
-                                    deviceArray[i].setDeviceStatus(true);
-                                    if (i == 0) {
-                                        geraeteListeModel.set(i, deviceArray[i].deviceName);
+                            if (i < 2 && 13 < message.length()) {
+                                if (deviceArray[i].hexIdentifier.equals(message.substring(0, 14))) {
+                                    if (!deviceArray[i].deviceStatus) {
+                                        deviceArray[i].setDeviceStatus(true);
+                                        if (i == 0) {
+                                            geraeteListeModel.set(i, deviceArray[i].deviceName);
+//                                        geraeteListe.getComponent(i).setBackground(Color.yellow);
+                                        }
                                     }
                                 }
-                            } else if (i > 1 && deviceArray[i].hexIdentifier.equals(message.substring(0, 6))) {
-                                if (!deviceArray[i].deviceStatus) {
-                                    deviceArray[i].setDeviceStatus(true);
+                            } else if (i > 1) {
+                                if (deviceArray[i].hexIdentifier.equals(message.substring(0, 6))) {
+                                    if (!deviceArray[i].deviceStatus) {
+                                        deviceArray[i].setDeviceStatus(true);
+                                    }
                                 }
                             }
                         }
+
                         if (requestbufferstring.equals(message.substring(0, 6))) {
                             // Werte aus Anfrage in Gerätedatentabelle speichern
                             for (Map.Entry entry : datacollectionArray[actualDeviceCounter].dataEntryCollection.entrySet()) {
-                                for (int j = 0; j < adresslist.size(); j++) {
-                                    if (entry.getKey().toString().equals(adresslist.get(j)) && dataValue != null) {
-                                        String dataentitystring1 = dataValue.substring(j * 2, j * 2 + 2);
-                                        String dataentitystring2 = dataValue.substring(j * 2 + 2, j * 2 + 4);
-                                        String dataentitystring = dataentitystring1 + dataentitystring2;
-                                        datacollectionArray[actualDeviceCounter].setCurrentValue(entry.getKey().toString(), dataentitystring);
+//                                for (int j = 0; j < adresslist.size(); j++) {
+                                if (entry.getKey().toString().equals(adress) && dataValue != null) {
+//                                        String dataentitystring1 = dataValue.substring(j * 2, j * 2 + 2);
+//                                        String dataentitystring2 = dataValue.substring(j * 2 + 2, j * 2 + 4);
+//                                        String dataentitystring = dataentitystring1 + dataentitystring2;
+                                    datacollectionArray[actualDeviceCounter].setCurrentValue(entry.getKey().toString(), dataValue);
+                                }
+//                                }
+                            }
+                        } else {
+                            // Livewerte speichern
+                            for (int i = 0; i < deviceArray.length; i++) {
+//                                for (int j = 0; j < requestAdressList.size(); j++) {
+                                if (liveValue != null && hexAdress != null) {
+                                    if (deviceArray[i].shortHexRead.equals(singleMessageShortString) || deviceArray[i].shortHexWrite.equals(singleMessageShortString)) {
+                                        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS"); // https://www.mkyong.com/java/java-how-to-get-current-date-time-date-and-calender/
+                                        Date date = new Date();
+                                        Livedataentry livedata = new Livedataentry();
+                                        livedata.id = messageList.get(z);
+                                        livedata.time = dateFormat.format(date);
+                                        livedata.deviceAdress = messageList.get(z).substring(0, 2);
+                                        livedata.functionCode = messageList.get(z).substring(2, 4);
+                                        livedata.hexAdress = hexAdress;
+//                                        livedata.hexAdress = requestAdressList.get(j);
+                                        livedata.value = liveValue;
+                                        livedatacollectionArray[i].addEntry(livedata.id, livedata);
                                     }
                                 }
                             }
-                        } else {
-//                            // Livewerte speichern
-//                            for (int i = 0; i < deviceArray.length; i++) {
-//                                for (int j = 0; j < requestAdressList.size(); j++) {
-//                                    if (deviceArray[i].shortHexRead.equals(singleMessageShortString) || deviceArray[i].shortHexWrite.equals(singleMessageShortString)) {
-//                                        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
-//                                        Date date = new Date();
-//                                        Livedataentry livedata = new Livedataentry();
-//                                        livedata.id = messageList.get(z);
-//                                        livedata.time = dateFormat.format(date);
-//                                        livedata.deviceAdress = messageList.get(z).substring(0, 2);
-//                                        livedata.functionCode = messageList.get(z).substring(2, 4);
-//                                        livedata.hexAdress = requestAdressList.get(j);
-//                                        livedata.value = dataValueArrayList.get(j);
-//                                        livedatacollectionArray[i].addEntry(livedata.id, livedata);
-//                                    }
-//                                }
-//                            }
                         }
                     } else {
                         System.err.println("CRC-Überprüfung fehlerhaft");
                     }
 
-                }
-                // Control Unit Typ abfragen, Abfragen auslösen, Änderungen senden
-                if ("0F03".equals(byteArrayToHex.substring(0, 4))) {
-                    if (abfragen) {
-                        if (!deviceArray[0].deviceStatus && !deviceArray[1].deviceStatus) {
-                            deviceRequest();
-                        } else {
-                            requestSend();
+                    // Control Unit Typ abfragen, Abfragen auslösen, Änderungen senden
+                    if ("0F03".equals(messageList.get(z).substring(0, 4))) {
+                        if (abfragen) {
+                            if (!deviceArray[0].deviceStatus && !deviceArray[1].deviceStatus) {
+                                deviceRequest();
+                            } else {
+                                requestSend();
+                            }
+                        }
+                        if (schreiben) {
+                            writeSend();
                         }
                     }
-                    if (schreiben) {
-                        writeSend();
+                    if (slaveStatus) {
+                        Thread.sleep(30);
+                        requestSend();
                     }
+//                for (int i = 0; i < messageListCache.size(); i++) {
+//                    messageListCache.remove(i);
+//                }
+
                 }
             }
+
             System.out.println("Endtime" + getCurrentTimeStamp());
             System.out.println("");
         } catch (IOException e) {
@@ -1257,6 +1291,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         public void actionPerformed(ActionEvent event) {
             System.out.println("oeffnenActionListener");
             oeffneSerialPort((String) auswahl.getSelectedItem());
+            JavaTimer();
         }
     }
 
@@ -1279,14 +1314,25 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     class abfragenActionListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
-            if (abfragen == false) {
-                System.out.println("abfragenActionListener true");
-                empfangen.append("Abfragen gestartet \n");
-                abfragen = true;
+            if (!slaveStatus) {
+                if (abfragen == false) {
+                    System.out.println("abfragenActionListener true");
+                    empfangen.append("Abfragen gestartet \n");
+                    abfragen = true;
+                } else {
+                    System.out.println("abfragenActionListener false");
+                    empfangen.append("Abfragen abgebrochen \n");
+                    abfragen = false;
+                }
             } else {
-                System.out.println("abfragenActionListener false");
-                empfangen.append("Abfragen abgebrochen \n");
-                abfragen = false;
+                try {
+                    Thread.sleep(30);
+                    requestSend();
+                } catch (IOException ex) {
+                    Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
@@ -1294,15 +1340,25 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     class schreibenActionListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
-
-            if (schreiben == false) {
-                System.out.println("schreibennActionListener true");
-                empfangen.append("Änderungen gesendet \n");
-                schreiben = true;
+            if (!slaveStatus) {
+                if (schreiben == false) {
+                    System.out.println("schreibennActionListener true");
+                    empfangen.append("Änderungen gesendet \n");
+                    schreiben = true;
+                } else {
+                    System.out.println("schreibennActionListener false");
+                    empfangen.append("Änderungen senden abgebrochen \n");
+                    schreiben = false;
+                }
             } else {
-                System.out.println("schreibennActionListener false");
-                empfangen.append("Änderungen senden abgebrochen \n");
-                schreiben = false;
+                try {
+                    Thread.sleep(30);
+                    writeSend();
+                } catch (IOException ex) {
+                    Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
@@ -1315,8 +1371,8 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 //                File folder = fwPathChooser.getSelectedFile();
                 String folder = "C:\\Users\\Julian\\Documents\\GitHub\\ba-gui\\04_Releases\\20180427-lightpad_slim_mda-v1.04\\20180427-lightpad_slim_mda-v1.04";
                 String file = "Lightpad2.bat";
-                String[] cmd = {"cmd", "/K", "start", folder + "\\" + file, "-o=3"};
-//                String[] cmd = {"cmd", "/K", "cd", folder, "&", "start", folder + "\\" + file, "-o=3"};
+//                String[] cmd = {"cmd", "/K", "start", folder + "\\" + file, "-o=3"};
+                String[] cmd = {"cmd", "/K", "cd", folder, "&", "start", file, "-o=3"};
 
                 Process p1 = runtime.exec(cmd);
                 InputStream is = p1.getInputStream();
@@ -1386,6 +1442,43 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         }
     }
 
+    public void JavaTimer() {
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                boolean completed = true;
+                for (int i = 0; i < deviceArray.length; i++) {
+                    if (deviceArray[i].deviceStatus) {
+                        completed = false;
+                        break;
+                    }
+                }
+                if (!completed) {
+                    slaveStatus = false;
+                    System.out.println("Slavestatus false gesetzt" + System.currentTimeMillis());
+                } else {
+//                    try {
+//                        deviceRequest();
+//                    } catch (IOException ex) {
+//                        Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+                    slaveStatus = true;
+                    empfangen.append("Keine Kommunikation erkannt\nManuelle Abfragen auslösen\n");
+                    System.out.println("Keine Kommunikation erkannt\nManuelle Abfragen auslösen");
+                    System.out.println("Slavestatus true gesetzt" + System.currentTimeMillis());
+                }
+                System.out.println("Timertask beendet" + System.currentTimeMillis());
+            }
+        };
+        System.out.println("Timer gestartet" + System.currentTimeMillis());
+        timer.schedule(task, 2000);
+        System.out.println("Timertask gestartet" + System.currentTimeMillis());
+
+    }
+
+    //https://coderanch.com/t/335943/java/Changing-background-color-JList
     private class DisabledItemListCellRenderer extends DefaultListCellRenderer {
 
         private static final long serialVersionUID = 1L;
@@ -1393,25 +1486,51 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             Component comp = super.getListCellRendererComponent(list, value, index, false, false);
-            if (deviceArray[index].deviceStatus) {
-                if (isSelected) {
-                    comp.setForeground(Color.white);
-                    comp.setBackground(Color.gray);
+//            System.out.println("value: " + value);
+//            System.out.println("index: " + index);
+//            for (int i = 0; i < deviceArray.length; i++) {
+            if (0 < index) {
+                if (deviceArray[index + 1].deviceStatus) {
+                    if (isSelected) {
+                        comp.setForeground(Color.white);
+                        comp.setBackground(Color.gray);
+                    } else {
+                        comp.setForeground(Color.black);
+                        comp.setBackground(Color.green);
+                    }
+                } else if (!deviceArray[index + 1].deviceStatus) {
+                    if (isSelected) { //  & cellHasFocus
+                        comp.setForeground(Color.white);
+                        comp.setBackground(Color.gray);
+                    } else if (deviceArray[index + 1].manualrequest) {
+                        comp.setForeground(Color.black);
+                        comp.setBackground(Color.red);
+                    }
                 } else {
                     comp.setForeground(Color.black);
-                    comp.setBackground(Color.green);
-                }
-            } else if (!deviceArray[index].deviceStatus) {
-                if (isSelected) { //  & cellHasFocus
-                    comp.setForeground(Color.white);
-                    comp.setBackground(Color.gray);
-                } else if (deviceArray[index].manualrequest) {
-                    comp.setForeground(Color.black);
-                    comp.setBackground(Color.red);
+                    comp.setBackground(Color.white);
                 }
             } else {
-                comp.setForeground(Color.black);
-                comp.setBackground(Color.white);
+                if (deviceArray[index].deviceStatus) {
+                    if (isSelected) {
+                        comp.setForeground(Color.white);
+                        comp.setBackground(Color.gray);
+                    } else {
+                        comp.setForeground(Color.black);
+                        comp.setBackground(Color.green);
+                    }
+                } else if (!deviceArray[index].deviceStatus) {
+                    if (isSelected) { //  & cellHasFocus
+                        comp.setForeground(Color.white);
+                        comp.setBackground(Color.gray);
+                    } else if (deviceArray[index].manualrequest) {
+                        comp.setForeground(Color.black);
+                        comp.setBackground(Color.red);
+                    }
+                } else {
+                    comp.setForeground(Color.black);
+                    comp.setBackground(Color.white);
+                }
             }
 //            geraeteListe.repaint();
             return comp;

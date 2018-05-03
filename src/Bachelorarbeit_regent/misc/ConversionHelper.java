@@ -40,7 +40,6 @@ public class ConversionHelper {
 
     public static byte[] hexStringToByteArray(String hexString) {
         byte[] bytes = new byte[hexString.length() / 2];
-
         for (int i = 0; i < hexString.length(); i += 2) {
             String sub = hexString.substring(i, i + 2);
             Integer intVal = Integer.parseInt(sub, 16);
@@ -49,10 +48,32 @@ public class ConversionHelper {
 //            System.out.println(hex);
         }
 //        System.out.println(hexString);
-
         return bytes;
-
     }
+
+    public static byte[] hexIdentifierToByteArray(String s) {
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i + 1), 16));
+        }
+        return data;
+    }
+
+//    public static byte[] hexIdentifierToByteArray(String hexString) {
+//        byte[] bytes = new byte[1];
+////        if (1 < hexString.length()) {
+//        for (int i = 0; i < hexString.length(); i += 2) {
+////            String sub = hexString.substring(i, i + 2);
+//            Integer intVal = Integer.parseInt(hexString, 16);
+//            bytes[0] = intVal.byteValue();
+//            String hex = "".format("%04x", bytes[0]);
+//            System.out.println("hex: " + hex);
+//        }
+//
+//        return bytes;
+//    }
 
     public static String unHex(String arg) {
 
