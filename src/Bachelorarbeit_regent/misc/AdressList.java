@@ -40,15 +40,16 @@ public class AdressList {
     }
 
     public static ArrayList<String> adressString(String hexAdress, String requestLength) {
-        Long requestlong = Long.parseLong(hexAdress, 16);
-        Long adresslong = Long.parseLong(requestLength, 16);
+        Long requestAdressLong = Long.parseLong(hexAdress, 16);
+        Long requestLengthLong = Long.parseLong(requestLength, 16);
 
         ArrayList<String> responseadresses = new ArrayList<String>();
 
-        for (int i = 0; i < requestlong; i++) {
-            Long adress = adresslong;
-            adresslong++;
-            String nextadress = Long.toHexString(adress).toUpperCase();
+        for (int i = 0; i < requestLengthLong; i++) {
+            Long adress = requestAdressLong;
+            requestAdressLong++;
+//            String nextadress = Long.toHexString(adress).toUpperCase();
+            String nextadress = String.format("%04X", adress & 0xFFFF).toUpperCase();
             responseadresses.add(nextadress);
         }
 

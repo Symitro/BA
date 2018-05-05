@@ -28,6 +28,7 @@ import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,6 +43,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -97,222 +99,6 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     int selectedtab;
     ArrayList<String> messageListCache;
 
-    // Abfragen für Control Unit M4, maximal 16 HR pro Abfrage für Performance
-    byte[] sendstreamCUM4_1 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamCUM4_2 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_3 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //37
-    byte[] sendstreamCUM4_4 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x40, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_5 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x50, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_6 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x01}; //05
-    byte[] sendstreamCUM4_7 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamCUM4_8 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //44
-    byte[] sendstreamCUM4_9 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x20, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_10 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x2C, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_11 = {(byte) 0x08, (byte) 0x03, (byte) 0x10, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //06
-    byte[] sendstreamCUM4_12 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x01, (byte) 0x00, (byte) 0x01}; //79
-    byte[] sendstreamCUM4_13 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x11, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_14 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x21, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_15 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x31, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_16 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x41, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_17 = {(byte) 0x08, (byte) 0x03, (byte) 0x27, (byte) 0x17, (byte) 0x00, (byte) 0x01}; //04
-    byte[] sendstreamCUM4_18 = {(byte) 0x08, (byte) 0x03, (byte) 0x35, (byte) 0x05, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamCUM4_19 = {(byte) 0x08, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //19
-    byte[] sendstreamCUM4_20 = {(byte) 0x08, (byte) 0x03, (byte) 0x40, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_21 = {(byte) 0x08, (byte) 0x03, (byte) 0x42, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //03
-    byte[] sendstreamCUM4_22 = {(byte) 0x08, (byte) 0x03, (byte) 0x45, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamCUM4_23 = {(byte) 0x08, (byte) 0x03, (byte) 0x45, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_24 = {(byte) 0x08, (byte) 0x03, (byte) 0x60, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //04
-    byte[] sendstreamCUM4_25 = {(byte) 0x08, (byte) 0x03, (byte) 0x60, (byte) 0x06, (byte) 0x00, (byte) 0x01}; //04
-    byte[] sendstreamCUM4_26 = {(byte) 0x08, (byte) 0x03, (byte) 0x61, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //04
-    byte[] sendstreamCUM4_27 = {(byte) 0x08, (byte) 0x03, (byte) 0x62, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //53
-    byte[] sendstreamCUM4_28 = {(byte) 0x08, (byte) 0x03, (byte) 0x62, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_29 = {(byte) 0x08, (byte) 0x03, (byte) 0x62, (byte) 0x20, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_30 = {(byte) 0x08, (byte) 0x03, (byte) 0x62, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_31 = {(byte) 0x08, (byte) 0x03, (byte) 0x63, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //69
-    byte[] sendstreamCUM4_32 = {(byte) 0x08, (byte) 0x03, (byte) 0x63, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_33 = {(byte) 0x08, (byte) 0x03, (byte) 0x63, (byte) 0x20, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_34 = {(byte) 0x08, (byte) 0x03, (byte) 0x63, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCUM4_35 = {(byte) 0x08, (byte) 0x03, (byte) 0x63, (byte) 0x40, (byte) 0x00, (byte) 0x01}; //^
-
-//            sendstreamCUM4_1 = Request.requestGenerate("CUM4Collection");
-    byte[][] sendarraysCUM4 = {sendstreamCUM4_1, sendstreamCUM4_2, sendstreamCUM4_3, sendstreamCUM4_4, sendstreamCUM4_5, sendstreamCUM4_6, sendstreamCUM4_7, sendstreamCUM4_8, sendstreamCUM4_9, sendstreamCUM4_10, sendstreamCUM4_11, sendstreamCUM4_12, sendstreamCUM4_13, sendstreamCUM4_14, sendstreamCUM4_15, sendstreamCUM4_16, sendstreamCUM4_17, sendstreamCUM4_18, sendstreamCUM4_19, sendstreamCUM4_20, sendstreamCUM4_21, sendstreamCUM4_22, sendstreamCUM4_23, sendstreamCUM4_24, sendstreamCUM4_25, sendstreamCUM4_26, sendstreamCUM4_27, sendstreamCUM4_28, sendstreamCUM4_29, sendstreamCUM4_30, sendstreamCUM4_31, sendstreamCUM4_32, sendstreamCUM4_33, sendstreamCUM4_34, sendstreamCUM4_35};
-
-    // Abfragen für Control Unit, maximal 16 HR pro Abfrage für Performance
-    byte[] sendstreamCU_1 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamCU_2 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCU_3 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //37
-    byte[] sendstreamCU_4 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x40, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCU_5 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0x50, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCU_6 = {(byte) 0x08, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x01}; //05
-    byte[] sendstreamCU_7 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamCU_8 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //44
-    byte[] sendstreamCU_9 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x20, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCU_10 = {(byte) 0x08, (byte) 0x03, (byte) 0x02, (byte) 0x2C, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCU_11 = {(byte) 0x08, (byte) 0x03, (byte) 0x10, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //04
-    byte[] sendstreamCU_12 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x01, (byte) 0x00, (byte) 0x01}; //79
-    byte[] sendstreamCU_13 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x11, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCU_14 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x21, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCU_15 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x31, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCU_16 = {(byte) 0x08, (byte) 0x03, (byte) 0x20, (byte) 0x41, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCU_17 = {(byte) 0x08, (byte) 0x03, (byte) 0x27, (byte) 0x17, (byte) 0x00, (byte) 0x01}; //04
-    byte[] sendstreamCU_18 = {(byte) 0x08, (byte) 0x03, (byte) 0x35, (byte) 0x05, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamCU_19 = {(byte) 0x08, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //19
-    byte[] sendstreamCU_20 = {(byte) 0x08, (byte) 0x03, (byte) 0x40, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCU_21 = {(byte) 0x08, (byte) 0x03, (byte) 0x42, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //03
-    byte[] sendstreamCU_22 = {(byte) 0x08, (byte) 0x03, (byte) 0x45, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //31
-    byte[] sendstreamCU_23 = {(byte) 0x08, (byte) 0x03, (byte) 0x45, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamCU_24 = {(byte) 0x08, (byte) 0x03, (byte) 0x60, (byte) 0x06, (byte) 0x00, (byte) 0x01}; //04
-    byte[] sendstreamCU_25 = {(byte) 0x08, (byte) 0x03, (byte) 0x62, (byte) 0x03, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamCU_26 = {(byte) 0x08, (byte) 0x03, (byte) 0x63, (byte) 0x03, (byte) 0x00, (byte) 0x01}; //01
-
-    byte[][] sendarraysCU = {sendstreamCU_1, sendstreamCU_2, sendstreamCU_3, sendstreamCU_4, sendstreamCU_5, sendstreamCU_6, sendstreamCU_7, sendstreamCU_8, sendstreamCU_9, sendstreamCU_10, sendstreamCU_11, sendstreamCU_12, sendstreamCU_13, sendstreamCU_14, sendstreamCU_15, sendstreamCU_16, sendstreamCU_17, sendstreamCU_18, sendstreamCU_19, sendstreamCU_20, sendstreamCU_21, sendstreamCU_22, sendstreamCU_23, sendstreamCU_24, sendstreamCU_25, sendstreamCU_26};
-
-    // Abfragen des Alone at Works 2.0
-    byte[] sendstreamAAW_1 = {(byte) 0x10, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamAAW_2 = {(byte) 0x10, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamAAW_3 = {(byte) 0x10, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //37
-    byte[] sendstreamAAW_4 = {(byte) 0x10, (byte) 0x03, (byte) 0x00, (byte) 0x40, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamAAW_5 = {(byte) 0x10, (byte) 0x03, (byte) 0x00, (byte) 0x50, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamAAW_6 = {(byte) 0x10, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x01}; //5
-    byte[] sendstreamAAW_7 = {(byte) 0x10, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamAAW_8 = {(byte) 0x10, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamAAW_9 = {(byte) 0x10, (byte) 0x03, (byte) 0x02, (byte) 0x20, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamAAW_10 = {(byte) 0x10, (byte) 0x03, (byte) 0x10, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //07
-    byte[] sendstreamAAW_11 = {(byte) 0x10, (byte) 0x03, (byte) 0x10, (byte) 0x20, (byte) 0x00, (byte) 0x01}; //28
-    byte[] sendstreamAAW_12 = {(byte) 0x10, (byte) 0x03, (byte) 0x10, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamAAW_13 = {(byte) 0x10, (byte) 0x03, (byte) 0x10, (byte) 0x68, (byte) 0x00, (byte) 0x01}; //09
-    byte[] sendstreamAAW_14 = {(byte) 0x10, (byte) 0x03, (byte) 0x11, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //07
-    byte[] sendstreamAAW_15 = {(byte) 0x10, (byte) 0x03, (byte) 0x27, (byte) 0x18, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamAAW_16 = {(byte) 0x10, (byte) 0x03, (byte) 0x30, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //09
-    byte[] sendstreamAAW_17 = {(byte) 0x10, (byte) 0x03, (byte) 0x40, (byte) 0x01, (byte) 0x00, (byte) 0x01}; //05
-
-    byte[][] sendarraysAAW = {sendstreamAAW_1, sendstreamAAW_2, sendstreamAAW_3, sendstreamAAW_4, sendstreamAAW_5, sendstreamAAW_6, sendstreamAAW_7, sendstreamAAW_8, sendstreamAAW_9, sendstreamAAW_10, sendstreamAAW_11, sendstreamAAW_12, sendstreamAAW_13, sendstreamAAW_14, sendstreamAAW_15, sendstreamAAW_16, sendstreamAAW_17};
-
-    // Abfragen des linken Panel
-    byte[] sendstreamPL_1 = {(byte) 0x11, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamPL_2 = {(byte) 0x11, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamPL_3 = {(byte) 0x11, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //37
-    byte[] sendstreamPL_4 = {(byte) 0x11, (byte) 0x03, (byte) 0x00, (byte) 0x40, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamPL_5 = {(byte) 0x11, (byte) 0x03, (byte) 0x00, (byte) 0x50, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamPL_6 = {(byte) 0x11, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x01}; //05
-    byte[] sendstreamPL_7 = {(byte) 0x11, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamPL_8 = {(byte) 0x11, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamPL_9 = {(byte) 0x11, (byte) 0x03, (byte) 0x02, (byte) 0x20, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamPL_10 = {(byte) 0x11, (byte) 0x03, (byte) 0x12, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamPL_11 = {(byte) 0x11, (byte) 0x03, (byte) 0x13, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //03
-    byte[] sendstreamPL_12 = {(byte) 0x11, (byte) 0x03, (byte) 0x13, (byte) 0x07, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamPL_13 = {(byte) 0x11, (byte) 0x03, (byte) 0x14, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //13
-    byte[] sendstreamPL_14 = {(byte) 0x11, (byte) 0x03, (byte) 0x21, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //07
-    byte[] sendstreamPL_15 = {(byte) 0x11, (byte) 0x03, (byte) 0x27, (byte) 0x18, (byte) 0x00, (byte) 0x01}; //02
-    byte[] sendstreamPL_16 = {(byte) 0x11, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //07
-
-    byte[][] sendarraysPL = {sendstreamPL_1, sendstreamPL_2, sendstreamPL_3, sendstreamPL_4, sendstreamPL_5, sendstreamPL_6, sendstreamPL_7, sendstreamPL_8, sendstreamPL_9, sendstreamPL_10, sendstreamPL_11, sendstreamPL_12, sendstreamPL_13, sendstreamPL_14, sendstreamPL_15, sendstreamPL_16};
-
-    // Abfrage des rechten Panel
-    byte[] sendstreamPR_1 = {(byte) 0x12, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamPR_2 = {(byte) 0x12, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamPR_3 = {(byte) 0x12, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //37
-    byte[] sendstreamPR_4 = {(byte) 0x12, (byte) 0x03, (byte) 0x00, (byte) 0x40, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamPR_5 = {(byte) 0x12, (byte) 0x03, (byte) 0x00, (byte) 0x50, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamPR_6 = {(byte) 0x12, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x01}; //05
-    byte[] sendstreamPR_7 = {(byte) 0x12, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamPR_8 = {(byte) 0x12, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamPR_9 = {(byte) 0x12, (byte) 0x03, (byte) 0x02, (byte) 0x20, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamPR_10 = {(byte) 0x12, (byte) 0x03, (byte) 0x12, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamPR_11 = {(byte) 0x12, (byte) 0x03, (byte) 0x13, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //03
-    byte[] sendstreamPR_12 = {(byte) 0x12, (byte) 0x03, (byte) 0x13, (byte) 0x07, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamPR_13 = {(byte) 0x12, (byte) 0x03, (byte) 0x14, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //13
-    byte[] sendstreamPR_14 = {(byte) 0x12, (byte) 0x03, (byte) 0x21, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //07
-    byte[] sendstreamPR_15 = {(byte) 0x12, (byte) 0x03, (byte) 0x27, (byte) 0x18, (byte) 0x00, (byte) 0x01}; //02
-    byte[] sendstreamPR_16 = {(byte) 0x12, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //07
-
-    byte[][] sendarraysPR = {sendstreamPR_1, sendstreamPR_2, sendstreamPR_3, sendstreamPR_4, sendstreamPR_5, sendstreamPR_6, sendstreamPR_7, sendstreamPR_8, sendstreamPR_9, sendstreamPR_10, sendstreamPR_11, sendstreamPR_12, sendstreamPR_13, sendstreamPR_14, sendstreamPR_15, sendstreamPR_16};
-
-    // Abfrage des Senselight Head 1
-    byte[] sendstreamSH1_1 = {(byte) 0x17, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamSH1_2 = {(byte) 0x17, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH1_3 = {(byte) 0x17, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //37
-    byte[] sendstreamSH1_4 = {(byte) 0x17, (byte) 0x03, (byte) 0x00, (byte) 0x40, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH1_5 = {(byte) 0x17, (byte) 0x03, (byte) 0x00, (byte) 0x50, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH1_6 = {(byte) 0x17, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x01}; //05
-    byte[] sendstreamSH1_7 = {(byte) 0x17, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamSH1_8 = {(byte) 0x17, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //44
-    byte[] sendstreamSH1_9 = {(byte) 0x17, (byte) 0x03, (byte) 0x02, (byte) 0x20, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH1_10 = {(byte) 0x17, (byte) 0x03, (byte) 0x02, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH1_11 = {(byte) 0x17, (byte) 0x03, (byte) 0x12, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamSH1_12 = {(byte) 0x17, (byte) 0x03, (byte) 0x13, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //11
-    byte[] sendstreamSH1_13 = {(byte) 0x17, (byte) 0x03, (byte) 0x14, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //06
-    byte[] sendstreamSH1_14 = {(byte) 0x17, (byte) 0x03, (byte) 0x15, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //07
-    byte[] sendstreamSH1_15 = {(byte) 0x17, (byte) 0x03, (byte) 0x16, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //02
-    byte[] sendstreamSH1_16 = {(byte) 0x17, (byte) 0x03, (byte) 0x27, (byte) 0x18, (byte) 0x00, (byte) 0x01}; //02
-    byte[] sendstreamSH1_17 = {(byte) 0x17, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //09
-
-    byte[][] sendarraysSH1 = {sendstreamSH1_1, sendstreamSH1_2, sendstreamSH1_3, sendstreamSH1_4, sendstreamSH1_5, sendstreamSH1_6, sendstreamSH1_7, sendstreamSH1_8, sendstreamSH1_9, sendstreamSH1_10, sendstreamSH1_11, sendstreamSH1_12, sendstreamSH1_13, sendstreamSH1_14, sendstreamSH1_15, sendstreamSH1_16, sendstreamSH1_17};
-
-    // Abfrage des Senselight Head 2
-    byte[] sendstreamSH2_1 = {(byte) 0x18, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamSH2_2 = {(byte) 0x18, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH2_3 = {(byte) 0x18, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //37
-    byte[] sendstreamSH2_4 = {(byte) 0x18, (byte) 0x03, (byte) 0x00, (byte) 0x40, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH2_5 = {(byte) 0x18, (byte) 0x03, (byte) 0x00, (byte) 0x50, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH2_6 = {(byte) 0x18, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x01}; //05
-    byte[] sendstreamSH2_7 = {(byte) 0x18, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamSH2_8 = {(byte) 0x18, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //44
-    byte[] sendstreamSH2_9 = {(byte) 0x18, (byte) 0x03, (byte) 0x02, (byte) 0x20, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH2_10 = {(byte) 0x18, (byte) 0x03, (byte) 0x02, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH2_11 = {(byte) 0x18, (byte) 0x03, (byte) 0x12, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamSH2_12 = {(byte) 0x18, (byte) 0x03, (byte) 0x13, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //11
-    byte[] sendstreamSH2_13 = {(byte) 0x18, (byte) 0x03, (byte) 0x14, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //06
-    byte[] sendstreamSH2_14 = {(byte) 0x18, (byte) 0x03, (byte) 0x15, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //07
-    byte[] sendstreamSH2_15 = {(byte) 0x18, (byte) 0x03, (byte) 0x16, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //02
-    byte[] sendstreamSH2_16 = {(byte) 0x18, (byte) 0x03, (byte) 0x27, (byte) 0x18, (byte) 0x00, (byte) 0x01}; //02
-    byte[] sendstreamSH2_17 = {(byte) 0x18, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //09
-
-    byte[][] sendarraysSH2 = {sendstreamSH2_1, sendstreamSH2_2, sendstreamSH2_3, sendstreamSH2_4, sendstreamSH2_5, sendstreamSH2_6, sendstreamSH2_7, sendstreamSH2_8, sendstreamSH2_9, sendstreamSH2_10, sendstreamSH2_11, sendstreamSH2_12, sendstreamSH2_13, sendstreamSH2_14, sendstreamSH2_15, sendstreamSH2_16, sendstreamSH2_17};
-
-    // Abfrage des Senselight Head 3
-    byte[] sendstreamSH3_1 = {(byte) 0x19, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamSH3_2 = {(byte) 0x19, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH3_3 = {(byte) 0x19, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //37
-    byte[] sendstreamSH3_4 = {(byte) 0x19, (byte) 0x03, (byte) 0x00, (byte) 0x40, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH3_5 = {(byte) 0x19, (byte) 0x03, (byte) 0x00, (byte) 0x50, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH3_6 = {(byte) 0x19, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x01}; //05
-    byte[] sendstreamSH3_7 = {(byte) 0x19, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamSH3_8 = {(byte) 0x19, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //44
-    byte[] sendstreamSH3_9 = {(byte) 0x19, (byte) 0x03, (byte) 0x02, (byte) 0x20, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH3_10 = {(byte) 0x19, (byte) 0x03, (byte) 0x02, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH3_11 = {(byte) 0x19, (byte) 0x03, (byte) 0x12, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamSH3_12 = {(byte) 0x19, (byte) 0x03, (byte) 0x13, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //11
-    byte[] sendstreamSH3_13 = {(byte) 0x19, (byte) 0x03, (byte) 0x14, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //06
-    byte[] sendstreamSH3_14 = {(byte) 0x19, (byte) 0x03, (byte) 0x15, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //07
-    byte[] sendstreamSH3_15 = {(byte) 0x19, (byte) 0x03, (byte) 0x16, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //02
-    byte[] sendstreamSH3_16 = {(byte) 0x19, (byte) 0x03, (byte) 0x27, (byte) 0x18, (byte) 0x00, (byte) 0x01}; //02
-    byte[] sendstreamSH3_17 = {(byte) 0x19, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //09
-
-    byte[][] sendarraysSH3 = {sendstreamSH3_1, sendstreamSH3_2, sendstreamSH3_3, sendstreamSH3_4, sendstreamSH3_5, sendstreamSH3_6, sendstreamSH3_7, sendstreamSH3_8, sendstreamSH3_9, sendstreamSH3_10, sendstreamSH3_11, sendstreamSH3_12, sendstreamSH3_13, sendstreamSH3_14, sendstreamSH3_15, sendstreamSH3_16, sendstreamSH3_17};
-
-    // Abfrage des Senselight Head 4
-    byte[] sendstreamSH4_1 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //32
-    byte[] sendstreamSH4_2 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH4_3 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //37
-    byte[] sendstreamSH4_4 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0x40, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH4_5 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0x50, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH4_6 = {(byte) 0x1A, (byte) 0x03, (byte) 0x00, (byte) 0xFF, (byte) 0x00, (byte) 0x01}; //05
-    byte[] sendstreamSH4_7 = {(byte) 0x1A, (byte) 0x03, (byte) 0x02, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamSH4_8 = {(byte) 0x1A, (byte) 0x03, (byte) 0x02, (byte) 0x10, (byte) 0x00, (byte) 0x01}; //44
-    byte[] sendstreamSH4_9 = {(byte) 0x1A, (byte) 0x03, (byte) 0x02, (byte) 0x20, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH4_10 = {(byte) 0x1A, (byte) 0x03, (byte) 0x02, (byte) 0x30, (byte) 0x00, (byte) 0x01}; //^
-    byte[] sendstreamSH4_11 = {(byte) 0x1A, (byte) 0x03, (byte) 0x12, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //01
-    byte[] sendstreamSH4_12 = {(byte) 0x1A, (byte) 0x03, (byte) 0x13, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //11
-    byte[] sendstreamSH4_13 = {(byte) 0x1A, (byte) 0x03, (byte) 0x14, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //06
-    byte[] sendstreamSH4_14 = {(byte) 0x1A, (byte) 0x03, (byte) 0x15, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //07
-    byte[] sendstreamSH4_15 = {(byte) 0x1A, (byte) 0x03, (byte) 0x16, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //02
-    byte[] sendstreamSH4_16 = {(byte) 0x1A, (byte) 0x03, (byte) 0x27, (byte) 0x18, (byte) 0x00, (byte) 0x01}; //02
-    byte[] sendstreamSH4_17 = {(byte) 0x1A, (byte) 0x03, (byte) 0x40, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //09
-
-    byte[][] sendarraysSH4 = {sendstreamSH4_1, sendstreamSH4_2, sendstreamSH4_3, sendstreamSH4_4, sendstreamSH4_5, sendstreamSH4_6, sendstreamSH4_7, sendstreamSH4_8, sendstreamSH4_9, sendstreamSH4_10, sendstreamSH4_11, sendstreamSH4_12, sendstreamSH4_13, sendstreamSH4_14, sendstreamSH4_15, sendstreamSH4_16, sendstreamSH4_17};
-
-//    byte[][][] sendarrays = {sendarraysCUM4, sendarraysCU, sendarraysAAW, sendarraysPL, sendarraysPR, sendarraysSH1, sendarraysSH2, sendarraysSH3, sendarraysSH4};
     // Datacollections werden in ein Array gefüllt
     Datacollection[] datacollectionArray;
 
@@ -323,8 +109,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     int actualDeviceCounter = 0;
 
-    HashMap<String, String> liveRequest = new HashMap<String, String>();
-
+//    HashMap<String, String> liveRequest = new HashMap<String, String>();
     /**
      * Fenster
      */
@@ -465,14 +250,14 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         this.deviceArray = new Device[]{
             new Device(CUM4Collection, "Control Unit M4", "0803020006E447", (byte) 0x08),
             new Device(CUCollection, "Control Unit", "0803020002E584", (byte) 0x08),
-            new Device(AAWCollection, "Alone at Work 2.0", "100302", (byte) 0x10),
-            new Device(PLCollection, "Panel Links", "110302", (byte) 0x11),
-            new Device(PRCollection, "Panel Rechts", "120302", (byte) 0x12),
-            new Device(SH1Collection, "Senselighthead 1", "170304", (byte) 0x17),
-            new Device(SH2Collection, "Senselighthead 2", "180304", (byte) 0x18),
-            new Device(SH3Collection, "Senselighthead 3", "190304", (byte) 0x19),
-            new Device(SH4Collection, "Senselighthead 4", "1A0304", (byte) 0x1A),
-            new Device(null, "Connected Lighting", "150302", (byte) 0x15),
+            new Device(AAWCollection, "AloneAtWork", "100302", (byte) 0x10),
+            new Device(PLCollection, "Panel left", "110302", (byte) 0x11),
+            new Device(PRCollection, "Panel right", "120302", (byte) 0x12),
+            new Device(SH1Collection, "Sensormodule 1", "170304", (byte) 0x17),
+            new Device(SH2Collection, "Sensormodule 2", "180304", (byte) 0x18),
+            new Device(SH3Collection, "Sensormodule 3", "190304", (byte) 0x19),
+            new Device(SH4Collection, "Sensormodule 4", "1A0304", (byte) 0x1A),
+            new Device(null, "CLM", "150302", (byte) 0x15),
             new Device(null, "PC-Bridge", "0F0302", (byte) 0x0F)
         };
 
@@ -524,12 +309,12 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         jmenubar1.add(jmenu1);
         jmenubar1.add(jmenu2);
         jmenubar1.add(jmenu3);
-        jmenu1.add(jmenuitem1);
-        jmenu1.add(jmenuitem2);
+//        jmenu1.add(jmenuitem1);
+//        jmenu1.add(jmenuitem2);
         jmenu1.add(jmenuitem3);
         jmenu2.add(jmenuitem4);
         jmenu2.add(jmenuitem5);
-        jmenu3.add(jmenuitem6);
+//        jmenu3.add(jmenuitem6);
         jmenu1.setText("Datei");
         jmenu2.setText("Firmware");
         jmenu3.setText("Hilfe");
@@ -538,8 +323,13 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         jmenuitem3.setText("Beenden");
         jmenuitem4.setText("Ordner für Firmware auswählen");
         jmenuitem5.setText("Manuelle Firmwareauswahl");
-        jmenuitem6.setText("Über");
+//        jmenuitem6.setText("Über");
         setJMenuBar(jmenubar1);
+        jmenuitem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitActionPerformed(evt);
+            }
+        });
         jmenuitem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fwPathActionPerformed(evt);
@@ -595,7 +385,6 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         constraints.anchor = GridBagConstraints.NORTHWEST;
 
         panelGeraeteListe.add(geraeteNamen, constraints);
-
         // Geräteliste
         for (int i = 0; i < deviceArray.length; i++) {
             if (i != 0) {
@@ -626,7 +415,6 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                                             datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "minValue"),
                                             datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "maxValue")});
                                     }
-//                                    empfangen.append(deviceArray[i].deviceName + " angewählt\n");
                                 } else {
                                     model.setRowCount(0);
                                 }
@@ -647,7 +435,6 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                                             livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "hexAdress"),
                                             livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "value")});
                                     }
-//                                    empfangen.append(deviceArray[i].deviceName + " angewählt\n");
                                 } else {
                                     model.setRowCount(0);
                                 }
@@ -704,8 +491,54 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                 if (e.getSource() instanceof JTabbedPane) {
                     JTabbedPane pane = (JTabbedPane) e.getSource();
                     selectedtab = pane.getSelectedIndex();
+                    String gereat = geraeteListe.getSelectedValue().toString();
+                    if (gereat != null) {
+                        if (selectedtab == 1) {
+                            DefaultTableModel model = (DefaultTableModel) geraeteDatenTabelle.getModel();
+                            model.setRowCount(0);
+                            for (int i = 0; i < deviceArray.length; i++) {
+                                if (deviceArray[i].deviceName.equals(gereat)) {
+                                    if (deviceArray[i].deviceStatus) {
+                                        for (Map.Entry entry : datacollectionArray[i].dataEntryCollection.entrySet()) {
+                                            model.addRow(new Object[]{
+                                                datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "index"),
+                                                datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "varName"),
+                                                entry.getKey(),
+                                                datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "currentValue"),
+                                                datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "defaultValue"),
+                                                datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "minValue"),
+                                                datacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "maxValue")});
+                                        }
+                                    } else {
+                                        model.setRowCount(0);
+                                    }
+                                }
+                            }
+                        } else {
+                            DefaultTableModel model = (DefaultTableModel) liveDatenTabelle.getModel();
+                            model.setRowCount(0);
+                            for (int i = 0; i < deviceArray.length; i++) {
+                                if (deviceArray[i].deviceName.equals(gereat)) {
+                                    if (deviceArray[i].deviceStatus) {
+                                        for (Map.Entry entry : livedatacollectionArray[i].liveDataEntryCollection.entrySet()) {
+                                            model.addRow(new Object[]{
+                                                livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "time"),
+                                                entry.getKey(),
+                                                livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "deviceAdress"),
+                                                livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "functionCode"),
+                                                livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "hexAdress"),
+                                                livedatacollectionArray[i].getDataByIdentifier(entry.getKey().toString(), "value")});
+                                        }
+                                    } else {
+                                        model.setRowCount(0);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
+
         }
         );
         // Abfragen werden gestartet
@@ -855,6 +688,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                         changedDevice = (byte) deviceArray[i].devicebyte;
                     }
                 }
+                empfangen.append("Änderungsanfrage für: " + changedDevice + " HEX-Adresse: " + hexofchangedvalue + " Neuer Wert: " + changedValue);
                 System.out.println("changedValue: " + changedValue);
                 System.out.println("hexofchangedvalue: " + hexofchangedvalue);
                 System.out.println("changedDevice: " + changedDevice);
@@ -956,43 +790,99 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     }
 
     public void requestSend() throws IOException {
-        if (deviceArray[actualDeviceCounter].deviceStatus) {
-            if (!deviceArray[actualDeviceCounter].isRequestFinished()) {
-                byte[] sendstream = deviceArray[actualDeviceCounter].getNextByteArray();
-                CRC16 crc = new CRC16();
-                crc.update(sendstream, 0, sendstream.length);
-                crc.getAll();
-                outputStream.write(crc.getAll());
+        ArrayList<Integer> deviceOnlineCount = new ArrayList<>();
+        for (int i = 0; i < deviceArray.length; i++) {
+            if (deviceArray[i].deviceStatus) {
+                deviceOnlineCount.add(i);
+            }
+        }
+        if (!deviceArray[actualDeviceCounter].deviceStatus) {
+            actualDeviceCounter++;
+        }
 
-                String sendstreamstring = ConversionHelper.byteArrayToHexString(sendstream);
-                System.err.println("Aktuelle Abfrage: " + deviceArray[actualDeviceCounter].deviceName);
-                System.err.println("Senden erfolgreich: " + sendstreamstring);
-                System.err.println("Senden erfolgreich: " + sendstreamstring);
-                System.err.println("Senden erfolgreich: " + sendstreamstring);
-                System.err.println("Senden erfolgreich: " + sendstreamstring);
+        if (actualDeviceCounter <= deviceOnlineCount.size()) {
+            if (deviceArray[actualDeviceCounter].deviceStatus) {
+                if (!deviceArray[actualDeviceCounter].isRequestFinished()) {
+                    byte[] sendstream = deviceArray[actualDeviceCounter].getNextByteArray();
+                    CRC16 crc = new CRC16();
+                    crc.update(sendstream, 0, sendstream.length);
+                    crc.getAll();
+                    outputStream.write(crc.getAll());
 
-            } else {
-                actualDeviceCounter++;
-                byte[] sendstream = deviceArray[actualDeviceCounter].getNextByteArray();
-                CRC16 crc = new CRC16();
-                crc.update(sendstream, 0, sendstream.length);
-                crc.getAll();
-                outputStream.write(crc.getAll());
+                    String sendstreamstring = ConversionHelper.byteArrayToHexString(sendstream);
+                    System.out.println("Aktuelle Abfrage: " + deviceArray[actualDeviceCounter].deviceName);
+                    System.out.println("Senden erfolgreich: " + sendstreamstring);
 
-                String sendstreamstring = ConversionHelper.byteArrayToHexString(sendstream);
-                System.err.println("Aktuelle Abfrage: " + deviceArray[actualDeviceCounter].deviceName);
-                System.err.println("Senden der letzten Nachrichterfolgreich: " + sendstreamstring);
-                System.err.println("Senden der letzten Nachrichterfolgreich: " + sendstreamstring);
-                System.err.println("Senden der letzten Nachrichterfolgreich: " + sendstreamstring);
-                System.err.println("Senden der letzten Nachrichterfolgreich: " + sendstreamstring);
+                } else {
+                    empfangen.append("Deviceabfrage abgeschlossen: " + deviceArray[actualDeviceCounter].deviceName + "\n");
+                    System.out.println("Deviceabfrage abgeschlossen: " + deviceArray[actualDeviceCounter].deviceName);
+                    firmwareVersion();
+                    actualDeviceCounter++;
+                }
             }
         } else {
-            actualDeviceCounter++;
+            System.err.println("Alle Abfragen abgeschlossen");
+            empfangen.append("Alle Abfragen abgeschlossen");
+            abfragen = false;
+        }
+    }
+
+    public void firmwareVersion() {
+        String startAdressFWVersion = "0000";
+        String fWVersionLength = "20";
+        ArrayList<String> adressListFW = AdressList.adressString(startAdressFWVersion, fWVersionLength);
+        StringBuilder fwsb = new StringBuilder();
+
+        String startAdressHWVersion = "0030";
+        String hWVersionLength = "05";
+        ArrayList<String> adresslistHW = AdressList.adressString(startAdressHWVersion, hWVersionLength);
+        StringBuilder hwsb = new StringBuilder();
+
+        String startAdressFWBLVersion = "0035";
+        String fWBLVersionLength = "14";
+        ArrayList<String> adresslistFWBL = AdressList.adressString(startAdressFWBLVersion, fWBLVersionLength);
+        StringBuilder fwblsb = new StringBuilder();
+
+        if (adressListFW != null) {
+            for (int i = 0; i < adressListFW.size(); i++) {
+                String fWVersion = null;
+                fWVersion = (String) datacollectionArray[actualDeviceCounter].getDataByIdentifier(adressListFW.get(i), "currentValue");
+                if (fWVersion != null) {
+                    String fWVersionSwapped = ConversionHelper.swapChars(fWVersion, 0, 1);
+                    fwsb.append(fWVersionSwapped);
+                }
+            }
+            System.out.println("Firmwareversion: " + fwsb.toString());
+            empfangen.append("Firmwareversion: " + fwsb.toString() + "\n");
+        }
+        if (adresslistHW != null) {
+            for (int i = 0; i < adresslistHW.size(); i++) {
+                String hWVersion = null;
+                hWVersion = (String) datacollectionArray[actualDeviceCounter].getDataByIdentifier(adresslistHW.get(i), "currentValue");
+                if (hWVersion != null) {
+                    String hWVersionSwapped = ConversionHelper.swapChars(hWVersion, 0, 1);
+                    hwsb.append(hWVersionSwapped);
+                }
+            }
+            System.out.println("Hardwareversion: " + hwsb.toString());
+            empfangen.append("Hardwareversion: " + hwsb.toString() + "\n");
+        }
+        if (adresslistFWBL != null) {
+            for (int i = 0; i < adresslistFWBL.size(); i++) {
+                String fWBLVersion = null;
+                fWBLVersion = (String) datacollectionArray[actualDeviceCounter].getDataByIdentifier(adresslistFWBL.get(i), "currentValue");
+                if (fWBLVersion != null) {
+                    String fWBLVersionSwapped = ConversionHelper.swapChars(fWBLVersion, 0, 1);
+                    fwblsb.append(fWBLVersionSwapped);
+                }
+            }
+            System.out.println("Firmware-BL-Version: " + fwblsb.toString());
+            empfangen.append("Firmware-BL-Version: " + fwblsb.toString() + "\n");
         }
     }
 
     // https://stackoverflow.com/questions/1735840/how-do-i-split-an-integer-into-2-byte-binary
-    void writeSend() throws IOException {
+    public void writeSend() throws IOException {
         // Alte Daten mit neuen Daten vergleichen, falls Änderungen 
         // Bsp. 08 06 0000 0001 "CRC" senden
         if (changedDevice != 0) {
@@ -1018,7 +908,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         changedDevice = 0;
     }
 
-    void deviceRequest() throws IOException {
+    public void deviceRequest() throws IOException {
         byte[] devicetype = {(byte) 0x08, (byte) 0x03, (byte) 0x01, (byte) 0x00, (byte) 0x00, (byte) 0x01}; //1
         CRC16 crc = new CRC16();
         crc.update(devicetype, 0, devicetype.length);
@@ -1026,7 +916,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         outputStream.write(crc.getAll());
     }
 
-    void manualDeviceRequest() throws IOException {
+    public void manualDeviceRequest() throws IOException {
         if (serialPortGeoeffnet) {
             String gereat = geraeteListe.getSelectedValue().toString();
             byte devicebyte = 0x00;
@@ -1057,7 +947,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     // https://www.javacodegeeks.com/2011/05/avoid-concurrentmodificationexception.html
     void serialPortDatenVerfuegbar() throws InterruptedException {
         try {
-            System.out.println("Starttime" + getCurrentTimeStamp());
+//            System.out.println("Starttime: " + getCurrentTimeStamp());
             byte[] data = new byte[170];
             byte[] requestbuffer = new byte[3];
             byte[] crcbuffer = new byte[2];
@@ -1068,12 +958,12 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
             requestbuffer[2] = (byte) (2 * deviceArray[actualDeviceCounter].getSingleByteArray(5));
             String requestbufferstring = ConversionHelper.byteArrayToHexString(requestbuffer);
             String adress = deviceArray[actualDeviceCounter].getCurrentByteAdress();
-            System.err.println("adress: " + adress);
-//            ArrayList<String> adresslist = AdressList.adressArray(deviceArray[actualDeviceCounter].requestGenerate(SOMEBITS), deviceArray[actualDeviceCounter].lastmessageCounter);
+//            System.err.println("adress: " + adress);
 
             while (inputStream.available() > 0) {
 
                 num = inputStream.read(data, 0, data.length);
+//                System.out.println(Arrays.toString(data));
                 String byteArrayToHex = ConversionHelper.byteArrayToHexString(data);
 //                System.out.println("Dateninput unbearbeitet: " + byteArrayToHex);
                 int datalength = byteArrayToHex.length() / 2;
@@ -1083,7 +973,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                 byte[] messagearray = new byte[datalength / 2];
                 System.arraycopy(data, 0, messagearray, 0, messagearray.length);
                 String message = ConversionHelper.byteArrayToHexString(messagearray);
-                System.out.println("Empfangene Nachricht: " + message);
+//                System.out.println("Empfangene Nachricht: " + message);
 
                 ArrayList<Integer> repeatList = new ArrayList<>();
                 ArrayList<String> messageList = new ArrayList<>();
@@ -1092,7 +982,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                 // Multiple Nachrichten finden
                 for (int i = 0; i < deviceArray.length; i++) {
                     for (int z = 0; z < message.length() - 4; z++) {
-                        if (deviceArray[i].shortHexRead.equals(message.substring(z, z + 4)) || deviceArray[i].shortHexWrite.equals(message.substring(z, z + 4))) {
+                        if (deviceArray[i].shortHexRead.equals(message.substring(z, z + 4)) || deviceArray[i].shortHexWrite.equals(message.substring(z, z + 4)) || deviceArray[i].shortHexMultipleWrite.equals(message.substring(z, z + 4))) {
                             if (!repeatList.contains(z)) {
                                 repeatList.add(z);
                             }
@@ -1101,33 +991,49 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                 }
                 // Sorting of arraylist using Collections.sort
                 Collections.sort(repeatList);
-                System.out.println("repeatList: " + repeatList);
                 // Multiple Nachrichten aufteilen
                 for (int i = 0; i < repeatList.size(); i++) {
                     int repeatstartposition = repeatList.get(i);
                     int repeatendposition = 0;
                     int next = i + 1;
+                    int last = repeatList.size();
+                    boolean isLast = false;
+                    boolean delta = false;
+                    boolean isEven = false;
                     if (1 < repeatList.size()) {
-                        if (repeatList.size() != next) {
-                            System.out.println("repeatList.get(next):" + repeatList.get(next));
-                            if (6 < ((repeatList.get(next)) - (repeatList.get(i)))) {
-                                repeatendposition = repeatList.get(next);
-                                System.out.println("repeatendposition: " + repeatendposition);
-                            }
-                            i++;
-                        } else {
-                            repeatendposition = message.length();
+                        if (next != last) {
+                            delta = 13 < (repeatList.get(next) - repeatList.get(i));
+                            isEven = ((repeatList.get(next) - repeatList.get(i)) % 2) == 0;
+                        } else if (next == last) {
+                            isLast = true;
+                            delta = 13 < (message.length() - repeatList.get(i));
+                            isEven = ((message.length() - repeatList.get(i)) % 2) == 0;
                         }
                     } else {
+                        isEven = (message.length() % 2) == 0;
                         repeatendposition = message.length();
+                        messageList.add(message.substring(repeatstartposition, repeatendposition));
                     }
-                    messageList.add(message.substring(repeatstartposition, repeatendposition));
+                    if (isEven) {
+                        if (isLast && delta) {
+                            repeatendposition = message.length();
+                            messageList.add(message.substring(repeatstartposition, repeatendposition));
+                        } else if (!isLast && delta) {
+                            repeatendposition = repeatList.get(next);
+                            messageList.add(message.substring(repeatstartposition, repeatendposition));
+                        }
+                    } else {
+                        System.err.println("isEven nicht true");
+                    }
                 }
-                messageListCache = messageList;
+                System.out.println("Anzahl erkannter Nachrichten: " + messageList.size());
+//                for (int i = 0; i < messageList.size(); i++) {
+//                    System.out.println("messageList: " + messageList.get(i));
+//                }
 
                 byte[] singleMessageArray = new byte[messageList.size()];
                 for (int z = 0; z < messageList.size(); z++) {
-                    System.out.println("messageList: " + messageList.get(z));
+//                    System.out.println("messageList: " + messageList.get(z));
 
                     singleMessageArray = ConversionHelper.hexStringToByteArray(messageList.get(z));
                     int arraylength = messageList.get(z).length() / 2;
@@ -1141,47 +1047,54 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                     if (msgcrctrue) {
                         String singleMessageString = messageList.get(z);
                         String singleMessageShortString = messageList.get(z).substring(0, 4);
+
+                        String deviceAdress = null;
+                        String functionCode = null;
                         String hexAdress = null;
                         String requestLength = null;
                         String dataValue = null;
                         String liveValue = null;
-                        ArrayList<String> dataValueArrayList = new ArrayList<>();
+                        ArrayList<String> liveDataValueArrayList = new ArrayList<>();
                         ArrayList<String> requestAdressList = new ArrayList<>();
+
                         // Anfragenlänge = 8 Byte, Antwort dynamisch
                         if (messageList.get(z).length() == 16) {
+                            deviceAdress = messageList.get(z).substring(0, 2);
+                            functionCode = messageList.get(z).substring(2, 4);
                             hexAdress = singleMessageString.substring(4, 8);
-                            System.out.println("hexadress: " + hexAdress);
                             requestLength = singleMessageString.substring(8, messageList.get(z).length() - 4);
-//                            System.out.println("requestLength: " + requestLength);
-                            System.out.println("requestLength in int: " + Integer.parseInt(requestLength));
                             requestAdressList = AdressList.adressString(hexAdress, requestLength);
-//                        } else if (messageListCache.get(messageListCache.size() - 1).length() == 16) {
-
-                        } else {
-                            dataValue = singleMessageString.substring(6, messageList.get(z).length() - 4);
-                            System.out.println("dataValue: " + dataValue);
                         }
                         // Antwort auf Anfrage in gleicher Zeile
-                        if (z + 1 < messageList.size() && messageList.get(z + 1).length() == 16) {
-                            liveValue = singleMessageString.substring(6, messageList.get(z + 1).length() - 4);
-                            System.out.println("liveValue: " + liveValue);
+                        if (z + 1 < messageList.size() && messageList.get(z + 1).length() != 16) {
+                            liveValue = messageList.get(z + 1).substring(6, messageList.get(z + 1).length() - 4);
+//                            System.out.println("liveValue: " + liveValue);
                         }
-//                        if (1 < requestAdressList.size() && dataValue != null) {
-//                            dataValueArrayList.add(dataValue.substring(0, dataValue.length() / 2));
-//                            dataValueArrayList.add(dataValue.substring(dataValue.length() / 2, dataValue.length() / 2));
-//                        } else {
-//                            dataValueArrayList.add(dataValue);
+                        if (requestbufferstring.equals(messageList.get(z).substring(0, 6))) {
+                            dataValue = singleMessageString.substring(6, messageList.get(z).length() - 4);
+//                            System.out.println("datavalue: " + dataValue);
+                        }
+                        if (liveValue != null && liveValue.length() == requestAdressList.size() * 4) {
+                            for (int y = 0; y < requestAdressList.size(); y++) {
+                                liveDataValueArrayList.add(liveValue.substring(y * 4, y * 4 + 4));
+//                                System.out.println("liveValue added: " + liveValue.substring(y * 4, y * 4 + 4));
+                            }
+                        }
+//                        for (int i = 0; i < requestAdressList.size(); i++) {
+//                            if (!requestAdressList.isEmpty() && !liveDataValueArrayList.isEmpty()) {
+//                                System.out.println("requestAdressList: " + requestAdressList.get(i));
+//                                System.out.println("liveDataValueArrayList: " + liveDataValueArrayList.get(i));
+//                            }
 //                        }
                         // Gerätestatus auslesen
                         for (int i = 0; i < deviceArray.length; i++) {
                             if (i < 2 && 13 < message.length()) {
                                 if (deviceArray[i].hexIdentifier.equals(message.substring(0, 14))) {
-                                    if (!deviceArray[i].deviceStatus) {
+                                    if (i == 0 && !deviceArray[i].deviceStatus && !deviceArray[i + 1].deviceStatus) {
                                         deviceArray[i].setDeviceStatus(true);
-                                        if (i == 0) {
-                                            geraeteListeModel.set(i, deviceArray[i].deviceName);
-//                                        geraeteListe.getComponent(i).setBackground(Color.yellow);
-                                        }
+                                        geraeteListeModel.set(i, deviceArray[i].deviceName);
+                                    } else if (i == 1 && !deviceArray[i].deviceStatus && !deviceArray[i - 1].deviceStatus) {
+                                        deviceArray[i].setDeviceStatus(true);
                                     }
                                 }
                             } else if (i > 1) {
@@ -1192,36 +1105,45 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                                 }
                             }
                         }
-
                         if (requestbufferstring.equals(message.substring(0, 6))) {
                             // Werte aus Anfrage in Gerätedatentabelle speichern
                             for (Map.Entry entry : datacollectionArray[actualDeviceCounter].dataEntryCollection.entrySet()) {
-//                                for (int j = 0; j < adresslist.size(); j++) {
                                 if (entry.getKey().toString().equals(adress) && dataValue != null) {
-//                                        String dataentitystring1 = dataValue.substring(j * 2, j * 2 + 2);
-//                                        String dataentitystring2 = dataValue.substring(j * 2 + 2, j * 2 + 4);
-//                                        String dataentitystring = dataentitystring1 + dataentitystring2;
                                     datacollectionArray[actualDeviceCounter].setCurrentValue(entry.getKey().toString(), dataValue);
                                 }
-//                                }
                             }
                         } else {
                             // Livewerte speichern
                             for (int i = 0; i < deviceArray.length; i++) {
-//                                for (int j = 0; j < requestAdressList.size(); j++) {
-                                if (liveValue != null && hexAdress != null) {
-                                    if (deviceArray[i].shortHexRead.equals(singleMessageShortString) || deviceArray[i].shortHexWrite.equals(singleMessageShortString)) {
-                                        DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS"); // https://www.mkyong.com/java/java-how-to-get-current-date-time-date-and-calender/
-                                        Date date = new Date();
-                                        Livedataentry livedata = new Livedataentry();
-                                        livedata.id = messageList.get(z);
-                                        livedata.time = dateFormat.format(date);
-                                        livedata.deviceAdress = messageList.get(z).substring(0, 2);
-                                        livedata.functionCode = messageList.get(z).substring(2, 4);
-                                        livedata.hexAdress = hexAdress;
-//                                        livedata.hexAdress = requestAdressList.get(j);
-                                        livedata.value = liveValue;
-                                        livedatacollectionArray[i].addEntry(livedata.id, livedata);
+                                if (deviceArray[i].shortHexRead.equals(singleMessageShortString) || deviceArray[i].shortHexWrite.equals(singleMessageShortString) || deviceArray[i].shortHexMultipleWrite.equals(singleMessageShortString)) {
+                                    if (requestLength == "0001") {
+                                        if (liveValue != null && hexAdress != null) {
+                                            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS"); // https://www.mkyong.com/java/java-how-to-get-current-date-time-date-and-calender/
+                                            Date date = new Date();
+                                            Livedataentry liveDataEntry = new Livedataentry();
+                                            liveDataEntry.id = deviceAdress + functionCode + hexAdress + liveValue;
+                                            liveDataEntry.time = dateFormat.format(date);
+                                            liveDataEntry.deviceAdress = deviceAdress;
+                                            liveDataEntry.functionCode = functionCode;
+                                            liveDataEntry.hexAdress = hexAdress;
+                                            liveDataEntry.value = liveValue;
+                                            livedatacollectionArray[i].addEntry(liveDataEntry.id, liveDataEntry);
+                                        }
+                                    } else {
+                                        if (!requestAdressList.isEmpty() && !liveDataValueArrayList.isEmpty()) {
+                                            for (int j = 0; j < requestAdressList.size(); j++) {
+                                                DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS"); // https://www.mkyong.com/java/java-how-to-get-current-date-time-date-and-calender/
+                                                Date date = new Date();
+                                                Livedataentry liveDataEntry = new Livedataentry();
+                                                liveDataEntry.id = deviceAdress + functionCode + requestAdressList.get(j) + liveDataValueArrayList.get(j);
+                                                liveDataEntry.time = dateFormat.format(date);
+                                                liveDataEntry.deviceAdress = deviceAdress;
+                                                liveDataEntry.functionCode = functionCode;
+                                                liveDataEntry.hexAdress = requestAdressList.get(j);
+                                                liveDataEntry.value = liveDataValueArrayList.get(j);
+                                                livedatacollectionArray[i].addEntry(liveDataEntry.id, liveDataEntry);
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -1232,36 +1154,31 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
                     // Control Unit Typ abfragen, Abfragen auslösen, Änderungen senden
                     if ("0F03".equals(messageList.get(z).substring(0, 4))) {
-                        if (abfragen) {
+                        if (abfragen && !schreiben) {
                             if (!deviceArray[0].deviceStatus && !deviceArray[1].deviceStatus) {
                                 deviceRequest();
                             } else {
                                 requestSend();
                             }
                         }
-                        if (schreiben) {
+                        if (schreiben && !abfragen) {
                             writeSend();
                         }
                     }
-                    if (slaveStatus) {
+                    if (slaveStatus && abfragen) {
                         Thread.sleep(30);
                         requestSend();
                     }
-//                for (int i = 0; i < messageListCache.size(); i++) {
-//                    messageListCache.remove(i);
-//                }
-
                 }
             }
-
-            System.out.println("Endtime" + getCurrentTimeStamp());
+//            System.out.println("Endtime: " + getCurrentTimeStamp());
             System.out.println("");
         } catch (IOException e) {
             System.out.println("Fehler beim Lesen empfangener Daten");
             empfangen.append("Fehler beim Lesen empfangener Daten\n");
-        } catch (java.lang.NegativeArraySizeException e) {
-            System.out.println("1. Nachricht nicht vollständig");
-            empfangen.append("1. Nachricht nicht vollständig\n");
+//        } catch (java.lang.NegativeArraySizeException e) {
+//            System.out.println("1. Nachricht nicht vollständig");
+//            empfangen.append("1. Nachricht nicht vollständig\n");
 //        } catch (java.lang.StringIndexOutOfBoundsException e) {
 //            System.out.println("StringIndexOutOfBoundsException: " + e);
 //            empfangen.append("StringIndexOutOfBoundsException: " + e + "\n");
@@ -1275,7 +1192,6 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         Date now = new Date();
         String strDate = sdf.format(now);
         return strDate;
-
     }
 
     class WindowListener extends WindowAdapter {
@@ -1343,7 +1259,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
             if (!slaveStatus) {
                 if (schreiben == false) {
                     System.out.println("schreibennActionListener true");
-                    empfangen.append("Änderungen gesendet \n");
+                    empfangen.append("Änderungen werden gesendet \n");
                     schreiben = true;
                 } else {
                     System.out.println("schreibennActionListener false");
@@ -1363,16 +1279,26 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         }
     }
 
+    private void exitActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        schliesseSerialPort();
+        System.out.println("Fenster wird geschlossen");
+        System.exit(0);
+
+    }
+
     class firmwareActionListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
             Runtime runtime = Runtime.getRuntime();
             try {
 //                File folder = fwPathChooser.getSelectedFile();
-                String folder = "C:\\Users\\Julian\\Documents\\GitHub\\ba-gui\\04_Releases\\20180427-lightpad_slim_mda-v1.04\\20180427-lightpad_slim_mda-v1.04";
-                String file = "Lightpad2.bat";
-//                String[] cmd = {"cmd", "/K", "start", folder + "\\" + file, "-o=3"};
-                String[] cmd = {"cmd", "/K", "cd", folder, "&", "start", file, "-o=3"};
+//                String folder = "C:\\Users\\Julian\\Documents\\GitHub\\ba-gui\\04_Releases\\20180427-lightpad_slim_mda-v1.04\\20180427-lightpad_slim_mda-v1.04";
+                String folder = "C:\\Users\\Julian\\Desktop";
+//                String file = "Lightpad2.bat";
+                String file = "test.bat";
+//                String[] cmd = {"cmd", "/K", "cd", folder, "&", "start", file, "3"};
+                String[] cmd = {"cmd", "/K", "cd", folder, "&", "start", file, "3"};
 
                 Process p1 = runtime.exec(cmd);
                 InputStream is = p1.getInputStream();
@@ -1380,11 +1306,11 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                 while ((i = is.read()) != -1) {
                     System.out.print((char) i);
                 }
-                p1.waitFor();
+//                p1.waitFor();
             } catch (IOException ioException) {
                 System.out.println(ioException.getMessage());
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (InterruptedException ex) {
+//                Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -1392,31 +1318,35 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     class modulfirmwareActionListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
-            Runtime runtime = Runtime.getRuntime();
-            File folder = fwPathChooser.getSelectedFile();
-            String file = null;
-            String gereat = geraeteListe.getSelectedValue().toString();
+            try {
+                Runtime runtime = Runtime.getRuntime();
+                File folder = fwPathChooser.getSelectedFile();
+                String file = null;
+                String gereat = geraeteListe.getSelectedValue().toString();
 
-            for (int i = 0; i < deviceArray.length; i++) {
-                if (gereat.equals(deviceArray[i].deviceName)) {
-                    String devicename = deviceArray[i].deviceName;
-                    file = devicename.replaceAll(" ", "_").toLowerCase();
-                }
-            }
-            if (gereat != null) {
-                try {
-                    Process p1 = runtime.exec("cmd /c start " + folder + "\\" + file);
-                    InputStream is = p1.getInputStream();
-                    int i = 0;
-                    while ((i = is.read()) != -1) {
-                        System.out.print((char) i);
+                for (int i = 0; i < deviceArray.length; i++) {
+                    if (gereat.equals(deviceArray[i].deviceName)) {
+                        String devicename = deviceArray[i].deviceName;
+                        file = devicename.replaceAll(" ", "_").toLowerCase();
                     }
-                    p1.waitFor();
-                } catch (IOException ioException) {
-                    System.out.println(ioException.getMessage());
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                if (gereat != null) {
+                    try {
+                        Process p1 = runtime.exec("cmd /c start " + folder + "\\" + file);
+                        InputStream is = p1.getInputStream();
+                        int i = 0;
+                        while ((i = is.read()) != -1) {
+                            System.out.print((char) i);
+                        }
+                        p1.waitFor();
+                    } catch (IOException ioException) {
+                        System.out.println(ioException.getMessage());
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            } catch (java.lang.NullPointerException e) {
+                System.out.println("Kein Gerät ausgewählt");
             }
         }
     }
@@ -1442,6 +1372,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         }
     }
 
+//https://stackoverflow.com/questions/9413656/how-to-use-timer-class-to-call-a-method-do-something-reset-timer-repeat
     public void JavaTimer() {
 
         Timer timer = new Timer();
@@ -1486,13 +1417,10 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         @Override
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             Component comp = super.getListCellRendererComponent(list, value, index, false, false);
-//            System.out.println("value: " + value);
-//            System.out.println("index: " + index);
-//            for (int i = 0; i < deviceArray.length; i++) {
             if (0 < index) {
                 if (deviceArray[index + 1].deviceStatus) {
                     if (isSelected) {
-                        comp.setForeground(Color.white);
+                        comp.setForeground(Color.green);
                         comp.setBackground(Color.gray);
                     } else {
                         comp.setForeground(Color.black);
@@ -1513,7 +1441,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
             } else {
                 if (deviceArray[index].deviceStatus) {
                     if (isSelected) {
-                        comp.setForeground(Color.white);
+                        comp.setForeground(Color.green);
                         comp.setBackground(Color.gray);
                     } else {
                         comp.setForeground(Color.black);
@@ -1532,26 +1460,42 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                     comp.setBackground(Color.white);
                 }
             }
-//            geraeteListe.repaint();
+            SwingWorker worker = new SwingWorker() {
+                @Override
+                public Object doInBackground() {
+                    return null;
+                }
+
+                @Override
+                public void done() {
+                    list.repaint();
+                }
+            };
+            worker.execute();
             return comp;
         }
     }
-//    @Override
-//    public void itemStateChanged(ItemEvent event) {
-//        JCheckBox checkBox = (JCheckBox) event.getSource();
-//        int index = -1;
-//        for (int i = 0; i < ITEMS.length; i++) {
-//            if (ITEMS[i].equals(checkBox.getText())) {
-//                index = i;
-//                break;
-//            }
-//        }
-//        if (index != -1) {
-//            enabledFlags[index] = checkBox.isSelected();
-//            jList.repaint();
+
+//    private class DefaulTableCellRenderer extends DefaultTableCellRenderer {
+//
+//        @Override
+//        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+//            DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+//            SwingWorker worker = new SwingWorker() {
+//                @Override
+//                public Object doInBackground() {
+//                    return null;
+//                }
+//
+//                @Override
+//                public void done() {
+//                    table.repaint();
+//                }
+//            };
+//            worker.execute();
+//            return renderer;
 //        }
 //    }
-
     class serialPortEventListener implements SerialPortEventListener {
 
         public void serialEvent(SerialPortEvent event) {

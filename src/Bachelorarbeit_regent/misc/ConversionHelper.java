@@ -74,7 +74,6 @@ public class ConversionHelper {
 //
 //        return bytes;
 //    }
-
     public static String unHex(String arg) {
 
         String str = "";
@@ -106,6 +105,15 @@ public class ConversionHelper {
         }
         System.out.println("Decimal : " + temp.toString());
 
+        return sb.toString();
+    }
+    
+    //https://stackoverflow.com/questions/956199/how-to-swap-string-characters-in-java
+    public static String swapChars(String str, int lIdx, int rIdx) {
+        StringBuilder sb = new StringBuilder(str);
+        char l = sb.charAt(lIdx), r = sb.charAt(rIdx);
+        sb.setCharAt(lIdx, r);
+        sb.setCharAt(rIdx, l);
         return sb.toString();
     }
 

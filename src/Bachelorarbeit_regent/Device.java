@@ -26,8 +26,10 @@ public class Device {
     public String deviceName;
     public String shortHexRead;
     public String shortHexWrite;
+    public String shortHexMultipleWrite;
     public String Read = "03";
     public String Write = "06";
+    public String multipleWrite = "10";
     public byte devicebyte;
 
     public Device(Datacollection dataCollection, String deviceName, String hexIdentifier, byte deviceByte) {
@@ -36,6 +38,7 @@ public class Device {
         this.devicebyte = (byte) deviceByte;
         this.shortHexRead = hexIdentifier.substring(0, 2) + Read;
         this.shortHexWrite = hexIdentifier.substring(0, 2) + Write;
+        this.shortHexMultipleWrite = hexIdentifier.substring(0, 2) + multipleWrite;
         this.dataCollection = dataCollection;
     }
 
@@ -57,8 +60,7 @@ public class Device {
     }
 
     public boolean isRequestFinished() {
-        return this.dataCollection.dataEntryCollection.size() == this.messageCounter + 1 ? true : false;
-        //return this.requestArray.length == this.messageCounter + 1 ? true : false;
+        return this.dataCollection.dataEntryCollection.size() == this.messageCounter + 1;
     }
 
     public void setDeviceStatus(boolean deviceStatus) {
@@ -71,16 +73,21 @@ public class Device {
         }
         byte[] out = requestGenerate(this.lastmessageCounter);
         String adress = ConversionHelper.byteArrayToHexString(out).substring(4, 8);
-//        Long adresslong = Long.parseLong(adress, 16);
-//        adress = Long.toHexString(adresslong).toUpperCase();
+
+        return adress;
+    }
+
+    public String getByteAdress(int hex) {
+        byte[] out = requestGenerate(hex);
+        String adress = ConversionHelper.byteArrayToHexString(out).substring(4, 8);
+
         return adress;
     }
 
     public byte[] getNextByteArray() {
-        //byte[] out = this.requestArray[this.messageCounter];
         byte[] out = requestGenerate(this.messageCounter);
-        System.out.println("messageCount: " + messageCounter);
         this.messageCounter++;
+
         return out;
     }
 
@@ -89,6 +96,7 @@ public class Device {
             this.lastmessageCounter = this.messageCounter - 1;
         }
         byte byteout = this.requestGenerate(this.lastmessageCounter)[i];
+
         return byteout;
     }
 }

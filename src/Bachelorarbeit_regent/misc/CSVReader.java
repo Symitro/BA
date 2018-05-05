@@ -25,7 +25,7 @@ public class CSVReader {
         String csvFile = "";
         switch (deviceType) {
             case "controlunit_m4":
-                csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/controlunit_m4/modbus_test2.CSV";
+                csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/controlunit_m4/modbus.CSV";
                 break;
             case "controlunit":
                 csvFile = "C:/Users/Julian/Documents/GitHub/ba-gui/05_Modbus/controlunit/modbus.CSV";
