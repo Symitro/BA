@@ -28,10 +28,8 @@ import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -43,7 +41,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -93,6 +90,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     Boolean abfrageabgeschlossen = false;
     Boolean manualrequest = false;
     Boolean slaveStatus = false;
+    Boolean errorRead = false;
     byte changedDevice;
     int changedValue;
     String hexofchangedvalue;
@@ -145,6 +143,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     JButton firmware = new JButton("Gesamte Lampen-Firmware aktualisieren");
     JButton modulfirmware = new JButton("Ausgewählte Modul-Firmware aktualisieren");
     JButton statusabfrage = new JButton("manuelle Statusabfrage");
+    JButton errorRequest = new JButton("Fehlermeldung auslesen");
 
     JTextArea empfangen = new JTextArea();
     JScrollPane empfangenJScrollPane = new JScrollPane();
@@ -299,6 +298,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         firmware.addActionListener(new firmwareActionListener());
         modulfirmware.addActionListener(new modulfirmwareActionListener());
         statusabfrage.addActionListener(new manualRequestActionListener());
+        errorRequest.addActionListener(new errorRequestActionListener());
 
         empfangenJScrollPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -491,8 +491,8 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                 if (e.getSource() instanceof JTabbedPane) {
                     JTabbedPane pane = (JTabbedPane) e.getSource();
                     selectedtab = pane.getSelectedIndex();
-                    String gereat = geraeteListe.getSelectedValue().toString();
-                    if (gereat != null) {
+                    if (geraeteListe.getSelectedValue() != null) {
+                        String gereat = geraeteListe.getSelectedValue().toString();
                         if (selectedtab == 1) {
                             DefaultTableModel model = (DefaultTableModel) geraeteDatenTabelle.getModel();
                             model.setRowCount(0);
@@ -570,6 +570,11 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         constraints.gridy = 4;
 
         panelFirmware.add(statusabfrage, constraints);
+
+        // Änderungen an aktiven Werten werden übernommen
+        constraints.gridy = 5;
+
+        panelFirmware.add(errorRequest, constraints);
 
         // Firmarepanel wird dem Panel hinzugefügt
         constraints.gridx = 2;
@@ -688,7 +693,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                         changedDevice = (byte) deviceArray[i].devicebyte;
                     }
                 }
-                empfangen.append("Änderungsanfrage für: " + changedDevice + " HEX-Adresse: " + hexofchangedvalue + " Neuer Wert: " + changedValue);
+                empfangen.append("Änderungsanfrage für Device: " + changedDevice + " | HEX-Adresse: " + hexofchangedvalue + " | Neuer Wert: " + changedValue + "\n");
                 System.out.println("changedValue: " + changedValue);
                 System.out.println("hexofchangedvalue: " + hexofchangedvalue);
                 System.out.println("changedDevice: " + changedDevice);
@@ -809,79 +814,97 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                     crc.getAll();
                     outputStream.write(crc.getAll());
 
-                    String sendstreamstring = ConversionHelper.byteArrayToHexString(sendstream);
-                    System.out.println("Aktuelle Abfrage: " + deviceArray[actualDeviceCounter].deviceName);
-                    System.out.println("Senden erfolgreich: " + sendstreamstring);
-
+//                    String sendstreamstring = ConversionHelper.byteArrayToHexString(sendstream);
+//                    System.out.println("Aktuelle Abfrage: " + deviceArray[actualDeviceCounter].deviceName);
+//                    System.out.println("Senden erfolgreich: " + sendstreamstring);
+                    empfangen.append(".");
                 } else {
-                    empfangen.append("Deviceabfrage abgeschlossen: " + deviceArray[actualDeviceCounter].deviceName + "\n");
-                    System.out.println("Deviceabfrage abgeschlossen: " + deviceArray[actualDeviceCounter].deviceName);
+                    empfangen.append("\nDeviceabfrage abgeschlossen: " + deviceArray[actualDeviceCounter].deviceName + "\n");
+//                    System.out.println("\nDeviceabfrage abgeschlossen: " + deviceArray[actualDeviceCounter].deviceName);
                     firmwareVersion();
                     actualDeviceCounter++;
+                    if (slaveStatus) {
+                        requestSend();
+                    }
                 }
+
             }
         } else {
-            System.err.println("Alle Abfragen abgeschlossen");
+//            System.out.println("Alle Abfragen abgeschlossen");
             empfangen.append("Alle Abfragen abgeschlossen");
             abfragen = false;
         }
     }
 
     public void firmwareVersion() {
-        String startAdressFWVersion = "0000";
-        String fWVersionLength = "20";
-        ArrayList<String> adressListFW = AdressList.adressString(startAdressFWVersion, fWVersionLength);
-        StringBuilder fwsb = new StringBuilder();
+        try {
+            String startAdressFWVersion = "0000";
+            String fWVersionLength = "20";
+            ArrayList<String> adressListFW = AdressList.adressString(startAdressFWVersion, fWVersionLength);
+            StringBuilder fwsb = new StringBuilder();
 
-        String startAdressHWVersion = "0030";
-        String hWVersionLength = "05";
-        ArrayList<String> adresslistHW = AdressList.adressString(startAdressHWVersion, hWVersionLength);
-        StringBuilder hwsb = new StringBuilder();
+            String startAdressHWVersion = "0030";
+            String hWVersionLength = "05";
+            ArrayList<String> adresslistHW = AdressList.adressString(startAdressHWVersion, hWVersionLength);
+            StringBuilder hwsb = new StringBuilder();
 
-        String startAdressFWBLVersion = "0035";
-        String fWBLVersionLength = "14";
-        ArrayList<String> adresslistFWBL = AdressList.adressString(startAdressFWBLVersion, fWBLVersionLength);
-        StringBuilder fwblsb = new StringBuilder();
+            String startAdressFWBLVersion = "0035";
+            String fWBLVersionLength = "14";
+            ArrayList<String> adresslistFWBL = AdressList.adressString(startAdressFWBLVersion, fWBLVersionLength);
+            StringBuilder fwblsb = new StringBuilder();
 
-        if (adressListFW != null) {
-            for (int i = 0; i < adressListFW.size(); i++) {
-                String fWVersion = null;
-                fWVersion = (String) datacollectionArray[actualDeviceCounter].getDataByIdentifier(adressListFW.get(i), "currentValue");
-                if (fWVersion != null) {
-                    String fWVersionSwapped = ConversionHelper.swapChars(fWVersion, 0, 1);
-                    fwsb.append(fWVersionSwapped);
+            if (adressListFW != null) {
+                for (int i = 0; i < adressListFW.size(); i++) {
+                    String fWVersion = null;
+                    fWVersion = (String) datacollectionArray[actualDeviceCounter].getDataByIdentifier(adressListFW.get(i), "currentValue");
+                    if (fWVersion != null && 1 < fWVersion.length()) {
+                        String fWVersionSwapped = ConversionHelper.swapChars(fWVersion, 0, 1);
+                        fwsb.append(fWVersionSwapped);
+                    } else {
+                        fwsb.append(fWVersion);
+                    }
                 }
+//                System.out.println("Firmwareversion: " + fwsb.toString());
+                empfangen.append("Firmwareversion: " + fwsb.toString() + "\n");
             }
-            System.out.println("Firmwareversion: " + fwsb.toString());
-            empfangen.append("Firmwareversion: " + fwsb.toString() + "\n");
-        }
-        if (adresslistHW != null) {
-            for (int i = 0; i < adresslistHW.size(); i++) {
-                String hWVersion = null;
-                hWVersion = (String) datacollectionArray[actualDeviceCounter].getDataByIdentifier(adresslistHW.get(i), "currentValue");
-                if (hWVersion != null) {
-                    String hWVersionSwapped = ConversionHelper.swapChars(hWVersion, 0, 1);
-                    hwsb.append(hWVersionSwapped);
+            if (adresslistHW != null) {
+                for (int i = 0; i < adresslistHW.size(); i++) {
+                    String hWVersion = null;
+                    hWVersion = (String) datacollectionArray[actualDeviceCounter].getDataByIdentifier(adresslistHW.get(i), "currentValue");
+                    if (hWVersion != null && 1 < hWVersion.length()) {
+                        String hWVersionSwapped = ConversionHelper.swapChars(hWVersion, 0, 1);
+                        hwsb.append(hWVersionSwapped);
+                    } else {
+                        hwsb.append(hWVersion);
+                    }
                 }
+//                System.out.println("Hardwareversion: " + hwsb.toString());
+                empfangen.append("Hardwareversion: " + hwsb.toString() + "\n");
             }
-            System.out.println("Hardwareversion: " + hwsb.toString());
-            empfangen.append("Hardwareversion: " + hwsb.toString() + "\n");
-        }
-        if (adresslistFWBL != null) {
-            for (int i = 0; i < adresslistFWBL.size(); i++) {
-                String fWBLVersion = null;
-                fWBLVersion = (String) datacollectionArray[actualDeviceCounter].getDataByIdentifier(adresslistFWBL.get(i), "currentValue");
-                if (fWBLVersion != null) {
-                    String fWBLVersionSwapped = ConversionHelper.swapChars(fWBLVersion, 0, 1);
-                    fwblsb.append(fWBLVersionSwapped);
+            if (adresslistFWBL != null) {
+                for (int i = 0; i < adresslistFWBL.size(); i++) {
+                    String fWBLVersion = null;
+                    fWBLVersion = (String) datacollectionArray[actualDeviceCounter].getDataByIdentifier(adresslistFWBL.get(i), "currentValue");
+                    if (fWBLVersion != null && 1 < fWBLVersion.length()) {
+                        String fWBLVersionSwapped = ConversionHelper.swapChars(fWBLVersion, 0, 1);
+                        fwblsb.append(fWBLVersionSwapped);
+                    } else {
+                        fwblsb.append(fWBLVersion);
+                    }
                 }
+//                System.out.println("Firmware-BL-Version: " + fwblsb.toString());
+                empfangen.append("Firmware-BL-Version: " + fwblsb.toString() + "\n\n");
             }
-            System.out.println("Firmware-BL-Version: " + fwblsb.toString());
-            empfangen.append("Firmware-BL-Version: " + fwblsb.toString() + "\n");
+        } catch (java.lang.NullPointerException e) {
+            empfangen.append("Versionierung nicht vollständig empfangen");
+//            System.out.println("Versionierung nicht vollständig empfangen");
+        } catch (java.lang.StringIndexOutOfBoundsException o) {
+            empfangen.append("Versionierung nicht vollständig empfangen");
+//            System.out.println("Versionierung nicht vollständig empfangen");
         }
     }
-
     // https://stackoverflow.com/questions/1735840/how-do-i-split-an-integer-into-2-byte-binary
+
     public void writeSend() throws IOException {
         // Alte Daten mit neuen Daten vergleichen, falls Änderungen 
         // Bsp. 08 06 0000 0001 "CRC" senden
@@ -904,7 +927,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         }
         schreiben = false;
         System.out.println("Änderungen übernommen");
-        empfangen.append("Änderungen übernommen");
+        empfangen.append("Änderungen übernommen\n");
         changedDevice = 0;
     }
 
@@ -914,6 +937,32 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         crc.update(devicetype, 0, devicetype.length);
         crc.getAll();
         outputStream.write(crc.getAll());
+    }
+
+    public void errorRequest2718() throws IOException {
+        if (serialPortGeoeffnet) {
+            byte[] devicetype = {(byte) 0x08, (byte) 0x03, (byte) 0x27, (byte) 0x18, (byte) 0x00, (byte) 0x01}; //1
+            CRC16 crc = new CRC16();
+            crc.update(devicetype, 0, devicetype.length);
+            crc.getAll();
+            outputStream.write(crc.getAll());
+        } else {
+            empfangen.append("Port geschlossen\n");
+            System.out.println("Port geschlossen");
+        }
+    }
+
+    public void errorRequest2719() throws IOException {
+        if (serialPortGeoeffnet) {
+            byte[] devicetype = {(byte) 0x08, (byte) 0x03, (byte) 0x27, (byte) 0x19, (byte) 0x00, (byte) 0x01}; //1
+            CRC16 crc = new CRC16();
+            crc.update(devicetype, 0, devicetype.length);
+            crc.getAll();
+            outputStream.write(crc.getAll());
+        } else {
+            empfangen.append("Port geschlossen\n");
+            System.out.println("Port geschlossen");
+        }
     }
 
     public void manualDeviceRequest() throws IOException {
@@ -965,7 +1014,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                 num = inputStream.read(data, 0, data.length);
 //                System.out.println(Arrays.toString(data));
                 String byteArrayToHex = ConversionHelper.byteArrayToHexString(data);
-//                System.out.println("Dateninput unbearbeitet: " + byteArrayToHex);
+                System.out.println("Dateninput unbearbeitet: " + byteArrayToHex);
                 int datalength = byteArrayToHex.length() / 2;
                 while ("00".equals(byteArrayToHex.substring(datalength - 2, datalength))) {
                     datalength -= 2;
@@ -989,6 +1038,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                         }
                     }
                 }
+                System.out.println("Anzahl erkannter Wiederholungen: " + repeatList.size());
                 // Sorting of arraylist using Collections.sort
                 Collections.sort(repeatList);
                 // Multiple Nachrichten aufteilen
@@ -996,6 +1046,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                     int repeatstartposition = repeatList.get(i);
                     int repeatendposition = 0;
                     int next = i + 1;
+                    int nextnext = i + 2;
                     int last = repeatList.size();
                     boolean isLast = false;
                     boolean delta = false;
@@ -1018,156 +1069,255 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                         if (isLast && delta) {
                             repeatendposition = message.length();
                             messageList.add(message.substring(repeatstartposition, repeatendposition));
+
                         } else if (!isLast && delta) {
                             repeatendposition = repeatList.get(next);
                             messageList.add(message.substring(repeatstartposition, repeatendposition));
                         }
-                    } else {
-                        System.err.println("isEven nicht true");
+                    } else if (!isEven && !isLast && !delta) {
+//                        System.err.println("intervall: " + i);
+//                        System.err.println("message.length: " + message.length());
+//                        System.err.println("repeatList i: " + repeatList.get(i));
+//                        System.err.println("repeatList i+1: " + repeatList.get(i + 1));
+//                        System.err.println("last: " + last);
+//                        System.err.println("next: " + next);
+                        if (nextnext != last) {
+                            repeatendposition = repeatList.get((nextnext));
+//                            System.out.println("repeatendposition: " + repeatendposition);
+//                            repeatendposition = repeatendposition - 1;
+//                            System.out.println("repeatendposition: " + repeatendposition);
+                            i++;
+                        } else {
+                            repeatendposition = message.length();
+//                            System.out.println("repeatendposition: " + repeatendposition);
+                            i++;
+                        }
+                        messageList.add(message.substring(repeatstartposition, repeatendposition));
+//                        messageList.get(i);
+//                        System.err.println("Anzahl erkannter Nachrichten: " + messageList.size());
                     }
                 }
-                System.out.println("Anzahl erkannter Nachrichten: " + messageList.size());
-//                for (int i = 0; i < messageList.size(); i++) {
+//                System.out.println("Anzahl erkannter Nachrichten: " + messageList.size());
+                for (int i = 0; i < messageList.size(); i++) {
 //                    System.out.println("messageList: " + messageList.get(i));
-//                }
+                }
+                if (0 < messageList.size()) {
+                    byte[] singleMessageArray = new byte[messageList.size()];
+                    for (int z = 0; z < messageList.size(); z++) {
+                        System.out.println("messageList.z: " + messageList.get(z));
 
-                byte[] singleMessageArray = new byte[messageList.size()];
-                for (int z = 0; z < messageList.size(); z++) {
-//                    System.out.println("messageList: " + messageList.get(z));
+                        singleMessageArray = ConversionHelper.hexStringToByteArray(messageList.get(z));
+                        int arraylength = messageList.get(z).length() / 2;
+                        byte[] msgbuffer = new byte[arraylength - 2];
+                        System.arraycopy(singleMessageArray, 0, msgbuffer, 0, msgbuffer.length);
+                        System.arraycopy(singleMessageArray, msgbuffer.length, crcbuffer, 0, 2);
 
-                    singleMessageArray = ConversionHelper.hexStringToByteArray(messageList.get(z));
-                    int arraylength = messageList.get(z).length() / 2;
-                    byte[] msgbuffer = new byte[arraylength - 2];
-                    System.arraycopy(singleMessageArray, 0, msgbuffer, 0, msgbuffer.length);
-                    System.arraycopy(singleMessageArray, msgbuffer.length, crcbuffer, 0, 2);
+                        // Überprüfung des CRCs, Empfangene Nachricht und CRC werden verglichen
+                        CRC16 crcreverse = new CRC16();
+                        boolean msgcrctrue = crcreverse.check(msgbuffer, crcbuffer);
+                        if (msgcrctrue) {
+                            String singleMessageString = messageList.get(z);
+                            String singleMessageShortString = messageList.get(z).substring(0, 4);
 
-                    // Überprüfung des CRCs, Empfangene Nachricht und CRC werden verglichen
-                    CRC16 crcreverse = new CRC16();
-                    boolean msgcrctrue = crcreverse.check(msgbuffer, crcbuffer);
-                    if (msgcrctrue) {
-                        String singleMessageString = messageList.get(z);
-                        String singleMessageShortString = messageList.get(z).substring(0, 4);
+                            Boolean isRequest = false;
+                            String deviceAdress = null;
+                            String functionCode = null;
+                            String hexAdress = null;
+                            String requestLength = null;
+                            String dataValue = null;
+                            String liveValue = null;
+                            ArrayList<String> liveDataValueArrayList = new ArrayList<>();
+                            ArrayList<String> requestAdressList = new ArrayList<>();
 
-                        String deviceAdress = null;
-                        String functionCode = null;
-                        String hexAdress = null;
-                        String requestLength = null;
-                        String dataValue = null;
-                        String liveValue = null;
-                        ArrayList<String> liveDataValueArrayList = new ArrayList<>();
-                        ArrayList<String> requestAdressList = new ArrayList<>();
-
-                        // Anfragenlänge = 8 Byte, Antwort dynamisch
-                        if (messageList.get(z).length() == 16) {
-                            deviceAdress = messageList.get(z).substring(0, 2);
-                            functionCode = messageList.get(z).substring(2, 4);
-                            hexAdress = singleMessageString.substring(4, 8);
-                            requestLength = singleMessageString.substring(8, messageList.get(z).length() - 4);
-                            requestAdressList = AdressList.adressString(hexAdress, requestLength);
-                        }
-                        // Antwort auf Anfrage in gleicher Zeile
-                        if (z + 1 < messageList.size() && messageList.get(z + 1).length() != 16) {
-                            liveValue = messageList.get(z + 1).substring(6, messageList.get(z + 1).length() - 4);
-//                            System.out.println("liveValue: " + liveValue);
-                        }
-                        if (requestbufferstring.equals(messageList.get(z).substring(0, 6))) {
-                            dataValue = singleMessageString.substring(6, messageList.get(z).length() - 4);
-//                            System.out.println("datavalue: " + dataValue);
-                        }
-                        if (liveValue != null && liveValue.length() == requestAdressList.size() * 4) {
-                            for (int y = 0; y < requestAdressList.size(); y++) {
-                                liveDataValueArrayList.add(liveValue.substring(y * 4, y * 4 + 4));
-//                                System.out.println("liveValue added: " + liveValue.substring(y * 4, y * 4 + 4));
-                            }
-                        }
-//                        for (int i = 0; i < requestAdressList.size(); i++) {
-//                            if (!requestAdressList.isEmpty() && !liveDataValueArrayList.isEmpty()) {
-//                                System.out.println("requestAdressList: " + requestAdressList.get(i));
-//                                System.out.println("liveDataValueArrayList: " + liveDataValueArrayList.get(i));
-//                            }
-//                        }
-                        // Gerätestatus auslesen
-                        for (int i = 0; i < deviceArray.length; i++) {
-                            if (i < 2 && 13 < message.length()) {
-                                if (deviceArray[i].hexIdentifier.equals(message.substring(0, 14))) {
-                                    if (i == 0 && !deviceArray[i].deviceStatus && !deviceArray[i + 1].deviceStatus) {
-                                        deviceArray[i].setDeviceStatus(true);
-                                        geraeteListeModel.set(i, deviceArray[i].deviceName);
-                                    } else if (i == 1 && !deviceArray[i].deviceStatus && !deviceArray[i - 1].deviceStatus) {
-                                        deviceArray[i].setDeviceStatus(true);
-                                    }
-                                }
-                            } else if (i > 1) {
-                                if (deviceArray[i].hexIdentifier.equals(message.substring(0, 6))) {
-                                    if (!deviceArray[i].deviceStatus) {
-                                        deviceArray[i].setDeviceStatus(true);
-                                    }
-                                }
-                            }
-                        }
-                        if (requestbufferstring.equals(message.substring(0, 6))) {
-                            // Werte aus Anfrage in Gerätedatentabelle speichern
-                            for (Map.Entry entry : datacollectionArray[actualDeviceCounter].dataEntryCollection.entrySet()) {
-                                if (entry.getKey().toString().equals(adress) && dataValue != null) {
-                                    datacollectionArray[actualDeviceCounter].setCurrentValue(entry.getKey().toString(), dataValue);
-                                }
-                            }
-                        } else {
-                            // Livewerte speichern
-                            for (int i = 0; i < deviceArray.length; i++) {
-                                if (deviceArray[i].shortHexRead.equals(singleMessageShortString) || deviceArray[i].shortHexWrite.equals(singleMessageShortString) || deviceArray[i].shortHexMultipleWrite.equals(singleMessageShortString)) {
-                                    if (requestLength == "0001") {
-                                        if (liveValue != null && hexAdress != null) {
-                                            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS"); // https://www.mkyong.com/java/java-how-to-get-current-date-time-date-and-calender/
-                                            Date date = new Date();
-                                            Livedataentry liveDataEntry = new Livedataentry();
-                                            liveDataEntry.id = deviceAdress + functionCode + hexAdress + liveValue;
-                                            liveDataEntry.time = dateFormat.format(date);
-                                            liveDataEntry.deviceAdress = deviceAdress;
-                                            liveDataEntry.functionCode = functionCode;
-                                            liveDataEntry.hexAdress = hexAdress;
-                                            liveDataEntry.value = liveValue;
-                                            livedatacollectionArray[i].addEntry(liveDataEntry.id, liveDataEntry);
-                                        }
+                            // Control Unit Typ abfragen, Abfragen auslösen, Änderungen senden
+                            if ("0F03".equals(messageList.get(z).substring(0, 4))) {
+                                if (abfragen && !schreiben) {
+                                    if (!deviceArray[0].deviceStatus && !deviceArray[1].deviceStatus) {
+                                        deviceRequest();
                                     } else {
-                                        if (!requestAdressList.isEmpty() && !liveDataValueArrayList.isEmpty()) {
-                                            for (int j = 0; j < requestAdressList.size(); j++) {
+                                        requestSend();
+                                    }
+                                }
+                                if (schreiben && !abfragen) {
+                                    writeSend();
+                                }
+                            }
+                            if (slaveStatus && abfragen) {
+                                Thread.sleep(50);
+                                requestSend();
+                            }
+                            // Anfragenlänge = 8 Byte, Antwort dynamisch
+                            if (singleMessageString.length() == 16) {
+                                deviceAdress = singleMessageString.substring(0, 2);
+                                functionCode = singleMessageString.substring(2, 4);
+                                hexAdress = singleMessageString.substring(4, 8);
+                                isRequest = true;
+                            } else if ("10".equals(singleMessageString.substring(2, 4)) && singleMessageString.length() != 16) {
+                                deviceAdress = singleMessageString.substring(0, 2);
+                                functionCode = "10";
+                                hexAdress = singleMessageString.substring(4, 8);
+                                requestLength = singleMessageString.substring(8, 12);
+                                requestAdressList = AdressList.adressString(hexAdress, requestLength);
+                                liveValue = singleMessageString.substring(14, singleMessageString.length() - 4);
+                            } else if (singleMessageString.length() != 16) {
+                                deviceAdress = singleMessageString.substring(0, 2);
+                                functionCode = singleMessageString.substring(2, 4);
+                            }
+                            // Lesebefehl erkannt
+                            if ("03".equals(functionCode)) {
+                                if (isRequest) {
+                                requestLength = singleMessageString.substring(8, messageList.get(z).length() - 4);
+                                requestAdressList = AdressList.adressString(hexAdress, requestLength);
+                                } else {
+                                    requestLength = "0001";
+                                    liveValue = singleMessageString.substring(6, 10);
+                            }
+                            }
+                            // Schreibbefehl erkannt
+                            if ("06".equals(functionCode)) {
+                                requestLength = "0001";
+                                liveValue = singleMessageString.substring(8, singleMessageString.length() - 4);
+                            }
+                            if (errorRead && "0803".equals(singleMessageString.substring(0, 4))) {
+                                if ("01".equals(singleMessageString.substring(10, 12))) {
+                                    empfangen.append("Fehlercode: 1 = Number Of LED Drivers Wrong");
+                                } else if ("02".equals(singleMessageString.substring(10, 12))) {
+                                    empfangen.append("Fehlercode: 2 = Number Of Sensors Wrong");
+                                } else if ("03".equals(singleMessageString.substring(10, 12))) {
+                                    empfangen.append("Fehlercode: 3 = Number Of Panels Wrong");
+                                } else if ("04".equals(singleMessageString.substring(10, 12))) {
+                                    empfangen.append("Fehlercode: 4 = falsche LED Drivers gefunden -> Adressierung falsch");
+                                } else if ("11".equals(singleMessageString.substring(10, 12))) {
+                                    empfangen.append("Fehlercode: 11 = Relais Error");
+                                } else if ("13".equals(singleMessageString.substring(10, 12))) {
+                                    empfangen.append("Fehlercode: 13 = Modbus Short");
+                                } else if ("14".equals(singleMessageString.substring(10, 12))) {
+                                    empfangen.append("Fehlercode: 14 = DC Detected – 0-Durchgang defect");
+                                } else if ("15".equals(singleMessageString.substring(10, 12))) {
+                                    empfangen.append("Fehlercode: 15 = Wrong Head detected");
+                                }
+                            }
+
+                            // MultipleWrite erkannt
+                            if ("10".equals(functionCode)) {
+                                requestLength = singleMessageString.substring(8, 12);
+                                requestAdressList = AdressList.adressString(hexAdress, requestLength);
+                                if (singleMessageString.length() != 16) {
+                                    liveValue = singleMessageString.substring(14, singleMessageString.length() - 4);
+                                }
+                            }
+                            // Antwort auf Anfrage in gleicher Zeile
+                            if (z + 1 < messageList.size() && messageList.get(z + 1).length() != 16) {
+                                liveValue = messageList.get(z + 1).substring(6, messageList.get(z + 1).length() - 4);
+//                            System.out.println("liveValue: " + liveValue);
+                            }
+                            if (requestbufferstring.equals(singleMessageString.substring(0, 6))) {
+                                dataValue = singleMessageString.substring(6, singleMessageString.length() - 4);
+//                            System.out.println("datavalue: " + dataValue);
+                            }
+                            if (liveValue != null && liveValue.length() == requestAdressList.size() * 4) {
+                                for (int y = 0; y < requestAdressList.size(); y++) {
+                                    liveDataValueArrayList.add(liveValue.substring(y * 4, y * 4 + 4));
+//                                System.out.println("liveValue added: " + liveValue.substring(y * 4, y * 4 + 4));
+                                }
+                            }
+                            // Gerätestatus auslesen
+                            for (int i = 0; i < deviceArray.length; i++) {
+                                if (i < 2 && 13 < message.length()) {
+                                    if (deviceArray[i].hexIdentifier.equals(message.substring(0, 14))) {
+                                        if (i == 0 && !deviceArray[i].deviceStatus && !deviceArray[i + 1].deviceStatus) {
+                                            deviceArray[i].setDeviceStatus(true);
+                                            geraeteListeModel.set(i, deviceArray[i].deviceName);
+                                        } else if (i == 1 && !deviceArray[i].deviceStatus && !deviceArray[i - 1].deviceStatus) {
+                                            deviceArray[i].setDeviceStatus(true);
+                                        }
+                                    }
+                                } else if (i > 1) {
+                                    if (deviceArray[i].hexIdentifier.equals(message.substring(0, 6))) {
+                                        if (!deviceArray[i].deviceStatus) {
+                                            deviceArray[i].setDeviceStatus(true);
+                                        }
+                                    }
+                                }
+                            }
+                            if (requestbufferstring.equals(message.substring(0, 6)) && abfragen) {
+                                // Werte aus Anfrage in Gerätedatentabelle speichern
+                                for (Map.Entry entry : datacollectionArray[actualDeviceCounter].dataEntryCollection.entrySet()) {
+                                    if (entry.getKey().toString().equals(adress) && dataValue != null) {
+                                        datacollectionArray[actualDeviceCounter].setCurrentValue(entry.getKey().toString(), dataValue);
+                                    }
+                                }
+                            } else {
+                                // Livewerte speichern
+                                for (int i = 0; i < deviceArray.length; i++) {
+                                    if (deviceArray[i].shortHexRead.equals(singleMessageShortString) || deviceArray[i].shortHexWrite.equals(singleMessageShortString) || deviceArray[i].shortHexMultipleWrite.equals(singleMessageShortString)) {
+                                        if (requestLength == "0001") {
+                                            if (liveValue != null && hexAdress != null) {
                                                 DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS"); // https://www.mkyong.com/java/java-how-to-get-current-date-time-date-and-calender/
                                                 Date date = new Date();
                                                 Livedataentry liveDataEntry = new Livedataentry();
-                                                liveDataEntry.id = deviceAdress + functionCode + requestAdressList.get(j) + liveDataValueArrayList.get(j);
+                                                liveDataEntry.id = deviceAdress + functionCode + hexAdress;
                                                 liveDataEntry.time = dateFormat.format(date);
                                                 liveDataEntry.deviceAdress = deviceAdress;
                                                 liveDataEntry.functionCode = functionCode;
-                                                liveDataEntry.hexAdress = requestAdressList.get(j);
-                                                liveDataEntry.value = liveDataValueArrayList.get(j);
+                                                liveDataEntry.hexAdress = hexAdress;
+                                                liveDataEntry.value = liveValue;
                                                 livedatacollectionArray[i].addEntry(liveDataEntry.id, liveDataEntry);
+//                                            } else if (liveValue != null) {
+//                                                DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS"); // https://www.mkyong.com/java/java-how-to-get-current-date-time-date-and-calender/
+//                                                Date date = new Date();
+//                                                Livedataentry liveDataEntry = new Livedataentry();
+//                                                liveDataEntry.id = deviceAdress + functionCode + liveValue;
+//                                                liveDataEntry.time = dateFormat.format(date);
+//                                                liveDataEntry.deviceAdress = deviceAdress;
+//                                                liveDataEntry.functionCode = functionCode;
+//                                                liveDataEntry.hexAdress = "-";
+//                                                liveDataEntry.value = liveValue;
+//                                                livedatacollectionArray[i].addEntry(liveDataEntry.id, liveDataEntry);
+                                            }
+                                        } else {
+                                            if (!requestAdressList.isEmpty() && !liveDataValueArrayList.isEmpty()) {
+                                                for (int j = 0; j < requestAdressList.size(); j++) {
+                                                    DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss.SSS"); // https://www.mkyong.com/java/java-how-to-get-current-date-time-date-and-calender/
+                                                    Date date = new Date();
+                                                    Livedataentry liveDataEntry = new Livedataentry();
+                                                    liveDataEntry.id = deviceAdress + functionCode + requestAdressList.get(j);
+                                                    liveDataEntry.time = dateFormat.format(date);
+                                                    liveDataEntry.deviceAdress = deviceAdress;
+                                                    liveDataEntry.functionCode = functionCode;
+                                                    liveDataEntry.hexAdress = requestAdressList.get(j);
+                                                    liveDataEntry.value = liveDataValueArrayList.get(j);
+                                                    livedatacollectionArray[i].addEntry(liveDataEntry.id, liveDataEntry);
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
+                            // CRC falsch    
+                        } else {
+                            System.err.println("Zeitstempel: " + getCurrentTimeStamp());
+                            System.err.println("CRC-Überprüfung fehlerhaft");
+                            System.out.println("Zeitstempel: " + getCurrentTimeStamp());
                         }
-                    } else {
-                        System.err.println("CRC-Überprüfung fehlerhaft");
-                    }
 
-                    // Control Unit Typ abfragen, Abfragen auslösen, Änderungen senden
-                    if ("0F03".equals(messageList.get(z).substring(0, 4))) {
-                        if (abfragen && !schreiben) {
-                            if (!deviceArray[0].deviceStatus && !deviceArray[1].deviceStatus) {
-                                deviceRequest();
-                            } else {
-                                requestSend();
-                            }
-                        }
-                        if (schreiben && !abfragen) {
-                            writeSend();
-                        }
-                    }
-                    if (slaveStatus && abfragen) {
-                        Thread.sleep(30);
-                        requestSend();
+//                    // Control Unit Typ abfragen, Abfragen auslösen, Änderungen senden
+//                    if ("0F03".equals(messageList.get(z).substring(0, 4))) {
+//                        if (abfragen && !schreiben) {
+//                            if (!deviceArray[0].deviceStatus && !deviceArray[1].deviceStatus) {
+//                                deviceRequest();
+//                            } else {
+//                                requestSend();
+//                            }
+//                        }
+//                        if (schreiben && !abfragen) {
+//                            writeSend();
+//                        }
+//                    }
+//                    if (slaveStatus && abfragen) {
+//                        Thread.sleep(30);
+//                        requestSend();
+//                    }
                     }
                 }
             }
@@ -1184,6 +1334,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 //            empfangen.append("StringIndexOutOfBoundsException: " + e + "\n");
 //        } catch (java.lang.NullPointerException e) {
 //            System.out.println("Nullpointer Exception");
+//            empfangen.append("Nullpointer Exception\n");
         }
     }
 
@@ -1192,6 +1343,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         Date now = new Date();
         String strDate = sdf.format(now);
         return strDate;
+
     }
 
     class WindowListener extends WindowAdapter {
@@ -1242,8 +1394,15 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                 }
             } else {
                 try {
-                    Thread.sleep(30);
-                    requestSend();
+                    if (abfragen == false) {
+                        Thread.sleep(30);
+                        requestSend();
+                        empfangen.append("Abfragen gestartet \n");
+                        abfragen = true;
+                    } else {
+                        empfangen.append("Abfragen abgebrochen \n");
+                        abfragen = false;
+                    }
                 } catch (IOException ex) {
                     Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {
@@ -1292,25 +1451,19 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         public void actionPerformed(ActionEvent event) {
             Runtime runtime = Runtime.getRuntime();
             try {
-//                File folder = fwPathChooser.getSelectedFile();
+                String port = (String) auswahl.getSelectedItem();
+                String portNr = port.substring(3, 4);
+                File folder = fwPathChooser.getSelectedFile();
+                String folderpath = folder.toString();
+                System.out.println("folderpath: " + folderpath);
 //                String folder = "C:\\Users\\Julian\\Documents\\GitHub\\ba-gui\\04_Releases\\20180427-lightpad_slim_mda-v1.04\\20180427-lightpad_slim_mda-v1.04";
-                String folder = "C:\\Users\\Julian\\Desktop";
-//                String file = "Lightpad2.bat";
-                String file = "test.bat";
-//                String[] cmd = {"cmd", "/K", "cd", folder, "&", "start", file, "3"};
-                String[] cmd = {"cmd", "/K", "cd", folder, "&", "start", file, "3"};
+                String file = "Lightpad2.bat";
+                String[] cmd = {"cmd", "/K", "cd", folderpath, "&", "start", file, portNr};
 
                 Process p1 = runtime.exec(cmd);
-                InputStream is = p1.getInputStream();
-                int i = 0;
-                while ((i = is.read()) != -1) {
-                    System.out.print((char) i);
-                }
-//                p1.waitFor();
+
             } catch (IOException ioException) {
                 System.out.println(ioException.getMessage());
-//            } catch (InterruptedException ex) {
-//                Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
@@ -1318,35 +1471,33 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     class modulfirmwareActionListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
+            Runtime runtime = Runtime.getRuntime();
             try {
-                Runtime runtime = Runtime.getRuntime();
+                String port = (String) auswahl.getSelectedItem();
+                String portNr = port.substring(3, 4);
                 File folder = fwPathChooser.getSelectedFile();
+                String folderpath = folder.toString();
                 String file = null;
-                String gereat = geraeteListe.getSelectedValue().toString();
+                String geraet = geraeteListe.getSelectedValue().toString();
 
                 for (int i = 0; i < deviceArray.length; i++) {
-                    if (gereat.equals(deviceArray[i].deviceName)) {
+                    if (geraet.equals(deviceArray[i].deviceName)) {
                         String devicename = deviceArray[i].deviceName;
                         file = devicename.replaceAll(" ", "_").toLowerCase();
                     }
                 }
-                if (gereat != null) {
+                if (geraet != null) {
+                    empfangen.append("Firmwareupdate für " + geraet + " gestartet...");
                     try {
-                        Process p1 = runtime.exec("cmd /c start " + folder + "\\" + file);
-                        InputStream is = p1.getInputStream();
-                        int i = 0;
-                        while ((i = is.read()) != -1) {
-                            System.out.print((char) i);
-                        }
-                        p1.waitFor();
+                        String[] cmd = {"cmd", "/K", "cd", folderpath, "&", "start", file, portNr};
+                        Process p1 = runtime.exec(cmd);
                     } catch (IOException ioException) {
                         System.out.println(ioException.getMessage());
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             } catch (java.lang.NullPointerException e) {
-                System.out.println("Kein Gerät ausgewählt");
+                empfangen.append("Kein Gerät ausgewählt oder Pfad angegeben");
+                System.out.println("Kein Gerät ausgewählt oder Pfad angegeben");
             }
         }
     }
@@ -1368,6 +1519,25 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                 System.out.println("Kein Gerät angewählt");
             } catch (IOException ex) {
                 Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    class errorRequestActionListener implements ActionListener {
+
+        public void actionPerformed(ActionEvent event) {
+            if (slaveStatus) {
+                try {
+                    Thread.sleep(30);
+                    errorRequest2718();
+                    Thread.sleep(30);
+                    errorRequest2719();
+                    errorRead = true;
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(Diagnoseapplikation.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
@@ -1427,12 +1597,16 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                         comp.setBackground(Color.green);
                     }
                 } else if (!deviceArray[index + 1].deviceStatus) {
-                    if (isSelected) { //  & cellHasFocus
+                    if (isSelected) {
                         comp.setForeground(Color.white);
                         comp.setBackground(Color.gray);
                     } else if (deviceArray[index + 1].manualrequest) {
                         comp.setForeground(Color.black);
                         comp.setBackground(Color.red);
+                    }
+                    if (isSelected && deviceArray[index + 1].manualrequest) {
+                        comp.setForeground(Color.red);
+                        comp.setBackground(Color.black);
                     }
                 } else {
                     comp.setForeground(Color.black);
@@ -1448,12 +1622,16 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                         comp.setBackground(Color.green);
                     }
                 } else if (!deviceArray[index].deviceStatus) {
-                    if (isSelected) { //  & cellHasFocus
+                    if (isSelected) {
                         comp.setForeground(Color.white);
                         comp.setBackground(Color.gray);
                     } else if (deviceArray[index].manualrequest) {
                         comp.setForeground(Color.black);
                         comp.setBackground(Color.red);
+                    }
+                    if (isSelected && deviceArray[index + 1].manualrequest) {
+                        comp.setForeground(Color.red);
+                        comp.setBackground(Color.black);
                     }
                 } else {
                     comp.setForeground(Color.black);
@@ -1476,26 +1654,6 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
         }
     }
 
-//    private class DefaulTableCellRenderer extends DefaultTableCellRenderer {
-//
-//        @Override
-//        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-//            DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-//            SwingWorker worker = new SwingWorker() {
-//                @Override
-//                public Object doInBackground() {
-//                    return null;
-//                }
-//
-//                @Override
-//                public void done() {
-//                    table.repaint();
-//                }
-//            };
-//            worker.execute();
-//            return renderer;
-//        }
-//    }
     class serialPortEventListener implements SerialPortEventListener {
 
         public void serialEvent(SerialPortEvent event) {
