@@ -9,7 +9,6 @@ package Bachelorarbeit_regent;
  *
  * @author Julian
  */
-//import Examples.Diagnoseapplikation;
 import Bachelorarbeit_regent.data.Datacollection;
 import Bachelorarbeit_regent.data.Livedatacollection;
 import Bachelorarbeit_regent.data.Livedataentry;
