@@ -9,6 +9,15 @@ package Bachelorarbeit_regent.data;
  *
  * @author Julian
  */
-public class Datastorage {
-    
+public class Dataentry {
+
+    public String varName;
+    public String hexIdentifier;
+    public int index;
+    public int defaultValue;
+    public Object currentValue;
+    public int minValue;
+    public int maxValue;
+    public String valueType;
+
 }
