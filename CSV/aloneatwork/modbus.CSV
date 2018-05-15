@@ -1,0 +1,174 @@
+#Name;EEPROM;Master-Mirror;Short-Name;MB-Adr (dezimal);MB-Adr (hex);Index;Einheit;Type;Min;Max;Default
+Firmware Version Application;0;0;FW_VERSION;0;0000;0;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_1;1;0001;1;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_2;2;0002;2;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_3;3;0003;3;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_4;4;0004;4;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_5;5;0005;5;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_6;6;0006;6;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_7;7;0007;7;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_8;8;0008;8;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_9;9;0009;9;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_10;10;000A;10;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_11;11;000B;11;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_12;12;000C;12;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_13;13;000D;13;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_14;14;000E;14;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_15;15;000F;15;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_16;16;0010;16;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_17;17;0011;17;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_18;18;0012;18;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_19;19;0013;19;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_20;20;0014;20;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_21;21;0015;21;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_22;22;0016;22;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_23;23;0017;23;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_24;24;0018;24;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_25;25;0019;25;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_26;26;001A;26;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_27;27;001B;27;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_28;28;001C;28;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_29;29;001D;29;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_30;30;001E;30;char;unsigned;0;65535;0
+Firmware Version Application;0;0;FW_VERSION_31;31;001F;31;char;unsigned;0;65535;0
+Hardware Version;0;0;HW_VERSION;48;0030;32;char;unsigned;0;65535;0
+Hardware Version;0;0;HW_VERSION_1;49;0031;33;char;unsigned;0;65535;0
+Hardware Version;0;0;HW_VERSION_2;50;0032;34;char;unsigned;0;65535;0
+Hardware Version;0;0;HW_VERSION_3;51;0033;35;char;unsigned;0;65535;0
+Hardware Version;0;0;HW_VERSION_4;52;0034;36;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL;53;0035;37;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_1;54;0036;38;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_2;55;0037;39;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_3;56;0038;40;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_4;57;0039;41;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_5;58;003A;42;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_6;59;003B;43;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_7;60;003C;44;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_8;61;003D;45;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_9;62;003E;46;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_10;63;003F;47;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_11;64;0040;48;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_12;65;0041;49;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_13;66;0042;50;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_14;67;0043;51;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_15;68;0044;52;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_16;69;0045;53;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_17;70;0046;54;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_18;71;0047;55;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_19;72;0048;56;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_20;73;0049;57;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_21;74;004A;58;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_22;75;004B;59;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_23;76;004C;60;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_24;77;004D;61;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_25;78;004E;62;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_26;79;004F;63;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_27;80;0050;64;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_28;81;0051;65;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_29;82;0052;66;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_30;83;0053;67;char;unsigned;0;65535;0
+Firmware Version Bootloader;0;0;FW_VERSION_BL_31;84;0054;68;char;unsigned;0;65535;0
+eepromVersion;1;0;EEPROM_VERSION;255;00FF;69;-;unsigned;0;65535;43776
+Device Type;0;1;DEVICE_TYPE;256;0100;70;-;unsigned;0;65535;3
+(Random/Set) Modbus Address ;1;0;MODBUS_ADDRESS;257;0101;71;-;unsigned;0;65535;16
+Modbus Timeout;1;0;MODBUS_TIMEOUT_LIGHTMEASURING_MULTI_FAKTOR;258;0102;72;-;unsigned;0;65535;20
+Command - Devicetype;0;0;MODBUS_COMMAND;259;0103;73;-;unsigned;0;65535;0
+Write SN/BIL/DATE/Order Code = BEEF - Erase // FLASH = DEAD;0;0;WRITE_MANUFACTURER_INFO;512;0200;74;-;unsigned;0;65535;0
+Manufacturer Serialnumber;0;0;SERIAL_NUMBER;528;0210;75;char;unsigned;0;65535;0
+Manufacturer Serialnumber;0;0;SERIAL_NUMBER_1;529;0211;76;char;unsigned;0;65535;0
+Manufacturer Serialnumber;0;0;SERIAL_NUMBER_2;530;0212;77;char;unsigned;0;65535;0
+Manufacturer Serialnumber;0;0;SERIAL_NUMBER_3;531;0213;78;char;unsigned;0;65535;0
+Manufacturer Serialnumber;0;0;SERIAL_NUMBER_4;532;0214;79;char;unsigned;0;65535;0
+Manufacturer Serialnumber;0;0;SERIAL_NUMBER_5;533;0215;80;char;unsigned;0;65535;0
+Manufacturer Serialnumber;0;0;SERIAL_NUMBER_6;534;0216;81;char;unsigned;0;65535;0
+Manufacturer Serialnumber;0;0;SERIAL_NUMBER_7;535;0217;82;char;unsigned;0;65535;0
+Manufacturer Hardware Version (BOM);0;0;HW_BOM_VERSION;536;0218;83;char;unsigned;0;65535;0
+Manufacturer Hardware Version (BOM);0;0;HW_BOM_VERSION_1;537;0219;84;char;unsigned;0;65535;0
+Manufacturer Hardware Version (BOM);0;0;HW_BOM_VERSION_2;538;021A;85;char;unsigned;0;65535;0
+Manufacturer Hardware Version (BOM);0;0;HW_BOM_VERSION_3;539;021B;86;char;unsigned;0;65535;0
+Manufacturer Hardware Version (BOM);0;0;HW_BOM_VERSION_4;540;021C;87;char;unsigned;0;65535;0
+Manufacturer Hardware Version (BOM);0;0;HW_BOM_VERSION_5;541;021D;88;char;unsigned;0;65535;0
+Manufacturer Hardware Version (BOM);0;0;HW_BOM_VERSION_6;542;021E;89;char;unsigned;0;65535;0
+Manufacturer Hardware Version (BOM);0;0;HW_BOM_VERSION_7;543;021F;90;char;unsigned;0;65535;0
+Manufacturer Date/Time;0;0;DATE;544;0220;91;char;unsigned;0;65535;0
+Manufacturer Date/Time;0;0;DATE_1;545;0221;92;char;unsigned;0;65535;0
+Manufacturer Date/Time;0;0;DATE_2;546;0222;93;char;unsigned;0;65535;0
+Manufacturer Date/Time;0;0;DATE_3;547;0223;94;char;unsigned;0;65535;0
+Manufacturer Date/Time;0;0;DATE_4;548;0224;95;char;unsigned;0;65535;0
+Manufacturer Date/Time;0;0;DATE_5;549;0225;96;char;unsigned;0;65535;0
+Manufacturer Date/Time;0;0;DATE_6;550;0226;97;char;unsigned;0;65535;0
+Manufacturer Date/Time;0;0;DATE_7;551;0227;98;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER;552;0228;99;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_1;553;0229;100;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_2;554;022A;101;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_3;555;022B;102;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_4;556;022C;103;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_5;557;022D;104;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_6;558;022E;105;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_7;559;022F;106;char;unsigned;0;65535;0
+IR Testresult (selftest);0;0;IR_TESTRESULT;4112;1010;107;-;unsigned;0;65535;1
+US Testresult (selftest);0;0;US_TESTRESULT1;4113;1011;108;-;unsigned;0;65535;65535
+US Testresult (selftest);0;0;US_TESTRESULT2;4114;1012;109;-;unsigned;0;65535;255
+US Testresult channel 0;0;0;US_CHANNEL_0;4115;1013;110;-;unsigned;0;65535;0
+US Testresult channel 1;0;0;US_CHANNEL_1;4116;1014;111;-;unsigned;0;65535;0
+US Testresult channel 2;0;0;US_CHANNEL_2;4117;1015;112;-;unsigned;0;65535;0
+US Testresult channel 3;0;0;US_CHANNEL_3;4118;1016;113;-;unsigned;0;65535;0
+Reduction Table (local);1;0;REDUCTION_TABLE_START;4128;1020;114;-;unsigned;0;65535;34
+Reduction Table (0m < X < 1m);1;0;REDUCTION_TABLE_1;4129;1021;115;-;unsigned;0;65535;34
+Reduction Table (1m < X < 2m);1;0;REDUCTION_TABLE_2;4130;1022;116;-;unsigned;0;65535;34
+Reduction Table (2m < X < 3m);1;0;REDUCTION_TABLE_3;4131;1023;117;-;unsigned;0;65535;34
+Reduction Table …;1;0;REDUCTION_TABLE_4;4132;1024;118;-;unsigned;0;65535;34
+Reduction Table …;1;0;REDUCTION_TABLE_5;4133;1025;119;-;unsigned;0;65535;34
+Reduction Table …;1;0;REDUCTION_TABLE_6;4134;1026;120;-;unsigned;0;65535;67
+Reduction Table …;1;0;REDUCTION_TABLE_7;4135;1027;121;-;unsigned;0;65535;67
+Reduction Table …;1;0;REDUCTION_TABLE_8;4136;1028;122;-;unsigned;0;65535;67
+Reduction Table …;1;0;REDUCTION_TABLE_9;4137;1029;123;-;unsigned;0;65535;67
+Reduction Table …;1;0;REDUCTION_TABLE_10;4138;102A;124;-;unsigned;0;65535;67
+Reduction Table …;1;0;REDUCTION_TABLE_11;4139;102B;125;-;unsigned;0;65535;100
+Reduction Table …;1;0;REDUCTION_TABLE_12;4140;102C;126;-;unsigned;0;65535;100
+Reduction Table …;1;0;REDUCTION_TABLE_13;4141;102D;127;-;unsigned;0;65535;100
+Reduction Table …;1;0;REDUCTION_TABLE_14;4142;102E;128;-;unsigned;0;65535;100
+Reduction Table …;1;0;REDUCTION_TABLE_15;4143;102F;129;-;unsigned;0;65535;100
+Reduction Table …;1;0;REDUCTION_TABLE_16;4144;1030;130;-;unsigned;0;65535;100
+Reduction Table …;1;0;REDUCTION_TABLE_17;4145;1031;131;-;unsigned;0;65535;100
+Reduction Table (17m < X < 18m);1;0;REDUCTION_TABLE_18;4146;1032;132;-;unsigned;0;65535;100
+Reduction Table (18m < X < 19m);1;0;REDUCTION_TABLE_END;4147;1033;133;-;unsigned;0;65535;100
+Remain light for additional light;1;0;REMAIN_LIGHT;4148;1034;134;-;unsigned;0;65535;0
+ALONEatWORK ID;1;0;AAW_ID;4149;1035;135;-;unsigned;0;65535;0
+Time to live;1;0;TIME_TO_LIVE;4150;1036;136;-;unsigned;0;65535;30
+Resend time in seconds;1;0;RESEND_TIME;4151;1037;137;-;unsigned;0;65535;2
+Maximum supported distance from luminare to luminaire;1;0;MAX_DISTANCE;4152;1038;138;-;unsigned;0;65535;7
+Treshold for LOK (lock count);1;0;LOCK_COUNT;4153;1039;139;-;unsigned;0;65535;50
+Init;1;0;EEPROM_INIT;4154;103A;140;-;unsigned;0;65535;2
+Sniffer mode;1;0;SNIFFER_MODE;4155;103B;141;-;unsigned;0;65535;0
+IDLE;1;0;IDLE;4200;1068;142;-;unsigned;0;65535;0
+ORE;1;0;ORE;4201;1069;143;-;unsigned;0;65535;0
+PE;1;0;PE;4202;106A;144;-;unsigned;0;65535;0
+LBD;1;0;LBD;4203;106B;145;-;unsigned;0;65535;0
+NE;1;0;NE;4204;106C;146;-;unsigned;0;65535;0
+FE;1;0;FE;4205;106D;147;-;unsigned;0;65535;0
+CTS;1;0;CTS;4206;106E;148;-;unsigned;0;65535;0
+"""No-Master"" Reset Timeout in seconds";1;0;NO_MASTER_TIMEOUT;4207;106F;149;-;unsigned;0;65535;120
+"Device Reset Counter because of ""No-Master""";1;0;NO_MASTER_RESET_COUNTER;4208;1070;150;-;unsigned;0;65535;0
+Remote Brightness;0;1;REMOTE_BRIGHTNESS_VALUE;4352;1100;151;-;unsigned;0;65535;0
+Remote DALI Value;0;1;REMOTE_DALI_VALUE;4353;1101;152;-;unsigned;0;65535;0
+Local  Brightness;0;1;LOCAL_BRIGHTNESS_VALUE;4354;1102;153;-;unsigned;0;65535;0
+Local  DALI Value;0;1;LOCAL_DALI_VALUE;4355;1103;154;-;unsigned;0;65535;0
+Error Alone AT Work;0;1;ERROR_ALONE_AT_WORK;4356;1104;155;-;unsigned;0;65535;0
+Local LED Color;0;1;LOCAL_LED_COLOR;4357;1105;156;-;unsigned;0;65535;0
+Remote LED Color;0;1;REMOTE_LED_COLOR;4358;1106;157;-;unsigned;0;65535;0
+Device states ;0;0;DEVICE_STATES;10008;2718;158;-;unsigned;0;65535;0
+ModBus Error Counters;0;0;MODBUS_ERRORS;12288;3000;159;-;unsigned;0;65535;0
+Infrared ID;0;0;INFRARED_ID;12289;3001;160;-;unsigned;0;65535;0
+Active Master;0;0;MASTER_ID;12290;3002;161;-;unsigned;0;65535;1
+Active Master Brightness;0;0;MASTER_BRIGHTNESS;12291;3003;162;-;unsigned;0;65535;65535
+Active Master Reduction;0;0;MASTER_REDUCTION;12292;3004;163;-;unsigned;0;65535;255
+ID of the master to verify from the shadow table;0;0;SHADOW_MASTER_ID;12293;3005;164;-;unsigned;0;65535;1
+Information of master with id SHADOW_MASTER_ID from the shadow table;0;0;SHADOW_INFORMATION;12294;3006;165;-;unsigned;0;65535;65535
+IR CRC errors;0;0;IR_RX_CRC_ERRORS;12295;3007;166;-;unsigned;0;65535;255
+IR RX DATA OK;0;0;IR_RX_DATA_OK;12296;3008;167;-;unsigned;0;65535;65535
+Get measured 12V;0;0;MEASURED_12V;16385;4001;168;mV;unsigned;0;65535;0
+Get measured 5V;0;0;MEASURED_5V;16386;4002;169;mV;unsigned;0;65535;0
+Get measured 3_3V;0;0;MEASURED_3_3V;16387;4003;170;mV;unsigned;0;65535;0
+Get measured VDDA - 0 = Voltage OK  1 = Voltage not OK;0;0;MEASURED_VDDA;16388;4004;171;mV;unsigned;0;65535;0
+Get measured Temperature;0;0;MEASURED_TEMP;16389;4005;172;C;unsigned;0;65535;0

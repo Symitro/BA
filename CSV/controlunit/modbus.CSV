@@ -1,0 +1,267 @@
+#Name;EEPROM;Master-Mirror;Short-Name;MB-Adr (dezimal);MB-Adr (hex);Index;Einheit;Type;Min;Max;Default
+firmwareProject 'oc'            control_unit_lightpad;0;0;FW_VERSION;0;0000;0;char;unsigned;0;65535;0
+firmwareProject 'tn';0;0;FW_VERSION_1;1;0001;1;char;unsigned;0;65535;0
+firmwareProject 'or';0;0;FW_VERSION_2;2;0002;2;char;unsigned;0;65535;0
+firmwareProject '_l';0;0;FW_VERSION_3;3;0003;3;char;unsigned;0;65535;0
+firmwareProject 'om';0;0;FW_VERSION_4;4;0004;4;char;unsigned;0;65535;0
+firmwareProject 'ud';0;0;FW_VERSION_5;5;0005;5;char;unsigned;0;65535;0
+firmwareProject '_l'sfasdafdsfdsf;0;0;FW_VERSION_6;6;0006;6;char;unsigned;0;65535;0
+firmwareProject 'il';0;0;FW_VERSION_7;7;0007;7;char;unsigned;0;65535;0
+firmwareProject 'hg';0;0;FW_VERSION_8;8;0008;8;char;unsigned;0;65535;0
+firmwareProject 'pt';0;0;FW_VERSION_9;9;0009;9;char;unsigned;0;65535;0
+firmwareProject 'da';0;0;FW_VERSION_10;10;000A;10;char;unsigned;0;65535;0
+firmwareVersion [0] ['-']  - 01.00;0;0;FW_VERSION_11;11;000B;11;char;unsigned;0;65535;0
+firmwareVersion ['.'] [1];0;0;FW_VERSION_12;12;000C;12;char;unsigned;0;65535;0
+firmwareVersion [3] [2];0;0;FW_VERSION_13;13;000D;13;char;unsigned;0;65535;0
+firmwareBuild [0] ['.']        .01;0;0;FW_VERSION_14;14;000E;14;char;unsigned;0;65535;0
+firmwareBuild ['-'] [1];0;0;FW_VERSION_15;15;000F;15;char;unsigned;0;65535;0
+gitCommit [1] [0]                 8 characters;0;0;FW_VERSION_16;16;0010;16;char;unsigned;0;65535;0
+gitCommit [3] [2];0;0;FW_VERSION_17;17;0011;17;char;unsigned;0;65535;0
+gitCommit [5] [4];0;0;FW_VERSION_18;18;0012;18;char;unsigned;0;65535;0
+gitCommit [7] [6];0;0;FW_VERSION_19;19;0013;19;char;unsigned;0;65535;0
+firmwareTarget [r] ['-']      rel;0;0;FW_VERSION_20;20;0014;20;char;unsigned;0;65535;0
+firmwareTarget [l] [e];0;0;FW_VERSION_21;21;0015;21;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_22;22;0016;22;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_23;23;0017;23;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_24;24;0018;24;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_25;25;0019;25;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_26;26;001A;26;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_27;27;001B;27;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_28;28;001C;28;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_29;29;001D;29;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_30;30;001E;30;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_31;31;001F;31;char;unsigned;0;65535;0
+hwVersions '61'                              1601-2;0;0;HW_VERSION;48;0030;32;char;unsigned;0;65535;0
+hwVersions '10';0;0;HW_VERSION_1;49;0031;33;char;unsigned;0;65535;0
+hwVersions '2-';0;0;HW_VERSION_2;50;0032;34;char;unsigned;0;65535;0
+hwVersions '0v';0;0;HW_VERSION_3;51;0033;35;char;unsigned;0;65535;0
+hwVersions '0v';0;0;HW_VERSION_4;52;0034;36;char;unsigned;0;65535;0
+firmwareProject 'ob'            bootloader_control_unit_M3;0;0;FW_VERSION_BL;53;0035;37;char;unsigned;0;65535;0
+firmwareProject 'to';0;0;FW_VERSION_BL_1;54;0036;38;char;unsigned;0;65535;0
+firmwareProject 'ol';0;0;FW_VERSION_BL_2;55;0037;39;char;unsigned;0;65535;0
+firmwareProject 'da';0;0;FW_VERSION_BL_3;56;0038;40;char;unsigned;0;65535;0
+firmwareProject 're';0;0;FW_VERSION_BL_4;57;0039;41;char;unsigned;0;65535;0
+firmwareProject 'c_';0;0;FW_VERSION_BL_5;58;003A;42;char;unsigned;0;65535;0
+firmwareProject 'no';0;0;FW_VERSION_BL_6;59;003B;43;char;unsigned;0;65535;0
+firmwareProject 'rt';0;0;FW_VERSION_BL_7;60;003C;44;char;unsigned;0;65535;0
+firmwareProject 'lo';0;0;FW_VERSION_BL_8;61;003D;45;char;unsigned;0;65535;0
+firmwareProject 'u_';0;0;FW_VERSION_BL_9;62;003E;46;char;unsigned;0;65535;0
+firmwareProject 'in';0;0;FW_VERSION_BL_10;63;003F;47;char;unsigned;0;65535;0
+firmwareProject '_t';0;0;FW_VERSION_BL_11;64;0040;48;char;unsigned;0;65535;0
+firmwareProject 'M3';0;0;FW_VERSION_BL_12;65;0041;49;char;unsigned;0;65535;0
+firmwareVersion [0] ['-']  - 01.00;0;0;FW_VERSION_BL_13;66;0042;50;char;unsigned;0;65535;0
+firmwareVersion ['.'] [1];0;0;FW_VERSION_BL_14;67;0043;51;char;unsigned;0;65535;0
+firmwareVersion [3] [2];0;0;FW_VERSION_BL_15;68;0044;52;char;unsigned;0;65535;0
+firmwareBuild [0] ['.']        .01;0;0;FW_VERSION_BL_16;69;0045;53;char;unsigned;0;65535;0
+firmwareBuild ['-'] [1];0;0;FW_VERSION_BL_17;70;0046;54;char;unsigned;0;65535;0
+gitCommit [1] [0]                 8 characters;0;0;FW_VERSION_BL_18;71;0047;55;char;unsigned;0;65535;0
+gitCommit [3] [2];0;0;FW_VERSION_BL_19;72;0048;56;char;unsigned;0;65535;0
+gitCommit [5] [4];0;0;FW_VERSION_BL_20;73;0049;57;char;unsigned;0;65535;0
+gitCommit [7] [6];0;0;FW_VERSION_BL_21;74;004A;58;char;unsigned;0;65535;0
+firmwareTarget [r] ['-']      rel;0;0;FW_VERSION_BL_22;75;004B;59;char;unsigned;0;65535;0
+firmwareTarget [l] [e];0;0;FW_VERSION_BL_23;76;004C;60;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_24;77;004D;61;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_25;78;004E;62;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_26;79;004F;63;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_27;80;0050;64;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_28;81;0051;65;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_29;82;0052;66;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_30;83;0053;67;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_31;84;0054;68;char;unsigned;0;65535;0
+EEPROM Version;1;0;EEPROM_VERSION;255;00FF;69;-;unsigned;0;65535;43778
+Device Type;0;0;DEVICE_TYPE;256;0100;70;-;unsigned;0;65535;2
+(Random/Set) Modbus Address ;1;0;MODBUS_ADDRESS;257;0101;71;-;unsigned;0;65535;8
+Modbus Timeout + multiplikation Faktor Ligt Measuring;1;0;MODBUS_TIMEOUT_LIGHTMEASURING_MULTI_FAKTOR;258;0102;72;-;unsigned;0;65535;1556
+Command - Devicetype;0;0;MODBUS_COMMAND;259;0103;73;-;unsigned;0;65535;0
+Write SN/BIL/DATE/Order Code = BEEF - Erase // FLASH = DEAD;0;0;WRITE_MANUFACTURE_INFO;512;0200;74;-;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER;528;0210;75;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_1;529;0211;76;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_2;530;0212;77;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_3;531;0213;78;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_4;532;0214;79;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_5;533;0215;80;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_6;534;0216;81;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_7;535;0217;82;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION;536;0218;83;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_1;537;0219;84;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_2;538;021A;85;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_3;539;021B;86;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_4;540;021C;87;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_5;541;021D;88;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_6;542;021E;89;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_7;543;021F;90;char;unsigned;0;65535;0
+Date;0;0;DATE;544;0220;91;char;unsigned;0;65535;0
+Date;0;0;DATE_1;545;0221;92;char;unsigned;0;65535;0
+Date;0;0;DATE_2;546;0222;93;char;unsigned;0;65535;0
+Date;0;0;DATE_3;547;0223;94;char;unsigned;0;65535;0
+Date;0;0;DATE_4;548;0224;95;char;unsigned;0;65535;0
+Date;0;0;DATE_5;549;0225;96;char;unsigned;0;65535;0
+Date;0;0;DATE_6;550;0226;97;char;unsigned;0;65535;0
+Date;0;0;DATE_7;551;0227;98;char;unsigned;0;65535;0
+Regent Order Code;0;0;REGENT_ITEM_NUMBER;552;0228;99;char;unsigned;0;65535;0
+Regent Order Code;0;0;REGENT_ITEM_NUMBER_1;553;0229;100;char;unsigned;0;65535;0
+Regent Order Code;0;0;REGENT_ITEM_NUMBER_2;554;022A;101;char;unsigned;0;65535;0
+Regent Order Code;0;0;REGENT_ITEM_NUMBER_3;555;022B;102;char;unsigned;0;65535;0
+Regent Order Code;0;0;REGENT_ITEM_NUMBER_4;556;022C;103;char;unsigned;0;65535;0
+Regent Order Code;0;0;REGENT_ITEM_NUMBER_5;557;022D;104;char;unsigned;0;65535;0
+Regent Order Code;0;0;REGENT_ITEM_NUMBER_6;558;022E;105;char;unsigned;0;65535;0
+Regent Order Code;0;0;REGENT_ITEM_NUMBER_7;559;022F;106;char;unsigned;0;65535;0
+Regent Serial Number;0;0;REGENT_SERIAL_NUMBER;560;0230;107;char;unsigned;0;65535;0
+Regent Serial Number;0;0;REGENT_SERIAL_NUMBER_1;561;0231;108;char;unsigned;0;65535;0
+Regent Serial Number;0;0;REGENT_SERIAL_NUMBER_2;562;0232;109;char;unsigned;0;65535;0
+Regent Serial Number;0;0;REGENT_SERIAL_NUMBER_3;563;0233;110;char;unsigned;0;65535;0
+Regent Serial Number;0;0;REGENT_SERIAL_NUMBER_4;564;0234;111;char;unsigned;0;65535;0
+Regent Serial Number;0;0;REGENT_SERIAL_NUMBER_5;565;0235;112;char;unsigned;0;65535;0
+Regent Serial Number;0;0;REGENT_SERIAL_NUMBER_6;566;0236;113;char;unsigned;0;65535;0
+Regent Serial Number;0;0;REGENT_SERIAL_NUMBER_7;567;0237;114;char;unsigned;0;65535;0
+Regent Serial Number;0;0;REGENT_SERIAL_NUMBER_8;568;0238;115;char;unsigned;0;65535;0
+Regent Serial Number;0;0;REGENT_SERIAL_NUMBER_9;569;0239;116;char;unsigned;0;65535;0
+Regent Serial Number;0;0;REGENT_SERIAL_NUMBER_10;570;023A;117;char;unsigned;0;65535;0
+Regent Serial Number;0;0;REGENT_SERIAL_NUMBER_11;571;023B;118;char;unsigned;0;65535;0
+ModBus to DALI Gateway Response Channel 1;0;0;MB2DALI_RESPONSE_CH1;4096;1000;119;-;unsigned;0;65535;0
+ModBus to DALI Gateway Request Channel 1;0;0;MB2DALI_REQUEST_CH1;4097;1001;120;-;unsigned;0;65535;0
+ModBus to DALI Gateway Response Channel 2;0;0;MB2DALI_RESPONSE_CH2;4098;1002;121;-;unsigned;0;65535;0
+ModBus to DALI Gateway Request Channel 2;0;0;MB2DALI_REQUEST_CH2;4099;1003;122;-;unsigned;0;65535;0
+Number of Light Decks;1;0;NUMBER_OF_LIGHT_DECKS;8193;2001;123;-;unsigned;0;5;5
+Number of Panels;1;0;NUMBER_OF_PANELS;8194;2002;124;-;unsigned;0;3;3
+Nachlaufzeit Sensor;1;0;PIR_DELAY_TIME;8195;2003;125;[s];unsigned;0;65535;600
+Security Light Level Nachlaufzeit;1;0;SECURITY_LIGHT_LEVEL_DELAY_TIME;8196;2004;126;[s];unsigned;0;65535;0
+Einschwingzeit PIR;1;0;PIR_SETTING_TIME;8197;2005;127;[s];unsigned;0;30;10000
+Features Sensormodule 1 Enable/Disable 1 = Enable 0 = Disable bitweise: [0]=pir [1]=ligtcontrol [2]=button;1;0;SENSORMODULE_MODE;8198;2006;128;-;unsigned;0;65535;7
+Features Sensormodule 2 Enable/Disable 1 = Enable 0 = Disable bitweise: [0]=pir [1]=ligtcontrol [2]=button;1;0;SENSORMODULE_MODE_1;8199;2007;129;-;unsigned;0;65535;7
+Features Sensormodule 3 Enable/Disable 1 = Enable 0 = Disable bitweise: [0]=pir [1]=ligtcontrol [2]=button;1;0;SENSORMODULE_MODE_2;8200;2008;130;-;unsigned;0;65535;7
+Features Sensormodule 4 Enable/Disable 1 = Enable 0 = Disable bitweise: [0]=pir [1]=ligtcontrol [2]=button;1;0;SENSORMODULE_MODE_3;8201;2009;131;-;unsigned;0;65535;7
+Buttons Bedienelement 1 Enable / Disable    1 = Enable 0 = Disable       bitweise: [0] = button 1 - [1] = button 2 - [2] = button 3 - [3] = led Bedienelement;1;0;PANEL_1_MODE;8202;200A;132;-;unsigned;0;65535;15
+Buttons Bedienelement 2 Enable / Disable    1 = Enable 0 = Disable       bitweise: [0] = button 1 - [1] = button 2 - [2] = button 3 - [3] = led Bedienelement;1;0;PANEL_2_MODE;8203;200B;133;-;unsigned;0;65535;15
+Halbautomatic;1;0;HALF_AUTOMATIC_FLAG;8204;200C;134;-;unsigned;0;1;0
+Sensodim Zuordnung 0 = Regelung auf jeweiligen Sensor - 1 = mittelwert aller Sensoren - 2 = Höchster Wert aller Sensoren - 3 = tiefster Wert aller Sensoren;1;0;SENSODIM_ASSIGNMENT;8205;200D;135;-;unsigned;0;3;0
+Sollwert überschreibbar;1;0;ENABLE_OVERWRITE_SET_POINT;8206;200E;136;-;unsigned;0;1;1
+min. safe point;1;0;MAX_SET_POINT_SENSOR;8207;200F;137;lux;unsigned;0;65535;5000
+Fade Time Slow Dimming;1;0;FADE_TIME_SLOW_DIMMING;8208;2010;138;ms;unsigned;0;65535;5000
+Fade In Time;1;0;FADE_IN_TIME;8209;2011;139;ms;unsigned;0;65535;2000
+Fade Out Time;1;0;FADE_OUT_TIME;8210;2012;140;ms;unsigned;0;65535;10000
+Fade On Off Time;1;0;FADE_ON_OFF_TIME;8211;2013;141;ms;unsigned;0;65535;500
+Lightregulation Speed HB - 2-10           2 = sehr schnell - 10 = sehr langsam               LB - hysteresis - default 5% ;1;0;LIGHT_REGULATION_SPEED_HYSTERESIS;8212;2014;142;-;unsigned;0;10;2053
+Min Light Value;1;0;MIN_LIGHT_VALUE;8213;2015;143;DALI;unsigned;104;144;104
+Max Light Value;1;0;MAX_LIGHT_VALUE;8214;2016;144;DALI;unsigned;104;144;254
+hold override = einschalten mit dem letzten wert;1;0;HOLD_OVERRIDE_FLAG;8215;2017;145;-;unsigned;0;1;1
+Power Safe Mode;1;0;POWER_SAFE_MODE;8216;2018;146;-;unsigned;0;1;1
+Power Safe Treshold;1;0;POWER_SAFE_TRESHOLD;8217;2019;147;%;unsigned;100;254;150
+Power Safe Treshold Duration - nach wie langer Zeit überlicht geht man dann in den Brightout mode;1;0;POWER_SAFE_TRESHOLD_DURATION;8218;201A;148;s;unsigned;0;65535;600
+Step UP DALI Value;1;0;DIM_STEP_UP;8219;201B;149;DALI;unsigned;1;100;10
+Step DOWN DALI VALUE;1;0;DIM_STEP_DOWN;8220;201C;150;DALI;unsigned;1;100;10
+Security Light Level;1;0;SECURITY_LIGHT_LEVEL;8221;201D;151;DALI;unsigned;0;254;0
+Power UP bei Nezt ein - bitweise: [0]=head 1 [1]=head 2 etc.;1;0;POWER_UP_MODE;8222;201E;152;-;unsigned;0;1;0
+Licht regelung auf temp value;1;0;LIGHT_CONTROL_ON_TEMP_VALUE_FLAG;8223;201F;153;-;unsigned;0;1;1
+Relais Mode HB - Busy für Software! LB-Free;0;0;RELAIS_MODE;8224;2020;154;-;unsigned;0;1;1
+Factory Brightness Value;1;0;FACTORY_BRIGHTNESS_VALUE;8225;2021;155;lux;unsigned;0;4000;1050
+Alone At Work Mode = Bit 8-11 / Relais Mode = LB / Manual Initialisation = Bit 12-15;1;0;ALONE_AT_WORK_RELAIS_MODE;8226;2022;156;-;unsigned;0;257;257
+Light Signalisation State Time - wie lange ist ein state / wenn = 0 - dann ist signalisation disabled;1;0;LIGHT_SIGNALISATION_STATE_TIME;8227;2023;157;ms;unsigned;0;5000;700
+User Set Point Sensor 1;1;0;USER_BRIGHTNESS_VALUE;8228;2024;158;lux;unsigned;0;4000;1050
+User Set Point Sensor 2;1;0;USER_BRIGHTNESS_VALUE_2;8229;2025;159;lux;unsigned;0;4000;1050
+User Set Point Sensor 3;1;0;USER_BRIGHTNESS_VALUE_3;8230;2026;160;lux;unsigned;0;4000;1050
+User Set Point Sensor 4;1;0;USER_BRIGHTNESS_VALUE_4;8231;2027;161;lux;unsigned;0;4000;1050
+Burning duration LED Driver 1 [min];1;0;BURNING_DURATION_LED_DRIVER_1;8232;2028;162;min;unsigned;0;65535;0
+Burning duration LED Driver 2 [min];1;0;BURNING_DURATION_LED_DRIVER_2;8233;2029;163;min;unsigned;0;65535;0
+Burning duration LED Driver 3 [min];1;0;BURNING_DURATION_LED_DRIVER_3;8234;202A;164;min;unsigned;0;65535;0
+Burning duration LED Driver 4 [min];1;0;BURNING_DURATION_LED_DRIVER_4;8235;202B;165;min;unsigned;0;65535;0
+DALI Value summiert led driver 1;1;0;BURNING_VALUE_SUMMED_LED_DRIVER_1;8236;202C;166;-;unsigned;0;65535;0
+DALI Value summiert led driver 2;1;0;BURNING_VALUE_SUMMED_LED_DRIVER_2;8237;202D;167;-;unsigned;0;65535;0
+DALI Value summiert led driver 3;1;0;BURNING_VALUE_SUMMED_LED_DRIVER_3;8238;202E;168;-;unsigned;0;65535;0
+DALI Value summiert led driver 4;1;0;BURNING_VALUE_SUMMED_LED_DRIVER_4;8239;202F;169;-;unsigned;0;65535;0
+Overflow Burning Duration (LB) - HB = Overflow von Burning duration;1;0;OVERFLOW_DURATION_1;8240;2030;170;-;unsigned;0;65535;0
+Overflow Burning Duration (LB) - HB = Overflow von Burning duration;1;0;OVERFLOW_DURATION_2;8241;2031;171;-;unsigned;0;65535;0
+Overflow Burning Duration (LB) - HB = Overflow von Burning duration;1;0;OVERFLOW_DURATION_3;8242;2032;172;-;unsigned;0;65535;0
+Overflow Burning Duration (LB) - HB = Overflow von Burning duration;1;0;OVERFLOW_DURATION_4;8243;2033;173;-;unsigned;0;65535;0
+Overflow burning Value Summed;1;0;OVERFLOW_SUMMED_1;8244;2034;174;-;unsigned;0;65535;0
+Overflow burning Value Summed;1;0;OVERFLOW_SUMMED_2;8245;2035;175;-;unsigned;0;65535;0
+Overflow burning Value Summed;1;0;OVERFLOW_SUMMED_3;8246;2036;176;-;unsigned;0;65535;0
+Overflow burning Value Summed;1;0;OVERFLOW_SUMMED_4;8247;2037;177;-;unsigned;0;65535;0
+Number of Short Presses Input 1;1;0;NUMBER_OF_SHORT_PRESSES_INPUT_1;8248;2038;178;-;unsigned;0;65535;0
+Number of Long Presses Input 1;1;0;NUMBER_OF_LONG_PRESSES_INPUT_1;8249;2039;179;-;unsigned;0;65535;0
+Number of Short Presses Input 2;1;0;NUMBER_OF_SHORT_PRESSES_INPUT_2;8250;203A;180;-;unsigned;0;65535;0
+Number of Long Presses Input 2;1;0;NUMBER_OF_LONG_PRESSES_INPUT_2;8251;203B;181;-;unsigned;0;65535;0
+Last Multiklick Input 1;1;0;LAST_MULTIKLICK_INPUT_1;8252;203C;182;-;unsigned;0;65535;0
+Last Multiklick Input 2;1;0;LAST_MULTIKLICK_INPUT_2;8253;203D;183;-;unsigned;0;65535;0
+overvoltage value - count number of detected overvoltages and safe them in EEPROM;1;0;NUMBER_OF_AC_OVERVOLTAGE_DETECTED;8254;203E;184;-;unsigned;0;65535;0
+Relais ON - OFF time HB = relais ON time                LB = relais OFF time;1;0;RELAIS_PUSH_AND_RELEASE_TIME;8255;203F;185;-;unsigned;0;65535;1541
+Error states Control Unit            1  = DALI short - 2 = Overvoltage - 3 = overcurrent N' - 4 = wrong sw on current Hardware - 5 = ???;1;0;ERROR_STATES;8256;2040;186;-;unsigned;0;65535;0
+Short Press time - ms;1;0;TIME_SHORT_PRESS;8257;2041;187;ms;unsigned;0;65535;500
+Delay Press time - ms;1;0;TIME_DELAY_PRESS;8258;2042;188;ms;unsigned;0;65535;200
+long press time max;1;0;TIME_LONG_PRESS_MAX;8259;2043;189;ms;unsigned;0;65535;60000
+Parametrizing Press time;1;0;TIME_PARAMETRIZING_PRESS;8260;2044;190;ms;unsigned;0;65535;20000
+Sampling Time Dali Monitor (in minutes);1;0;SAMPLING_TIME_DALI_MONITOR;8261;2045;191;min;unsigned;0;65535;1
+2nd Delay Time;1;0;SECOND_DELAY_TIME;8262;2046;192;[s];unsigned;0;65535;0
+Luminaire Protected;1;0;LUMINAIRE_PROTECTED;8263;2047;193;-;unsigned;0;65535;0
+DALI2 Interface Protected (0 = not powered - 1 = powered);1;0;DALI_2_INTERFACE_POWER;8264;2048;194;-;unsigned;0;65535;0
+AC Buttons Mode (bit[0] = AC1 - Enable or Disable       bit[1] = AC2 - Enable or Disable;1;0;AC_BUTTONS_MODE;8265;2049;195;-;unsigned;0;65535;0
+Tunable Demo Mode Duration Day (sec);1;0;TUNABLE_DEMO_MODE_DURATION_DAY;8266;204A;196;s;unsigned;0;65535;0
+HB = CLM-Mode / LB = TIME_SYNC;1;0;CLM_MODE_TIME_SYNC;8267;204B;197;-;unsigned;0;65535;257
+reserve6;1;0;NOT_USED_6;8268;204C;198;-;unsigned;0;65535;0
+reserve7;1;0;NOT_USED_7;8269;204D;199;-;unsigned;0;65535;0
+Time Zone;1;0;TIME_ZONE;8270;204E;200;-;signed;0;65535;1
+Daylight Saving;1;0;DAYLIGHT_SAVING;8271;204F;201;-;unsigned;0;65535;1
+Luminaire Type - Normal = 0 or Tuneable = 1 or ENEC = 2;1;0;LUMINAIRE_TYPE;10007;2717;202;-;unsigned;0;65535;0
+Device states ;0;0;DEVICE_STATES;10008;2718;203;-;unsigned;0;65535;0
+Device error states ;1;0;DEVICE_ERROR_STATES;10009;2719;204;-;unsigned;0;65535;0
+luminaire temperature of leds;0;0;LUMINAIRE_TEMPERATURE;10010;271A;205;K;unsigned;0;65535;0
+Relais Current IAC - no safe in eeprom;0;0;GET_MEASURED_IAC_NOUT;13573;3505;206;mA;unsigned;0;65535;0
+Get measured 3V3;0;0;GET_MEASURED_3V3;16384;4000;207;mV;unsigned;0;65535;0
+Get measured 12V;0;0;GET_MEASURED_12V;16385;4001;208;mV;unsigned;0;65535;0
+Get measured Current of 12V current;0;0;GET_MEASURED_12V_CURRENT;16386;4002;209;mV;unsigned;0;65535;0
+Get measured Current of 5V;0;0;GET_MEASURED_5V;16387;4003;210;mV;unsigned;0;65535;0
+Get measured Current of 18V;0;0;GET_MEASURED_18V;16388;4004;211;mV;unsigned;0;65535;0
+Get measured Modbus Voltage;0;0;GET_MEASURED_MODBUS_VOLTAGE;16389;4005;212;mV;unsigned;0;65535;0
+Get measured 230V IN;0;0;GET_MEASURED_VAC_IN;16390;4006;213;mV;unsigned;0;65535;0
+Get measured AIN Voltage;0;0;GET_MEASURED_AIN;16391;4007;214;mV;unsigned;0;65535;0
+Get measured temperature;0;0;GET_MEASURED_TEMPERATURE;16392;4008;215;Celsius;unsigned;0;65535;0
+ISYS Sense;0;0;GET_MEASURED_ISYS_SENSE;16393;4009;216;-;unsigned;0;65535;0
+MCU id;0;0;GET_MEASURED_MCU_ID;16394;400A;217;-;unsigned;0;65535;0
+Temp Brightness Value Head 1;0;0;SET_POINT_LIGHT_REGULATION_1;16395;400B;218;lux;unsigned;0;4000;0
+Temp Brightness Value Head 2;0;0;SET_POINT_LIGHT_REGULATION_2;16396;400C;219;lux;unsigned;0;4000;0
+Temp Brightness Value Head 3;0;0;SET_POINT_LIGHT_REGULATION_3;16397;400D;220;lux;unsigned;0;4000;0
+Temp Brightness Value Head 4;0;0;SET_POINT_LIGHT_REGULATION_4;16398;400E;221;lux;unsigned;0;4000;0
+Dali Value Driver 1;0;0;DALI_VALUE_LIGHT_DECK_1;16399;400F;222;dali;unsigned;254;4000;0
+Dali Value Driver 2;0;0;DALI_VALUE_LIGHT_DECK_2;16400;4010;223;dali;unsigned;254;4000;0
+Dali Value Driver 3;0;0;DALI_VALUE_LIGHT_DECK_3;16401;4011;224;dali;unsigned;254;4000;0
+Dali Value Driver 4;0;0;DALI_VALUE_LIGHT_DECK_4;16402;4012;225;dali;unsigned;254;4000;0
+Raw Data PushButton 1;0;0;RAW_DATA_PUSHBUTTON_1;16896;4200;226;-;unsigned;0;65535;0
+Raw Data PushButton 2;0;0;RAW_DATA_PUSHBUTTON_2;16897;4201;227;-;unsigned;0;65535;0
+number of sw timers = HB;0;0;SW_TIMERS_STACK_SIZE;16898;4202;228;-;unsigned;0;65535;0
+CONFIG_PANEL1_BUTTON_UP_SHORT_PRESS;1;0;CONFIG_PANEL1_BUTTON_UP_SHORT_PRESS;17664;4500;229;-;unsigned;0;65535;0
+CONFIG_PANEL1_BUTTON_UP_LONG_PRESS;1;0;CONFIG_PANEL1_BUTTON_UP_LONG_PRESS;17665;4501;230;-;unsigned;0;65535;0
+CONFIG_PANEL1_BUTTON_UP_DOUBLE_PRESS;1;0;CONFIG_PANEL1_BUTTON_UP_DOUBLE_PRESS;17666;4502;231;-;unsigned;0;65535;0
+CONFIG_PANEL1_BUTTON_MIDDLE_SHORT_PRESS;1;0;CONFIG_PANEL1_BUTTON_MIDDLE_SHORT_PRESS;17667;4503;232;-;unsigned;0;65535;0
+CONFIG_PANEL1_BUTTON_MIDDLE_LONG_PRESS;1;0;CONFIG_PANEL1_BUTTON_MIDDLE_LONG_PRESS;17668;4504;233;-;unsigned;0;65535;0
+CONFIG_PANEL1_BUTTON_MIDDLE_DOUBLE_PRESS;1;0;CONFIG_PANEL1_BUTTON_MIDDLE_DOUBLE_PRESS;17669;4505;234;-;unsigned;0;65535;0
+CONFIG_PANEL1_BUTTON_DOWN_SHORT_PRESS;1;0;CONFIG_PANEL1_BUTTON_DOWN_SHORT_PRESS;17670;4506;235;-;unsigned;0;65535;0
+CONFIG_PANEL1_BUTTON_DOWN_LONG_PRESS;1;0;CONFIG_PANEL1_BUTTON_DOWN_LONG_PRESS;17671;4507;236;-;unsigned;0;65535;0
+CONFIG_PANEL1_BUTTON_DOWN_DOUBLE_PRESS;1;0;CONFIG_PANEL1_BUTTON_DOWN_DOUBLE_PRESS;17672;4508;237;-;unsigned;0;65535;0
+CONFIG_PANEL2_BUTTON_UP_SHORT_PRESS;1;0;CONFIG_PANEL2_BUTTON_UP_SHORT_PRESS;17673;4509;238;-;unsigned;0;65535;0
+CONFIG_PANEL2_BUTTON_UP_LONG_PRESS;1;0;CONFIG_PANEL2_BUTTON_UP_LONG_PRESS;17674;450A;239;-;unsigned;0;65535;0
+CONFIG_PANEL2_BUTTON_UP_DOUBLE_PRESS;1;0;CONFIG_PANEL2_BUTTON_UP_DOUBLE_PRESS;17675;450B;240;-;unsigned;0;65535;0
+CONFIG_PANEL2_BUTTON_MIDDLE_SHORT_PRESS;1;0;CONFIG_PANEL2_BUTTON_MIDDLE_SHORT_PRESS;17676;450C;241;-;unsigned;0;65535;0
+CONFIG_PANEL2_BUTTON_MIDDLE_LONG_PRESS;1;0;CONFIG_PANEL2_BUTTON_MIDDLE_LONG_PRESS;17677;450D;242;-;unsigned;0;65535;0
+CONFIG_PANEL2_BUTTON_MIDDLE_DOUBLE_PRESS;1;0;CONFIG_PANEL2_BUTTON_MIDDLE_DOUBLE_PRESS;17678;450E;243;-;unsigned;0;65535;0
+CONFIG_PANEL2_BUTTON_DOWN_SHORT_PRESS;1;0;CONFIG_PANEL2_BUTTON_DOWN_SHORT_PRESS;17679;450F;244;-;unsigned;0;65535;0
+CONFIG_PANEL2_BUTTON_DOWN_LONG_PRESS;1;0;CONFIG_PANEL2_BUTTON_DOWN_LONG_PRESS;17680;4510;245;-;unsigned;0;65535;0
+CONFIG_PANEL2_BUTTON_DOWN_DOUBLE_PRESS;1;0;CONFIG_PANEL2_BUTTON_DOWN_DOUBLE_PRESS;17681;4511;246;-;unsigned;0;65535;0
+CONFIG_SENSORMODULE_BUTTON_SHORT_PRESS;1;0;CONFIG_SENSORMODULE_BUTTON_SHORT_PRESS;17682;4512;247;-;unsigned;0;65535;0
+CONFIG_SENSORMODULE_BUTTON_LONG_PRESS;1;0;CONFIG_SENSORMODULE_BUTTON_LONG_PRESS;17683;4513;248;-;unsigned;0;65535;0
+CONFIG_SENSORMODULE_BUTTON_DOUBLE_PRESS;1;0;CONFIG_SENSORMODULE_BUTTON_DOUBLE_PRESS;17684;4514;249;-;unsigned;0;65535;0
+CONFIG_AC_BUTTON_1_SHORT_PRESS;1;0;CONFIG_AC_BUTTON_1_SHORT_PRESS;17685;4515;250;-;unsigned;0;65535;1537
+CONFIG_AC_BUTTON_2_SHORT_PRESS;1;0;CONFIG_AC_BUTTON_2_SHORT_PRESS;17686;4516;251;-;unsigned;0;65535;1538
+CONFIG_AC_BUTTON_1_LONG_PRESS;1;0;CONFIG_AC_BUTTON_1_LONG_PRESS;17687;4517;252;-;unsigned;0;65535;769
+CONFIG_AC_BUTTON_2_LONG_PRESS;1;0;CONFIG_AC_BUTTON_2_LONG_PRESS;17688;4518;253;-;unsigned;0;65535;770
+CONFIG_AC_BUTTON_1_DOUBLE_PRESS;1;0;CONFIG_AC_BUTTON_1_DOUBLE_PRESS;17689;4519;254;-;unsigned;0;65535;0
+CONFIG_AC_BUTTON_2_DOUBLE_PRESS;1;0;CONFIG_AC_BUTTON_2_DOUBLE_PRESS;17690;451A;255;-;unsigned;0;65535;0
+CONFIG_AC_BUTTON_1_TRIPPLE_PRESS;1;0;CONFIG_AC_BUTTON_1_TRIPPLE_PRESS;17691;451B;256;-;unsigned;0;65535;0
+CONFIG_AC_BUTTON_2_TRIPPLE_PRESS;1;0;CONFIG_AC_BUTTON_2_TRIPPLE_PRESS;17692;451C;257;-;unsigned;0;65535;0
+CONFIG_PANEL_1_EVENT_TO_TRIGGER;1;0;CONFIG_PANEL_1_EVENT_TO_TRIGGER;17693;451D;258;-;unsigned;0;65535;514
+CONFIG_PANEL_2_EVENT_TO_TRIGGER;1;0;CONFIG_PANEL_2_EVENT_TO_TRIGGER;17694;451E;259;-;unsigned;0;65535;514
+MANUEL_BRIGHTNESS_HEAD_1;0;0;HEAD_1_MANUAL_BRIGHTNESS;25091;6203;260;DALI;unsigned;0;65535;0
+MANUEL_BRIGHTNESS_HEAD_2;0;0;HEAD_2_MANUAL_BRIGHTNESS;25347;6303;261;DALI;unsigned;0;65535;0
+Status Head 1 (delaytime active?);0;0;STATUS_HEAD_1;24582;6006;262;-;unsigned;0;65535;0
+Status Head 2 (delaytime active?);0;0;STATUS_HEAD_2;24583;6007;263;-;unsigned;0;65535;0
+Status Head 3 (delaytime active?);0;0;STATUS_HEAD_3;24584;6008;264;-;unsigned;0;65535;0
+Status Head 4 (delaytime active?);0;0;STATUS_HEAD_4;24585;6009;265;-;unsigned;0;65535;0

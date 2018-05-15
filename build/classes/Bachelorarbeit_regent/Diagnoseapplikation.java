@@ -142,9 +142,9 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
 
     JButton abfragenbtn = new JButton("Abfragen starten");
     JButton uebernehmen = new JButton("Änderungen übernehmen");
-    JButton firmware = new JButton("Gesamte Lampen-Firmware aktualisieren");
+    JButton firmware = new JButton("Gesamte Leuchten-Firmware aktualisieren");
     JButton modulfirmware = new JButton("Ausgewählte Modul-Firmware aktualisieren");
-    JButton statusabfrage = new JButton("manuelle Statusabfrage");
+    JButton statusabfrage = new JButton("Manuelle Statusabfrage");
     JButton errorRequest = new JButton("Fehlermeldung auslesen");
     JButton masterMode = new JButton("Mastermode");
     JButton slaveMode = new JButton("Slavemode");
@@ -669,10 +669,25 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     private void fwFileActionPerformed(java.awt.event.ActionEvent evt) {
         int returnVal = fwFileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
+
             File file = fwFileChooser.getSelectedFile();
             System.out.println(fwFileChooser.getSelectedFile());
+            schliesseSerialPort();
+
+            Runtime runtime = Runtime.getRuntime();
+
             try {
-                Runtime.getRuntime().exec("cmd /c start " + fwFileChooser.getSelectedFile());
+                String port = (String) auswahl.getSelectedItem();
+                String portNr = port.substring(3, 4);
+                File folder = fwPathChooser.getSelectedFile();
+//                String folderpath = folder.toString();
+                String fileString = file.toString();
+
+//                Runtime.getRuntime().exec("cmd /c start " + fwFileChooser.getSelectedFile());
+                String[] cmd = {"cmd", "/K", "start", fileString, portNr};
+
+                Process p1 = runtime.exec(cmd);
+
             } catch (IOException ioException) {
                 System.out.println(ioException.getMessage());
             }
@@ -900,7 +915,6 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                         fwsb.append(fWVersion);
                     }
                 }
-//                System.out.println("Firmwareversion: " + fwsb.toString());
                 empfangen.append("Firmwareversion: " + fwsb.toString() + "\n");
             }
             if (adresslistHW != null) {
@@ -914,7 +928,6 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                         hwsb.append(hWVersion);
                     }
                 }
-//                System.out.println("Hardwareversion: " + hwsb.toString());
                 empfangen.append("Hardwareversion: " + hwsb.toString() + "\n");
             }
             if (adresslistFWBL != null) {
@@ -928,15 +941,12 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                         fwblsb.append(fWBLVersion);
                     }
                 }
-//                System.out.println("Firmware-BL-Version: " + fwblsb.toString());
-                empfangen.append("Firmware-BL-Version: " + fwblsb.toString() + "\n\n");
+                empfangen.append("Firmwareversion Bootloader: " + fwblsb.toString() + "\n\n");
             }
         } catch (java.lang.NullPointerException e) {
             empfangen.append("Versionierung nicht vollständig empfangen");
-//            System.out.println("Versionierung nicht vollständig empfangen");
         } catch (java.lang.StringIndexOutOfBoundsException o) {
             empfangen.append("Versionierung nicht vollständig empfangen");
-//            System.out.println("Versionierung nicht vollständig empfangen");
         }
     }
     // https://stackoverflow.com/questions/1735840/how-do-i-split-an-integer-into-2-byte-binary
@@ -1136,9 +1146,9 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
                         } else if (!isLast && delta) {
                             repeatendposition = repeatList.get(next);
                             messageList.add(message.substring(repeatstartposition, repeatendposition));
-                        } else if (!isLast && !delta) {
-                            repeatendposition = repeatList.get(next);
-                            messageList.add(message.substring(repeatstartposition, repeatendposition));
+//                        } else if (!isLast && !delta) {
+//                            repeatendposition = repeatList.get(next);
+//                            messageList.add(message.substring(repeatstartposition, repeatendposition));
                         }
                     } else if (!isEven && !isLast && !delta) {
                         if (nextnext != last) {
@@ -1496,6 +1506,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     class firmwareActionListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
+            schliesseSerialPort();
             Runtime runtime = Runtime.getRuntime();
             try {
                 String port = (String) auswahl.getSelectedItem();
@@ -1516,6 +1527,7 @@ public class Diagnoseapplikation extends JFrame implements TableModelListener {
     class modulfirmwareActionListener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
+            schliesseSerialPort();
             Runtime runtime = Runtime.getRuntime();
             try {
                 String port = (String) auswahl.getSelectedItem();

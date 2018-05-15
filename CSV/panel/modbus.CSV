@@ -1,0 +1,142 @@
+#Name;EEPROM;Master-Mirror;Short-Name;MB-Adr (dezimal);MB-Adr (hex);Index;Einheit;Type;Min;Max;Default
+firmwareProject 'ea';0;0;FW_VERSION;0;0000;0;char;unsigned;0;65535;0
+firmwareProject 'sy';0;0;FW_VERSION_1;1;0001;1;char;unsigned;0;65535;0
+firmwareProject 'to';0;0;FW_VERSION_2;2;0002;2;char;unsigned;0;65535;0
+firmwareProject 'uc';0;0;FW_VERSION_3;3;0003;3;char;unsigned;0;65535;0
+firmwareProject 'h '-'';0;0;FW_VERSION_4;4;0004;4;char;unsigned;0;65535;0
+firmwareVersion [0 1];0;0;FW_VERSION_5;5;0005;5;char;unsigned;0;65535;0
+firmwareVersion ['.' 3];0;0;FW_VERSION_6;6;0006;6;char;unsigned;0;65535;0
+firmwareVersion [4 '.'];0;0;FW_VERSION_7;7;0007;7;char;unsigned;0;65535;0
+firmwareBuild [0 1];0;0;FW_VERSION_8;8;0008;8;char;unsigned;0;65535;0
+gitCommit ['-' 0];0;0;FW_VERSION_9;9;0009;9;char;unsigned;0;65535;0
+gitCommit[1 2];0;0;FW_VERSION_10;10;000A;10;char;unsigned;0;65535;0
+gitCommit[3 4];0;0;FW_VERSION_11;11;000B;11;char;unsigned;0;65535;0
+gitCommit[5 6];0;0;FW_VERSION_12;12;000C;12;char;unsigned;0;65535;0
+gitCommit[7 '-'];0;0;FW_VERSION_13;13;000D;13;char;unsigned;0;65535;0
+firmwareTarget [0 1];0;0;FW_VERSION_14;14;000E;14;char;unsigned;0;65535;0
+firmwareTarget [2];0;0;FW_VERSION_15;15;000F;15;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_16;16;0010;16;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_17;17;0011;17;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_18;18;0012;18;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_19;19;0013;19;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_20;20;0014;20;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_21;21;0015;21;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_22;22;0016;22;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_23;23;0017;23;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_24;24;0018;24;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_25;25;0019;25;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_26;26;001A;26;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_27;27;001B;27;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_28;28;001C;28;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_29;29;001D;29;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_30;30;001E;30;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_31;31;001F;31;char;unsigned;0;65535;0
+hwVersions '1 5';0;0;HW_VERSION;48;0030;32;char;unsigned;0;65535;0
+hwVersions '0 6';0;0;HW_VERSION_1;49;0031;33;char;unsigned;0;65535;0
+hwVersions '- 1';0;0;HW_VERSION_2;50;0032;34;char;unsigned;0;65535;0
+hwVersions 'v x';0;0;HW_VERSION_3;51;0033;35;char;unsigned;0;65535;0
+hwVersions 'x';0;0;HW_VERSION_4;52;0034;36;char;unsigned;0;65535;0
+firmwareProject 'bl';0;0;FW_VERSION_BL;53;0035;37;char;unsigned;0;65535;0
+firmwareProject '_e';0;0;FW_VERSION_BL_1;54;0036;38;char;unsigned;0;65535;0
+firmwareProject 'as';0;0;FW_VERSION_BL_2;55;0037;39;char;unsigned;0;65535;0
+firmwareProject 'yt';0;0;FW_VERSION_BL_3;56;0038;40;char;unsigned;0;65535;0
+firmwareProject 'ou';0;0;FW_VERSION_BL_4;57;0039;41;char;unsigned;0;65535;0
+firmwareProject 'ch';0;0;FW_VERSION_BL_5;58;003A;42;char;unsigned;0;65535;0
+firmwareProject firmwareVersion ' '-'[0] ';0;0;FW_VERSION_BL_6;59;003B;43;char;unsigned;0;65535;0
+firmwareVersion [1 '.'];0;0;FW_VERSION_BL_7;60;003C;44;char;unsigned;0;65535;0
+firmwareVersion [3 4];0;0;FW_VERSION_BL_8;61;003D;45;char;unsigned;0;65535;0
+firmwareVersion firmwareBuild ['.' [0]];0;0;FW_VERSION_BL_9;62;003E;46;char;unsigned;0;65535;0
+firmwareBuild [1 2];0;0;FW_VERSION_BL_10;63;003F;47;char;unsigned;0;65535;0
+gitCommit ['-' 0];0;0;FW_VERSION_BL_11;64;0040;48;char;unsigned;0;65535;0
+gitCommit[1 2];0;0;FW_VERSION_BL_12;65;0041;49;char;unsigned;0;65535;0
+gitCommit[3 4];0;0;FW_VERSION_BL_13;66;0042;50;char;unsigned;0;65535;0
+gitCommit[5 6];0;0;FW_VERSION_BL_14;67;0043;51;char;unsigned;0;65535;0
+gitCommit[7 '-'];0;0;FW_VERSION_BL_15;68;0044;52;char;unsigned;0;65535;0
+firmwareTarget [0 1];0;0;FW_VERSION_BL_16;69;0045;53;char;unsigned;0;65535;0
+firmwareTarget [2];0;0;FW_VERSION_BL_17;70;0046;54;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_18;71;0047;55;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_19;72;0048;56;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_20;73;0049;57;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_21;74;004A;58;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_22;75;004B;59;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_23;76;004C;60;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_24;77;004D;61;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_25;78;004E;62;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_26;79;004F;63;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_27;80;0050;64;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_28;81;0051;65;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_29;82;0052;66;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_30;83;0053;67;char;unsigned;0;65535;0
+not used;0;0;FW_VERSION_BL_31;84;0054;68;char;unsigned;0;65535;0
+Eeprom Version;1;0;EEPROM_VERSION;255;00FF;69;-;unsigned;0;65535;43776
+Device Type;0;1;DEVICE_TYPE;256;0100;70;-;unsigned;0;65535;1
+(Random/Set) Modbus Address ;1;0;MODBUS_ADDRESS;257;0101;71;-;unsigned;0;65535;1
+Modbus Timeout;0;0;MODBUS_TIMEOUT_LIGHTMEASURING_MULTI_FAKTOR;258;0102;72;-;unsigned;0;65535;20
+Command - Devicetype;0;0;MODBUS_COMMAND;259;0103;73;-;unsigned;0;65535;0
+Write SN/BIL/DATE/Order Code = BEEF - Erase // FLASH = DEAD;0;0;WRITE_MANUFACTURE_INFO;512;0200;74;-;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER;528;0210;75;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_1;529;0211;76;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_2;530;0212;77;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_3;531;0213;78;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_4;532;0214;79;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_5;533;0215;80;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_6;534;0216;81;char;unsigned;0;65535;0
+serialNumber;0;0;SERIAL_NUMBER_7;535;0217;82;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION;536;0218;83;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_1;537;0219;84;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_2;538;021A;85;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_3;539;021B;86;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_4;540;021C;87;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_5;541;021D;88;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_6;542;021E;89;char;unsigned;0;65535;0
+HW/BOM;0;0;HW_BOM_VERSION_7;543;021F;90;char;unsigned;0;65535;0
+Date;0;0;DATE;544;0220;91;char;unsigned;0;65535;0
+Date;0;0;DATE_1;545;0221;92;char;unsigned;0;65535;0
+Date;0;0;DATE_2;546;0222;93;char;unsigned;0;65535;0
+Date;0;0;DATE_3;547;0223;94;char;unsigned;0;65535;0
+Date;0;0;DATE_4;548;0224;95;char;unsigned;0;65535;0
+Date;0;0;DATE_5;549;0225;96;char;unsigned;0;65535;0
+Date;0;0;DATE_6;550;0226;97;char;unsigned;0;65535;0
+Date;0;0;DATE_7;551;0227;98;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER;552;0228;99;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_1;553;0229;100;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_2;554;022A;101;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_3;555;022B;102;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_4;556;022C;103;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_5;557;022D;104;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_6;558;022E;105;char;unsigned;0;65535;0
+Regent Item Number;0;0;REGENT_ITEM_NUMBER_7;559;022F;106;char;unsigned;0;65535;0
+Enable-Disable / 0 = disabled 1 = enabled / [0] = button UP- [1] button MIDDLE - [2] button DOWN - [3] LED;1;0;ENABLE_DISABLE;4608;1200;107;-;unsigned;0;65535;15
+Button UP Events;0;1;BUTTON_UP_EVENTS;4864;1300;108;-;unsigned;0;65535;0
+Button MIDDLE Events;0;1;BUTTON_MIDDLE_EVENTS;4865;1301;109;-;unsigned;0;65535;0
+Button DOWN Events;0;1;BUTTON_DOWN_EVENTS;4866;1302;110;-;unsigned;0;65535;0
+Error Panel - Error Button UP [0] - Error Button MIDDLE [1] - Error Button Down [2] ;1;1;ERROR_PANEL;4871;1307;111;-;unsigned;0;65535;0
+Time button t-short;1;0;TIME_SHORT_PRESS;5120;1400;112;ms;unsigned;0;65535;500
+Time button t-delay;1;0;TIME_DELAY_PRESS;5121;1401;113;ms;unsigned;0;65535;200
+Time button t-long_max;1;0;TIME_LONG_PRESS_MAX;5122;1402;114;ms;unsigned;0;65535;60000
+Time button t-parametrizing;1;0;TIME_PARAMETRIZING_PRESS;5123;1403;115;ms;unsigned;0;65535;20000
+Number of short Button UP Events ;1;0;NUMBER_OF_S_BUTTON_UP_EVENTS;5124;1404;116;-;unsigned;0;65535;0
+Number of long Button UP Events ;1;0;NUMBER_OF_L_BUTTON_UP_EVENTS;5125;1405;117;-;unsigned;0;65535;0
+Number of short Button MIDDLE Events ;1;0;NUMBER_OF_S_BUTTON_MIDDLE_EVENTS;5126;1406;118;-;unsigned;0;65535;0
+Number of long Button MIDDLE Events ;1;0;NUMBER_OF_L_BUTTON_MIDDLE_EVENTS;5127;1407;119;-;unsigned;0;65535;0
+Number of short Button DOWN Events ;1;0;NUMBER_OF_S_BUTTON_DOWN_EVENTS;5128;1408;120;-;unsigned;0;65535;0
+Number of long Button DOWN Events ;1;0;NUMBER_OF_L_BUTTON_DOWN_EVENTS;5129;1409;121;-;unsigned;0;65535;0
+Last Multiklick Button UP;1;0;LAST_MULTIKLICK_BUTTON_UP;5130;140A;122;-;unsigned;0;65535;0
+Last Multiklick Button Middle;1;0;LAST_MULTIKLICK_BUTTON_MIDDLE;5131;140B;123;-;unsigned;0;65535;0
+Last Multiklick Button Down;1;0;LAST_MULTIKLICK_BUTTON_DOWN;5132;140C;124;-;unsigned;0;65535;0
+LED_MODES;0;1;LED_STATUS;8448;2100;125;-;unsigned;0;65535;0
+Set Power ON RED Level;0;0;POWER_ON_LEVEL_RED;8449;2101;126;-;unsigned;0;65535;0
+Set Power ON GREEN Level;0;0;POWER_ON_LEVEL_GREEN;8450;2102;127;-;unsigned;0;65535;0
+Set Power ON BLUE Level;0;0;POWER_ON_LEVEL_BLUE;8451;2103;128;-;unsigned;0;65535;0
+Set Duty Cycle;1;0;POWER_LEVEL_OF_LED_GREEN;8452;2104;129;-;unsigned;0;65535;1
+Set Duty Cycle;1;0;POWER_LEVEL_OF_LED_RED;8453;2105;130;-;unsigned;0;65535;2
+Set Duty Cycle;1;0;POWER_LEVEL_OF_LED_BLUE;8454;2106;131;-;unsigned;0;65535;3
+Device states;0;0;DEVICE_STATES;10008;2718;132;-;unsigned;0;65535;0
+Device error states;1;0;DEVICE_ERROR_STATES;10009;2719;133;-;unsigned;0;65535;0
+Button states - 0 = not pressed  1 = pressed (manufacturing test) / [0] = button UP / [1] = button MIDDLE / [2] = button DOWN;0;0;RAW_SIGNAL_BUTTON;16384;4000;134;-;unsigned;0;65535;0
+Set LEDs ON OFF;0;0;SET_LEDS_ON_OFF;16385;4001;135;-;unsigned;0;65535;0
+Get measured 12V;0;0;MEASURED_12V;16386;4002;136;mV;unsigned;0;65535;0
+Get measured 5V;0;0;MEASURED_5V;16387;4003;137;mV;unsigned;0;65535;0
+Get measured 3.3V;0;0;MEASURED_3_3V;16388;4004;138;mV;unsigned;0;65535;0
+Get measured VDDA;0;0;MEASURED_VDDA;16389;4005;139;mV;unsigned;0;65535;0
+Get measured Temperature;0;0;MEASURED_TEMP;16390;4006;140;mV;unsigned;0;65535;0
